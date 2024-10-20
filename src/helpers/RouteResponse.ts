@@ -8,10 +8,8 @@ export class RouteResponse {
    * @param message Mensagem a ser retornada, por padrão a mensagem é 'Success'
    * @returns Resposta da requisição
    */
-  public static sucess(res: Response, content, message?: string) {
-    return res
-      .status(200)
-      .json({ message: message || 'Sucess', data: content });
+  public static sucess(res: Response, content) {
+    return res.status(200).json({ sucess: 'true', data: content });
   }
 
   /**
@@ -22,9 +20,7 @@ export class RouteResponse {
    * @returns Resposta da requisição
    */
   public static sucessCreated(res: Response, content, message?: string) {
-    return res
-      .status(201)
-      .json({ message: message || 'Sucess Create', content });
+    return res.status(201).json({ sucess: 'true', data: content });
   }
 
   /**
@@ -34,7 +30,7 @@ export class RouteResponse {
    * @returns Resposta da requisição
    */
   public static successEmpty(res: Response, message?: string) {
-    return res.status(204).json({ message: message || 'Sucess' });
+    return res.status(204).json({ sucess: 'true' });
   }
 
   /**
