@@ -114,4 +114,38 @@ export class AuthController {
 
     return RouteResponse.sucess(response, token);
   }
+
+  async returnUserInfo(req: Request, res: Response) {
+    const userRepository = new UserRepository();
+    if (
+      !req.headers.authorization ||
+      !req.headers.authorization.includes('Bearer')
+    ) {
+      return RouteResponse.error(res, 'Token inválido ou ausente');
+    }
+
+    const token = req.headers.authorization.replace('Bearer ', '');
+    let decoded = null;
+
+    try {
+      decoded = jwt.verify(token, process.env.JWT_SECRET);
+      if (!decoded || !decoded.email) {
+        throw new Error();
+      }
+    } catch (error) {
+      return RouteResponse.error(res, 'Token inválido ou ausente');
+    }
+
+    const existingUser = await userRepository.findUserByEmail(undefined);
+
+    if (!existingUser) {
+      return RouteResponse.notFound(res, 'Usuário não encontrado');
+    }
+
+    delete existingUser.password;
+    delete existingUser.createdAt;
+    delete existingUser.updateAt;
+
+    return RouteResponse.sucess(res, existingUser);
+  }
 }
