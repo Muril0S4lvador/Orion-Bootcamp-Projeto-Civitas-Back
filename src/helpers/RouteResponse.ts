@@ -9,7 +9,9 @@ export class RouteResponse {
    * @returns Resposta da requisição
    */
   public static sucess(res: Response, content, message?: string) {
-    return res.status(200).json({ message: message || 'Sucess', content });
+    return res
+      .status(200)
+      .json({ message: message || 'Sucess', data: content });
   }
 
   /**
