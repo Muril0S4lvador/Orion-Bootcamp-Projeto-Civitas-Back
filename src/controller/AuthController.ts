@@ -115,6 +115,65 @@ export class AuthController {
     return RouteResponse.sucess(response, token);
   }
 
+  /**
+   * @swagger
+   * /me:
+   *   get:
+   *     summary: Retorna as informações de um usuário de acordo com o token
+   *     tags: [auth]
+   *     produces:
+   *       - application/json
+   *     security:
+   *       - BearerAuth: []
+   *     responses:
+   *       '200':
+   *          description: Requisição executada com sucesso
+   *          content:
+   *            application/json:
+   *              schema:
+   *                type: object
+   *                properties:
+   *                  success:
+   *                    type: boolean
+   *                    example: 'true'
+   *                  data:
+   *                    type: object
+   *                    properties:
+   *                      id:
+   *                        type: number
+   *                        example: 1
+   *                      name:
+   *                        type: string
+   *                        example: 'usuario'
+   *                      email:
+   *                        type: string
+   *                        example: 'usuario@email.com'
+   *                      roles:
+   *                        type: array
+   *                        items:
+   *                          type: string
+   *                          example: ['ADMIN', 'TEACHER']
+   *       '404':
+   *         description: Token válido, mas usuário não encontrado
+   *         content:
+   *           application/json:
+   *             schema:
+   *               type: object
+   *               properties:
+   *                 message:
+   *                   type: string
+   *                   example: "Usuário não encontrado"
+   *       '400':
+   *         description: Token ausente ou inválido
+   *         content:
+   *           application/json:
+   *             schema:
+   *               type: object
+   *               properties:
+   *                 message:
+   *                   type: string
+   *                   example: "Token inválido ou ausente"
+   */
   async returnUserInfo(req: Request, res: Response) {
     const userRepository = new UserRepository();
     if (
