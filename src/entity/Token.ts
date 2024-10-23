@@ -12,7 +12,7 @@ export class Token {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({ type: 'varchar', length: 255, nullable: false })
   token: string;
 
   @Column()

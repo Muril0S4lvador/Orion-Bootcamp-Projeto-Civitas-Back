@@ -20,9 +20,9 @@ export class Role {
     type: 'enum',
     enum: enumRoles
   })
-  public authType: string;
+  public authType: enumRoles;
 
-  @Column()
+  @Column({ type: 'varchar', length: 255, nullable: false })
   description: string;
 
   @Column({ default: () => 'NOW()' })

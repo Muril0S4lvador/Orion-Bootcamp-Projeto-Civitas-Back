@@ -4,13 +4,9 @@ import {
     Column,
     BeforeInsert,
     BeforeUpdate,
-    ManyToOne,
-    ManyToMany,
-    OneToMany
+    ManyToOne 
   } from 'typeorm';
   
-  import { Role } from './Role';
-  import { Token } from './Token';
   import { Class } from './Class';
   
   @Entity('student')
@@ -18,21 +14,21 @@ import {
     @PrimaryGeneratedColumn()
     id: number;
   
-    @Column()
+    @Column({ type: 'varchar', length: 255, nullable: false })
     name: string;
   
-    @Column({ unique: true })
+    @Column({ type: 'int', nullable: false, unique: true })
     registration: number;
     
     @Column({
       type: 'varchar',
       length: 11, 
-      unique: true, // CPF deve ser único
-      nullable: false // CPF não pode ser nulo
+      unique: true, 
+      nullable: false 
     })
     cpf: string;
     
-    @Column({ unique: true })
+    @Column({ type: 'varchar', length: 255, nullable: false, unique: true })
     email: string;
     
     @ManyToOne(() => Class, (classEntity) => classEntity.students)
@@ -42,16 +38,17 @@ import {
     createdAt: Date;
   
     @Column({ default: () => 'NOW()' })
-    updateAt: Date;
+    updatedAt: Date;
   
     @BeforeInsert()
     public setCreatedAt(): void {
       this.createdAt = new Date();
     }
+
     @BeforeInsert()
     @BeforeUpdate()
     public setUpdateAt(): void {
-      this.updateAt = new Date();
+      this.updatedAt = new Date();
     }
 
   }

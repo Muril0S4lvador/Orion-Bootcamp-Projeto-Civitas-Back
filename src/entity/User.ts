@@ -16,20 +16,20 @@ export class User {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({ type: 'varchar', length: 255, nullable: false })
   name: string;
 
-  @Column({ unique: true })
+  @Column({ type: 'varchar', length: 255, nullable: false, unique: true })
   email: string;
 
-  @Column()
+  @Column({ type: 'varchar', length: 255, nullable: false })
   password: string;
 
   @Column({ default: () => 'NOW()' })
   createdAt: Date;
 
   @Column({ default: () => 'NOW()' })
-  updateAt: Date;
+  updatedAt: Date;
 
   @ManyToMany(() => Role, (role) => role.users)
   roles: Role[];
@@ -37,7 +37,6 @@ export class User {
   @OneToMany(() => Token, (token) => token.userId)
   tokens: Token[];
 
-  //Methods
   @BeforeInsert()
   public setCreatedAt(): void {
     this.createdAt = new Date();
@@ -45,6 +44,6 @@ export class User {
   @BeforeInsert()
   @BeforeUpdate()
   public setUpdateAt(): void {
-    this.updateAt = new Date();
+    this.updatedAt = new Date();
   }
 }

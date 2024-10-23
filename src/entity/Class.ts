@@ -2,13 +2,9 @@ import {
     Entity,
     PrimaryGeneratedColumn,
     Column,
-    OneToMany,
-    ManyToMany,
-    JoinTable,
-    BeforeInsert,
-    BeforeUpdate
+    OneToMany
   } from 'typeorm';
-  import { User } from './User';
+  
   import { enumYears } from '../models/enums/EnumYears';
   import { enumShifts } from '../models/enums/EnumShifts';
   import { enumTeaching } from '../models/enums/EnumTeaching';
@@ -40,7 +36,7 @@ import {
     })
     public teachingType: enumTeaching;
 
-    @Column()
+    @Column({ type: 'varchar', length: 20, nullable: false, unique: true })
     identifier: string;
 
     @OneToMany(() => Student, (student) => student.class)
