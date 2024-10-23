@@ -20,9 +20,9 @@ export class Role {
     type: 'enum',
     enum: enumRoles
   })
-  public authType: string;
+  public authType: enumRoles;
 
-  @Column()
+  @Column({ type: 'varchar', length: 255, nullable: false })
   description: string;
 
   @Column({ default: () => 'NOW()' })
@@ -31,8 +31,7 @@ export class Role {
   @Column({ default: () => 'NOW()' })
   updatedAt: Date;
 
-  @ManyToMany(() => User)
-  @JoinTable({ name: 'role_user' })
+  @ManyToMany(() => User, (user) => user.roles)
   users: User[];
 
   // Methods
