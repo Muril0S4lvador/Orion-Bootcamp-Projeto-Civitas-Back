@@ -5,7 +5,8 @@ import {
   BeforeInsert,
   BeforeUpdate,
   ManyToMany,
-  OneToMany
+  OneToMany,
+  JoinTable
 } from 'typeorm';
 
 import { Role } from './Role';
@@ -32,6 +33,7 @@ export class User {
   updatedAt: Date;
 
   @ManyToMany(() => Role, (role) => role.users)
+  @JoinTable({ name: 'role_user' })
   roles: Role[];
 
   @OneToMany(() => Token, (token) => token.userId)
