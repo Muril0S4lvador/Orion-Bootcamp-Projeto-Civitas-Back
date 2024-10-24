@@ -4,6 +4,10 @@ import jwt from 'jsonwebtoken';
 import { RouteResponse } from '../helpers/RouteResponse';
 import { TokenRepository } from '../repositories/TokenRepository';
 import { UserRepository } from '../repositories/UserRepository';
+import { LoginRequestBody } from '../models/interfaces/LoginRequestBody';
+import { DecodedToken } from '../models/interfaces/DecodedToken';
+import { User } from '../entity/User';
+import { Token } from '../entity/Token';
 
 export class AuthController {
   /**
@@ -69,9 +73,9 @@ export class AuthController {
    *                   example: "Nome de usuário ou senha incorretos"
    */
   async login(request: Request, response: Response) {
-    const { email, password } = request.body;
-    const tokenRepository = new TokenRepository();
-    const userRepository = new UserRepository();
+    const { email, password }: LoginRequestBody = request.body;
+    const tokenRepository: TokenRepository = new TokenRepository();
+    const userRepository: UserRepository = new UserRepository();
 
     if (!email || !password) {
       return RouteResponse.error(
@@ -80,7 +84,9 @@ export class AuthController {
       );
     }
 
-    const existingUser = await userRepository.findUserByEmail(email);
+    const existingUser: User | undefined = await userRepository.findUserByEmail(
+      email
+    );
 
     if (!existingUser) {
       return RouteResponse.notFound(
@@ -89,7 +95,10 @@ export class AuthController {
       );
     }
 
-    const validPassword = await bcrypt.compare(password, existingUser.password);
+    const validPassword: boolean = await bcrypt.compare(
+      password,
+      existingUser.password
+    );
     if (!validPassword) {
       return RouteResponse.error(
         response,
@@ -97,12 +106,19 @@ export class AuthController {
       );
     }
 
-    const token = jwt.sign({ email: email }, process.env.JWT_SECRET, {
-      expiresIn: '24h'
-    });
+    const token: string = jwt.sign(
+      { email: email },
+      process.env.JWT_SECRET as string,
+      {
+        expiresIn: '24h'
+      }
+    );
 
-    const decoded = jwt.verify(token, process.env.JWT_SECRET) as jwt.JwtPayload;
-    const expiresAt = new Date(decoded.exp * 1000);
+    const decoded: DecodedToken = jwt.verify(
+      token,
+      process.env.JWT_SECRET as string
+    );
+    const expiresAt: Date = new Date(decoded.exp * 1000);
 
     tokenRepository.save({ token, expiresAt, userId: existingUser.id });
 
@@ -175,8 +191,8 @@ export class AuthController {
    *                   example: "Token inválido ou ausente"
    */
   async returnUserInfo(req: Request, res: Response) {
-    const userRepository = new UserRepository();
-    const tokenRepository = new TokenRepository();
+    const userRepository: UserRepository = new UserRepository();
+    const tokenRepository: TokenRepository = new TokenRepository();
     if (
       !req.headers.authorization ||
       !req.headers.authorization.includes('Bearer')
@@ -184,12 +200,12 @@ export class AuthController {
       return RouteResponse.error(res, 'Token inválido ou ausente');
     }
 
-    const token = req.headers.authorization.replace('Bearer ', '');
-    let decoded = null;
+    const token: string = req.headers.authorization.replace('Bearer ', '');
+    let decoded: DecodedToken | null = null;
 
     try {
-      decoded = jwt.verify(token, process.env.JWT_SECRET);
-      const tokenFound = await tokenRepository.findToken(token);
+      decoded = jwt.verify(token, process.env.JWT_SECRET as string);
+      const tokenFound: Token = await tokenRepository.findToken(token);
       if (!decoded || !decoded.email || !tokenFound) {
         throw new Error();
       }
@@ -197,7 +213,9 @@ export class AuthController {
       return RouteResponse.error(res, 'Token inválido ou ausente');
     }
 
-    const existingUser = await userRepository.findUserByEmail(decoded.email);
+    const existingUser: User | undefined = await userRepository.findUserByEmail(
+      decoded.email
+    );
 
     if (!existingUser) {
       return RouteResponse.notFound(res, 'Usuário não encontrado');

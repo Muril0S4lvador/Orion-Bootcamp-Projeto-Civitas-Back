@@ -7,7 +7,7 @@ export class TokenRepository extends Repository<Token> {
     super(Token, MysqlDataSource.manager);
   }
 
-  async findToken(token: string) {
+  async findToken(token: string): Promise<Token | undefined> {
     return this.findOne({ where: { token } });
   }
 }
