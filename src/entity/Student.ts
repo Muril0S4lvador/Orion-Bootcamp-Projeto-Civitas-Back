@@ -50,5 +50,4 @@ export class Student {
   public setUpdateAt(): void {
     this.updatedAt = new Date();
   }
-
 }
