@@ -13,8 +13,6 @@ export class ClassController {
    *     tags: [class]
    *     produces:
    *       - application/json
-   *     security:
-   *       - BearerAuth: []
    *     responses:
    *       '200':
    *          description: Requisição executada com sucesso
