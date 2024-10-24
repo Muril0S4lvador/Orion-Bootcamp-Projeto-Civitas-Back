@@ -2,27 +2,23 @@ import {
   Entity,
   PrimaryGeneratedColumn,
   Column,
-  ManyToMany,
   BeforeInsert,
   BeforeUpdate
 } from 'typeorm';
-import { User } from './User';
-import { enumRoles } from '../models/enums/EnumRoles';
 
-@Entity('role')
-export class Role {
+import { enumTeaching } from '../models/enums/EnumTeaching';
+
+@Entity('teaching')
+export class Teaching {
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column({
-    name: 'autenticacao',
+    name: 'teaching',
     type: 'enum',
-    enum: enumRoles
+    enum: enumTeaching
   })
-  public authType: enumRoles;
-
-  @Column({ type: 'varchar', length: 255, nullable: false })
-  description: string;
+  public teachingType: string;
 
   @Column({ default: () => 'NOW()' })
   createdAt: Date;
@@ -30,10 +26,6 @@ export class Role {
   @Column({ default: () => 'NOW()' })
   updatedAt: Date;
 
-  @ManyToMany(() => User, (user) => user.roles)
-  users: User[];
-
-  // Methods
   @BeforeInsert()
   public setCreatedAt(): void {
     this.createdAt = new Date();
