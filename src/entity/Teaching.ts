@@ -18,7 +18,7 @@ export class Teaching {
     type: 'enum',
     enum: enumTeaching
   })
-  public shiftType: string;
+  public teachingType: string;
 
   @Column({ default: () => 'NOW()' })
   createdAt: Date;

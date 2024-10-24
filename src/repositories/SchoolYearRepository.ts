@@ -7,7 +7,13 @@ export class SchoolYearRepository extends Repository<SchoolYear> {
     super(SchoolYear, MysqlDataSource.manager);
   }
 
-  async getAllSchoolYears(): Promise<SchoolYear | undefined> {
-    return this.find();
+  async getAllSchoolYears(): Promise<string[] | undefined> {
+    const result = await this.find();
+    let schoolYears: string[] = [];
+    if (result)
+      schoolYears = result?.map(
+        (schoolYear: SchoolYear) => schoolYear.yearType
+      );
+    return schoolYears;
   }
 }

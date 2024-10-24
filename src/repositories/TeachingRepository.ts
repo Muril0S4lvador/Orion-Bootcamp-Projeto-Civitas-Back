@@ -7,7 +7,11 @@ export class TeachingRepository extends Repository<Teaching> {
     super(Teaching, MysqlDataSource.manager);
   }
 
-  async getAllTeachings(): Promise<Teaching | undefined> {
-    return this.find();
+  async getAllTeachings(): Promise<string[] | undefined> {
+    const result = await this.find();
+    let teachings: string[] = [];
+    if (result)
+      teachings = result?.map((teaching: Teaching) => teaching.teachingType);
+    return teachings;
   }
 }

@@ -7,7 +7,10 @@ export class ShiftRepository extends Repository<Shift> {
     super(Shift, MysqlDataSource.manager);
   }
 
-  async getAllShifts(): Promise<Shift | undefined> {
-    return this.find();
+  async getAllShifts(): Promise<string[] | undefined> {
+    const result = await this.find();
+    let shifts: string[] = [];
+    if (result) shifts = result?.map((shift: Shift) => shift.shiftType);
+    return shifts;
   }
 }
