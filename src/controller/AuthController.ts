@@ -39,11 +39,11 @@ export class AuthController {
    *             schema:
    *               type: object
    *               properties:
-   *                 status:
-   *                   type: string
+   *                 success:
+   *                   type: boolean
    *                   description: Status da requisição
-   *                   example: "Success"
-   *                 token:
+   *                   example: "true"
+   *                 data:
    *                   type: string
    *                   description: Token JWT de autenticação
    *                   example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
@@ -54,9 +54,6 @@ export class AuthController {
    *             schema:
    *               type: object
    *               properties:
-   *                 statusCode:
-   *                   type: number
-   *                   example: 500
    *                 message:
    *                   type: string
    *                   example: "Nome de usuário ou senha incorretos"
@@ -67,9 +64,6 @@ export class AuthController {
    *             schema:
    *               type: object
    *               properties:
-   *                 statusCode:
-   *                   type: number
-   *                   example: 404
    *                 message:
    *                   type: string
    *                   example: "Nome de usuário ou senha incorretos"

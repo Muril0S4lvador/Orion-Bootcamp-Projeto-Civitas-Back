@@ -3,7 +3,6 @@ import {
   PrimaryGeneratedColumn,
   Column,
   ManyToMany,
-  JoinTable,
   BeforeInsert,
   BeforeUpdate
 } from 'typeorm';
@@ -31,8 +30,7 @@ export class Role {
   @Column({ default: () => 'NOW()' })
   updatedAt: Date;
 
-  @ManyToMany(() => User)
-  @JoinTable({ name: 'role_user' })
+  @ManyToMany(() => User, (user) => user.roles)
   users: User[];
 
   // Methods
