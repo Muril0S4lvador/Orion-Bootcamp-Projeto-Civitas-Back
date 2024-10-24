@@ -8,8 +8,8 @@ import {
 
 import { enumYears } from '../models/enums/EnumYears';
 
-@Entity('grade')
-export class Grade {
+@Entity('schoolYear')
+export class SchoolYear {
   @PrimaryGeneratedColumn()
   id: number;
 
