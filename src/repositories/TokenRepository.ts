@@ -6,4 +6,8 @@ export class TokenRepository extends Repository<Token> {
   constructor() {
     super(Token, MysqlDataSource.manager);
   }
+
+  async findToken(token: string) {
+    return this.findOne({ where: { token } });
+  }
 }

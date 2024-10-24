@@ -142,6 +142,12 @@ export class AuthController {
    *                      email:
    *                        type: string
    *                        example: 'usuario@email.com'
+   *                      createdAt:
+   *                        type: string
+   *                        example: '2024-10-21T11:04:32.000Z'
+   *                      updatedAt:
+   *                        type: string
+   *                        example: '2024-10-21T11:04:32.000Z'
    *                      roles:
    *                        type: array
    *                        items:
@@ -170,6 +176,7 @@ export class AuthController {
    */
   async returnUserInfo(req: Request, res: Response) {
     const userRepository = new UserRepository();
+    const tokenRepository = new TokenRepository();
     if (
       !req.headers.authorization ||
       !req.headers.authorization.includes('Bearer')
@@ -182,22 +189,21 @@ export class AuthController {
 
     try {
       decoded = jwt.verify(token, process.env.JWT_SECRET);
-      if (!decoded || !decoded.email) {
+      const tokenFound = await tokenRepository.findToken(token);
+      if (!decoded || !decoded.email || !tokenFound) {
         throw new Error();
       }
     } catch (error) {
       return RouteResponse.error(res, 'Token inválido ou ausente');
     }
 
-    const existingUser = await userRepository.findUserByEmail(undefined);
+    const existingUser = await userRepository.findUserByEmail(decoded.email);
 
     if (!existingUser) {
       return RouteResponse.notFound(res, 'Usuário não encontrado');
     }
 
     delete existingUser.password;
-    delete existingUser.createdAt;
-    delete existingUser.updateAt;
 
     return RouteResponse.sucess(res, existingUser);
   }

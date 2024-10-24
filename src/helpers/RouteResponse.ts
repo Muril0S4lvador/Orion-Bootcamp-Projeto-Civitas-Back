@@ -8,7 +8,7 @@ export class RouteResponse {
    * @returns Resposta da requisição
    */
   public static sucess(res: Response, content) {
-    return res.status(200).json({ sucess: 'true', data: content });
+    return res.status(200).json({ sucess: true, data: content });
   }
 
   /**
@@ -18,7 +18,7 @@ export class RouteResponse {
    * @returns Resposta da requisição
    */
   public static sucessCreated(res: Response, content) {
-    return res.status(201).json({ sucess: 'true', data: content });
+    return res.status(201).json({ sucess: true, data: content });
   }
 
   /**
@@ -27,7 +27,7 @@ export class RouteResponse {
    * @returns Resposta da requisição
    */
   public static successEmpty(res: Response) {
-    return res.status(204).json({ sucess: 'true' });
+    return res.status(204).json({ sucess: true });
   }
 
   /**
