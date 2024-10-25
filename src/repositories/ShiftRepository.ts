@@ -10,10 +10,7 @@ export class ShiftRepository extends Repository<Shift> {
   /**
    * @returns Todos os turnos da tabela Shift
    */
-  async getAllShifts(): Promise<string[] | undefined> {
-    const result = await this.find();
-    let shifts: string[] = [];
-    if (result) shifts = result?.map((shift: Shift) => shift.shiftType);
-    return shifts;
+  async getAllShifts(): Promise<Shift | undefined> {
+    return this.find();
   }
 }

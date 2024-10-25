@@ -3,6 +3,9 @@ import { ShiftRepository } from '../repositories/ShiftRepository';
 import { SchoolYearRepository } from '../repositories/SchoolYearRepository';
 import { TeachingRepository } from '../repositories/TeachingRepository';
 import { RouteResponse } from '../helpers/RouteResponse';
+import { Teaching } from '../entity/Teaching';
+import { SchoolYear } from '../entity/SchoolYear';
+import { Shift } from '../entity/Shift';
 
 export class ClassController {
   /**
@@ -59,9 +62,9 @@ export class ClassController {
       new SchoolYearRepository();
     const teachingRepository: TeachingRepository = new TeachingRepository();
 
-    const teachings: string[] = await teachingRepository.getAllTeachings();
-    const shifts: string[] = await shiftRepository.getAllShifts();
-    const schoolYears: string[] =
+    const teachings: Teaching = await teachingRepository.getAllTeachings();
+    const shifts: Shift = await shiftRepository.getAllShifts();
+    const schoolYears: SchoolYear =
       await schoolYearRepository.getAllSchoolYears();
 
     return RouteResponse.sucess(res, { teachings, shifts, schoolYears });

@@ -10,11 +10,7 @@ export class TeachingRepository extends Repository<Teaching> {
   /**
    * @returns Todos os turnos da tabela Teaching
    */
-  async getAllTeachings(): Promise<string[] | undefined> {
-    const result = await this.find();
-    let teachings: string[] = [];
-    if (result)
-      teachings = result?.map((teaching: Teaching) => teaching.teachingType);
-    return teachings;
+  async getAllTeachings(): Promise<Teaching | undefined> {
+    return this.find();
   }
 }
