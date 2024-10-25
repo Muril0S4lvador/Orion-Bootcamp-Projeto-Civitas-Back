@@ -6,19 +6,17 @@ import {
   BeforeUpdate
 } from 'typeorm';
 
-import { enumTeaching } from '../models/enums/EnumTeaching';
-
 @Entity('teaching')
 export class Teaching {
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column({
-    name: 'teaching',
-    type: 'enum',
-    enum: enumTeaching
+    type: 'varchar',
+    length: 100,
+    nullable: false
   })
-  public teachingType: string;
+  name: string;
 
   @Column({ default: () => 'NOW()' })
   createdAt: Date;

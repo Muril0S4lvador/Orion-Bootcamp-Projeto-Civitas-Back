@@ -6,19 +6,17 @@ import {
   BeforeUpdate
 } from 'typeorm';
 
-import { enumYears } from '../models/enums/EnumYears';
-
 @Entity('schoolYear')
 export class SchoolYear {
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column({
-    name: 'schoolYear',
-    type: 'enum',
-    enum: enumYears
+    type: 'varchar',
+    length: 20,
+    nullable: false
   })
-  public yearType: string;
+  name: string;
 
   @Column({ default: () => 'NOW()' })
   createdAt: Date;
