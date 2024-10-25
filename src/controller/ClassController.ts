@@ -64,19 +64,6 @@ export class ClassController {
     const schoolYears: string[] =
       await schoolYearRepository.getAllSchoolYears();
 
-    if (!teachings) {
-      return RouteResponse.notFound(res, 'Opções de ensino não encontradas');
-    }
-    if (!shifts) {
-      return RouteResponse.notFound(res, 'Opções de turno não encontradas');
-    }
-    if (!schoolYears) {
-      return RouteResponse.notFound(
-        res,
-        'Opções de ano letivo não encontradas'
-      );
-    }
-
     return RouteResponse.sucess(res, { teachings, shifts, schoolYears });
   }
 }

@@ -27,11 +27,6 @@ export class SchoolYear {
   updatedAt: Date;
 
   @BeforeInsert()
-  public setCreatedAt(): void {
-    this.createdAt = new Date();
-  }
-
-  @BeforeInsert()
   @BeforeUpdate()
   public setUpdateAt(): void {
     this.updatedAt = new Date();
