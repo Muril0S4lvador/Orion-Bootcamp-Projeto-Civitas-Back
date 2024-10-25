@@ -5,34 +5,29 @@ export class RouteResponse {
    * Resposta da requisição caso tenha sido concluída com sucesso
    * @param res Variável Response do express
    * @param content Conteúdo a ser retornado
-   * @param message Mensagem a ser retornada, por padrão a mensagem é 'Success'
    * @returns Resposta da requisição
    */
-  public static sucess(res: Response, content, message?: string) {
-    return res.status(200).json({ message: message || 'Sucess', content });
+  public static sucess(res: Response, content) {
+    return res.status(200).json({ sucess: true, data: content });
   }
 
   /**
    * Resposta da requisição de criação de algum objeto caso tenha sido concluída com sucesso
    * @param res Variável Response do express
    * @param content Conteúdo a ser retornado
-   * @param message Mensagem a ser retornada, por padrão a mensagem é 'Success'
    * @returns Resposta da requisição
    */
-  public static sucessCreated(res: Response, content, message?: string) {
-    return res
-      .status(201)
-      .json({ message: message || 'Sucess Create', content });
+  public static sucessCreated(res: Response, content) {
+    return res.status(201).json({ sucess: true, data: content });
   }
 
   /**
    * Resposta da requisição caso tenha sido concluída com sucesso, mas sem nenhum objeto retornado
    * @param res Variável Response do express
-   * @param message Mensagem a ser retornada, por padrão a mensagem é 'Success'
    * @returns Resposta da requisição
    */
-  public static successEmpty(res: Response, message?: string) {
-    return res.status(204).json({ message: message || 'Sucess' });
+  public static successEmpty(res: Response) {
+    return res.status(204).json({ sucess: true });
   }
 
   /**
