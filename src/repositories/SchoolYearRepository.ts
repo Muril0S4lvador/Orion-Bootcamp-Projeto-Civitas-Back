@@ -7,6 +7,9 @@ export class SchoolYearRepository extends Repository<SchoolYear> {
     super(SchoolYear, MysqlDataSource.manager);
   }
 
+  /**
+   * @returns Todos os anos escolares da tabela SchoolYear
+   */
   async getAllSchoolYears(): Promise<string[] | undefined> {
     const result = await this.find();
     let schoolYears: string[] = [];

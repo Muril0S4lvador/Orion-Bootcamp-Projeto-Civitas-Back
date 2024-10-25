@@ -7,6 +7,9 @@ export class TeachingRepository extends Repository<Teaching> {
     super(Teaching, MysqlDataSource.manager);
   }
 
+  /**
+   * @returns Todos os turnos da tabela Teaching
+   */
   async getAllTeachings(): Promise<string[] | undefined> {
     const result = await this.find();
     let teachings: string[] = [];
