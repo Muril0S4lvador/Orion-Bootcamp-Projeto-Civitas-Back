@@ -14,7 +14,8 @@ export class Teaching {
   @Column({
     type: 'varchar',
     length: 100,
-    nullable: false
+    nullable: false,
+    unique: true
   })
   name: string;
 

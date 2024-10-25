@@ -14,7 +14,8 @@ export class Shift {
   @Column({
     type: 'varchar',
     length: 50,
-    nullable: false
+    nullable: false,
+    unique: true
   })
   name: string;
 

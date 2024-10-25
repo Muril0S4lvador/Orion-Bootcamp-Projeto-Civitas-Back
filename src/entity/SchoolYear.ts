@@ -13,8 +13,9 @@ export class SchoolYear {
 
   @Column({
     type: 'varchar',
-    length: 20,
-    nullable: false
+    length: 50,
+    nullable: false,
+    unique: true
   })
   name: string;
 
