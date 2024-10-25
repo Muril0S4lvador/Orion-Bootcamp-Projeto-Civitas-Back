@@ -33,28 +33,54 @@ export class ClassController {
    *                      shifts:
    *                        type: array
    *                        items:
-   *                          type: string
-   *                          example: ["Maternal", "Fundamental I"]
+   *                          type: object
+   *                          properties:
+   *                            id:
+   *                              type: number
+   *                              example: 1
+   *                            name:
+   *                              type: string
+   *                              example: 'Manhã'
+   *                            createdAt:
+   *                              type: string
+   *                              example: '2024-10-21T11:04:32.000Z'
+   *                            updatedAt:
+   *                              type: string
+   *                              example: '2024-10-21T11:04:32.000Z'
    *                      schoolYears:
    *                        type: array
    *                        items:
-   *                          type: string
-   *                          example: ["1º ano", "2º ano"]
+   *                          type: object
+   *                          properties:
+   *                            id:
+   *                              type: number
+   *                              example: 1
+   *                            name:
+   *                              type: string
+   *                              example: '1º ano'
+   *                            createdAt:
+   *                              type: string
+   *                              example: '2024-10-21T11:04:32.000Z'
+   *                            updatedAt:
+   *                              type: string
+   *                              example: '2024-10-21T11:04:32.000Z'
    *                      teachings:
    *                        type: array
    *                        items:
-   *                          type: string
-   *                          example: ["Tarde", "Noite"]
-   *       '404':
-   *         description: Opções a serem retornadas não encontradas
-   *         content:
-   *           application/json:
-   *             schema:
-   *               type: object
-   *               properties:
-   *                 message:
-   *                   type: string
-   *                   example: "Opções de ensino não encontradas"
+   *                          type: object
+   *                          properties:
+   *                            id:
+   *                              type: number
+   *                              example: 1
+   *                            name:
+   *                              type: string
+   *                              example: 'Maternal'
+   *                            createdAt:
+   *                              type: string
+   *                              example: '2024-10-21T11:04:32.000Z'
+   *                            updatedAt:
+   *                              type: string
+   *                              example: '2024-10-21T11:04:32.000Z'
    */
   async getEnumsInfos(req: Request, res: Response) {
     const shiftRepository: ShiftRepository = new ShiftRepository();
