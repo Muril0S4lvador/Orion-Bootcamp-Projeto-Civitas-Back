@@ -5,7 +5,9 @@
   "author": "",
   "license": "ISC",
   "scripts": {
-    "start:dev": "npx nodemon -L",
+    "start:dev": "npm run migration:run && npx nodemon -L",
+    "migration:revert": "npx typeorm-ts-node-commonjs migration:revert -d ./src/config/database.ts",
+    "migration:run": "npx typeorm-ts-node-commonjs migration:run -s ./src/config/database.ts",
     "build": "npm run lint && npx tsc",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\"",
     "test": "echo \"Error: no test specified\" && exit 1"
