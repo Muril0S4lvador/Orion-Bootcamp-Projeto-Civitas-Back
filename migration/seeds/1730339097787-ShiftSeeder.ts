@@ -1,6 +1,7 @@
 import { MigrationInterface, QueryRunner } from "typeorm";
 
-export class ShiftSeeder1730318496718 implements MigrationInterface {
+export class ShiftSeeder1730339097787 implements MigrationInterface {
+
     private table = 'shift';
     private readonly shifts = [
         {name: "Manhã"},
@@ -14,7 +15,11 @@ export class ShiftSeeder1730318496718 implements MigrationInterface {
 
     public async down(queryRunner: QueryRunner): Promise<void> {
         const names = this.shifts.map((shift) => shift.name);
-        await queryRunner.manager.createQuerryBuilder().delete().from(this.table).where('name IN (:...names', { names }).execute();
+        await queryRunner.manager.createQueryBuilder()
+            .delete()
+            .from(this.table)
+            .where('name IN (:...names)', { names })
+            .execute();
     }
-
+    
 }
