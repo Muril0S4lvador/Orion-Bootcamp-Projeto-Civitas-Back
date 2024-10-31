@@ -84,9 +84,8 @@ export class AuthController {
       );
     }
 
-    const existingUser: User | undefined = await userRepository.findUserByEmail(
-      email
-    );
+    const existingUser: User | undefined =
+      await userRepository.findUserByEmail(email);
 
     if (!existingUser) {
       return RouteResponse.notFound(
