@@ -6,6 +6,7 @@ import {
   BeforeInsert,
   BeforeUpdate
 } from 'typeorm';
+
 import { User } from './User';
 import { enumRoles } from '../models/enums/EnumRoles';
 
