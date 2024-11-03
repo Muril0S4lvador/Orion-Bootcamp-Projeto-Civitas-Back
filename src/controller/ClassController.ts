@@ -95,4 +95,53 @@ export class ClassController {
 
     return RouteResponse.sucess(res, { teachings, shifts, schoolYears });
   }
+
+  /**
+   * @swagger
+   * /schoolYear-options:
+   *   get:
+   *     summary: Retorna as opções de ano escolar
+   *     tags: [class]
+   *     produces:
+   *       - application/json
+   *     responses:
+   *       '200':
+   *          description: Requisição executada com sucesso
+   *          content:
+   *            application/json:
+   *              schema:
+   *                type: object
+   *                properties:
+   *                  success:
+   *                    type: boolean
+   *                    example: 'true'
+   *                  data:
+   *                    type: object
+   *                    properties:
+   *                      schoolYears:
+   *                        type: array
+   *                        items:
+   *                          type: object
+   *                          properties:
+   *                            id:
+   *                              type: number
+   *                              example: 1
+   *                            name:
+   *                              type: string
+   *                              example: '1º ano'
+   *                            createdAt:
+   *                              type: string
+   *                              example: '2024-10-21T11:04:32.000Z'
+   *                            updatedAt:
+   *                              type: string
+   *                              example: '2024-10-21T11:04:32.000Z'
+   */
+  async getEnumSchoolYear(req: Request, res: Response) {
+    const schoolYearRepository: SchoolYearRepository =
+      new SchoolYearRepository();
+    const schoolYears: SchoolYear =
+      await schoolYearRepository.getAllSchoolYears();
+
+    return RouteResponse.sucess(res, { schoolYears });
+  }
 }

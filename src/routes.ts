@@ -15,4 +15,6 @@ router.get('/me', new AuthController().returnUserInfo);
 // Class
 router.get('/classes-options', new ClassController().getEnumsInfos);
 
+router.get('/schoolYear-options', new ClassController().getEnumSchoolYear);
+
 export default router;
