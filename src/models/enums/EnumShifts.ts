@@ -1,6 +1,5 @@
 export enum enumShifts {
-    MANHA = 'Manhã',
-    TARDE = 'Tarde',
-    NOITE = 'Noite'
-
+  MANHA = 'Manhã',
+  TARDE = 'Tarde',
+  NOITE = 'Noite'
 }
