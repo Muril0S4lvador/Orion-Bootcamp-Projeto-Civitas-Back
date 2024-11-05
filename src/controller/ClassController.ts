@@ -4,7 +4,6 @@ import { ClassRepository } from '../repositories/ClassRepository';
 import { enumYears } from '../models/enums/EnumYears';
 import { enumShifts } from '../models/enums/EnumShifts';
 import { enumTeaching } from '../models/enums/EnumTeaching';
-import { MysqlDataSource } from '../config/database';
 import { body, validationResult } from 'express-validator';
 import { ShiftRepository } from '../repositories/ShiftRepository';
 import { SchoolYearRepository } from '../repositories/SchoolYearRepository';
