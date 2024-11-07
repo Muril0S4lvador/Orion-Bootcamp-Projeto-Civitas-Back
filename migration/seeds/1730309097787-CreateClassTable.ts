@@ -17,21 +17,18 @@ export class CreateClassTable1730309097787 implements MigrationInterface {
                         generationStrategy: "increment",
                     },
                     {
-                        name: "schoolYear",
-                        type: "enum",
-                        enum: enumYears,
+                        name: "schoolYearId",
+                        type: "int",
                         isNullable: false,
                     },
                     {
-                        name: "shift",
-                        type: "enum",
-                        enum: enumShifts,
+                        name: "shiftId",
+                        type: "int",
                         isNullable: false,
                     },
                     {
-                        name: "teaching",
-                        type: "enum",
-                        enum: enumTeaching,
+                        name: "teachingId",
+                        type: "int",
                         isNullable: false,
                     },
                     {
@@ -40,6 +37,28 @@ export class CreateClassTable1730309097787 implements MigrationInterface {
                         length: "20",
                         isNullable: false,
                         isUnique: true,
+                    },
+                ],
+                foreignKeys: [
+                    {
+                        columnNames: ["schoolYearId"],
+                        referencedTableName: "schoolYear",
+                        referencedColumnNames: ["id"],
+                        onDelete: "CASCADE",
+                    },
+                    {
+                        columnNames: ["shiftId"],
+                        referencedTableName: "shift",
+                        referencedColumnNames: ["id"],
+                        onDelete: "CASCADE",
+
+                    },
+                    {
+                        columnNames: ["teachingId"],
+                        referencedTableName: "teaching",
+                        referencedColumnNames: ["id"],
+                        onDelete: "CASCADE",
+
                     },
                 ],
             })

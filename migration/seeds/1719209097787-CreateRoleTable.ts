@@ -17,7 +17,7 @@ export class CreateRoleTable1719209097787 implements MigrationInterface {
                     {
                         name: "autenticacao",
                         type: "enum",
-                        enum: enumRoles,
+                        enum: Object.values(enumRoles) as string[],
                         isNullable: false,
                     },
                     {

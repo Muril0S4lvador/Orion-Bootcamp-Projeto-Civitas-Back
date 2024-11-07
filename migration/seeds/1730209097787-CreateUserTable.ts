@@ -46,49 +46,7 @@ export class CreateUserTable1730209097787 implements MigrationInterface {
             }),
             true
         );
-
-        // Criação da tabela intermediária `role_user` para a relação ManyToMany entre `user` e `role`
-        await queryRunner.createTable(
-            new Table({
-                name: "role_user",
-                columns: [
-                    {
-                        name: "userId",
-                        type: "int",
-                        isPrimary: true,
-                    },
-                    {
-                        name: "roleId",
-                        type: "int",
-                        isPrimary: true,
-                    },
-                ],
-            }),
-            true
-        );
-
-        // Chave estrangeira entre `role_user.userId` e `user.id`
-        await queryRunner.createForeignKey(
-            "role_user",
-            new TableForeignKey({
-                columnNames: ["userId"],
-                referencedColumnNames: ["id"],
-                referencedTableName: "user",
-                onDelete: "CASCADE",
-            })
-        );
-
-        // Chave estrangeira entre `role_user.roleId` e `role.id`
-        await queryRunner.createForeignKey(
-            "role_user",
-            new TableForeignKey({
-                columnNames: ["roleId"],
-                referencedColumnNames: ["id"],
-                referencedTableName: "role",
-                onDelete: "CASCADE",
-            })
-        );
-
+        
         // Chave estrangeira para a relação `OneToMany` entre `user` e `token`
         await queryRunner.createForeignKey(
             "token",
