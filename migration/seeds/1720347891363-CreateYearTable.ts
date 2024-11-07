@@ -11,27 +11,27 @@ export class CreateYearTable1720347891363 implements MigrationInterface {
             type: 'int',
             isPrimary: true,
             isGenerated: true,
-            generationStrategy: 'increment',
+            generationStrategy: 'increment'
           },
           {
             name: 'name',
             type: 'varchar',
             length: '50',
             isNullable: false,
-            isUnique: true,
+            isUnique: true
           },
           {
             name: 'createdAt',
             type: 'timestamp',
-            default: 'CURRENT_TIMESTAMP',
+            default: 'CURRENT_TIMESTAMP'
           },
           {
             name: 'updatedAt',
             type: 'timestamp',
             default: 'CURRENT_TIMESTAMP',
-            onUpdate: 'CURRENT_TIMESTAMP',
-          },
-        ],
+            onUpdate: 'CURRENT_TIMESTAMP'
+          }
+        ]
       })
     );
   }
