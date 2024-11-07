@@ -3,6 +3,7 @@ import {
   PrimaryGeneratedColumn,
   Column,
   BeforeInsert,
+  JoinColumn,
   BeforeUpdate,
   ManyToOne
 } from 'typeorm';
@@ -32,6 +33,7 @@ export class Student {
   email: string;
 
   @ManyToOne(() => Class, (classEntity) => classEntity.students)
+  @JoinColumn({ name: 'classId' })
   class: Class;
 
   @Column({ default: () => 'NOW()' })

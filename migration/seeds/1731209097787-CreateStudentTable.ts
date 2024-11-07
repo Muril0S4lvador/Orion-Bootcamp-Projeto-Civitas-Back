@@ -69,7 +69,7 @@ export class CreateStudentTable1731209097787 implements MigrationInterface {
       new TableForeignKey({
         columnNames: ['classId'],
         referencedColumnNames: ['id'],
-        referencedTableName: 'class',
+        referencedTableName: 'classes',
         onDelete: 'SET NULL'
       })
     );

@@ -4,9 +4,6 @@ import {
   Table,
   TableForeignKey
 } from 'typeorm';
-import { enumYears } from '../../src/models/enums/EnumYears';
-import { enumShifts } from '../../src/models/enums/EnumShifts';
-import { enumTeaching } from '../../src/models/enums/EnumTeaching';
 
 export class CreateClassTable1730309097787 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
@@ -22,17 +19,17 @@ export class CreateClassTable1730309097787 implements MigrationInterface {
             generationStrategy: 'increment'
           },
           {
-            name: 'schoolYearId',
+            name: 'schoolYear',
             type: 'int',
             isNullable: false
           },
           {
-            name: 'shiftId',
+            name: 'shift',
             type: 'int',
             isNullable: false
           },
           {
-            name: 'teachingId',
+            name: 'teaching',
             type: 'int',
             isNullable: false
           },
@@ -46,19 +43,19 @@ export class CreateClassTable1730309097787 implements MigrationInterface {
         ],
         foreignKeys: [
           {
-            columnNames: ['schoolYearId'],
+            columnNames: ['schoolYear'],
             referencedTableName: 'schoolYear',
             referencedColumnNames: ['id'],
             onDelete: 'CASCADE'
           },
           {
-            columnNames: ['shiftId'],
+            columnNames: ['shift'],
             referencedTableName: 'shift',
             referencedColumnNames: ['id'],
             onDelete: 'CASCADE'
           },
           {
-            columnNames: ['teachingId'],
+            columnNames: ['teaching'],
             referencedTableName: 'teaching',
             referencedColumnNames: ['id'],
             onDelete: 'CASCADE'
@@ -67,21 +64,10 @@ export class CreateClassTable1730309097787 implements MigrationInterface {
       })
     );
 
-    // Definindo a chave estrangeira para associar 'students' com 'classes'
-    await queryRunner.createForeignKey(
-      'classes',
-      new TableForeignKey({
-        columnNames: ['id'],
-        referencedColumnNames: ['classId'],
-        referencedTableName: 'students',
-        onDelete: 'CASCADE'
-      })
-    );
+
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    // Removendo a chave estrangeira e a tabela 'classes'
-    await queryRunner.dropForeignKey('classes', 'FK_class_students');
     await queryRunner.dropTable('classes');
   }
 }

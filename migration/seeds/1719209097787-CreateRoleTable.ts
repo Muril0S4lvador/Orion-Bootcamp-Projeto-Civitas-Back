@@ -43,7 +43,6 @@ export class CreateRoleTable1719209097787 implements MigrationInterface {
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    // Remover a tabela `role`
     await queryRunner.dropTable('role');
   }
 }

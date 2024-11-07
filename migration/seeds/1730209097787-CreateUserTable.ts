@@ -67,13 +67,6 @@ export class CreateUserTable1730209097787 implements MigrationInterface {
   public async down(queryRunner: QueryRunner): Promise<void> {
     // Remover chave estrangeira `token.userId`
     await queryRunner.dropForeignKey('token', 'FK_token_user');
-
-    // Remover chaves estrangeiras `role_user`
-    await queryRunner.dropForeignKey('role_user', 'FK_role_user_user');
-    await queryRunner.dropForeignKey('role_user', 'FK_role_user_role');
-
-    // Remover tabelas `role_user` e `user`
-    await queryRunner.dropTable('role_user');
     await queryRunner.dropTable('user');
   }
 }

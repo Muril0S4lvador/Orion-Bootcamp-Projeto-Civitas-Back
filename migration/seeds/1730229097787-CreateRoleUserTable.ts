@@ -35,4 +35,7 @@ export class CreateRoleUserTable719209097787 implements MigrationInterface {
       true
     );
   }
+  public async down(queryRunner: QueryRunner): Promise<void> {
+    await queryRunner.dropTable('role_user');
+  }
 }
