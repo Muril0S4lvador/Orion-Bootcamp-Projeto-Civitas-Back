@@ -1,7 +1,7 @@
-import { MigrationInterface, QueryRunner, Table, TableColumn, TableForeignKey } from "typeorm";
-import { enumYears } from "../src/models/enums/EnumYears";
-import { enumShifts } from "../src/models/enums/EnumShifts";
-import { enumTeaching } from "../src/models/enums/EnumTeaching";
+import { MigrationInterface, QueryRunner, Table, TableForeignKey } from "typeorm";
+import { enumYears } from "models/enums/EnumYears";
+import { enumShifts } from "models/enums/EnumShifts";
+import { enumTeaching } from 'models/enums/EnumTeaching';
 
 export class CreateClassTable1730309097787 implements MigrationInterface {
     public async up(queryRunner: QueryRunner): Promise<void> {

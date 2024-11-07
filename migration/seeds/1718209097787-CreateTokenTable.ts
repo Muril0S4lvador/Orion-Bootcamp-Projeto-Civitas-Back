@@ -1,6 +1,6 @@
 import { MigrationInterface, QueryRunner, Table, TableForeignKey } from "typeorm";
 
-export class CreateTokenTable1730339097792 implements MigrationInterface {
+export class CreateTokenTable1718209097787 implements MigrationInterface {
     public async up(queryRunner: QueryRunner): Promise<void> {
         // Criação da tabela `token`
         await queryRunner.createTable(

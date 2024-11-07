@@ -1,7 +1,7 @@
 import { MigrationInterface, QueryRunner, Table } from "typeorm";
-import { enumRoles } from "../models/enums/EnumRoles";
+import { enumRoles } from "models/enums/EnumRoles";
 
-export class CreateRoleTable1730339097790 implements MigrationInterface {
+export class CreateRoleTable1719209097787 implements MigrationInterface {
     public async up(queryRunner: QueryRunner): Promise<void> {
         // Criação da tabela `role`
         await queryRunner.createTable(
