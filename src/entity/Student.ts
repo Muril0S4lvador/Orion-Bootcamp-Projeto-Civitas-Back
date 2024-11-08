@@ -3,8 +3,9 @@ import {
   PrimaryGeneratedColumn,
   Column,
   BeforeInsert,
+  JoinTable,
   BeforeUpdate,
-  ManyToOne
+  ManyToMany
 } from 'typeorm';
 
 import { Class } from './Class';
@@ -31,8 +32,19 @@ export class Student {
   @Column({ type: 'varchar', length: 255, nullable: false, unique: true })
   email: string;
 
-  @ManyToOne(() => Class, (classEntity) => classEntity.students)
-  class: Class;
+  @ManyToMany(() => Class, (classEntity) => classEntity.students)
+  @JoinTable({
+    name: 'student_classes',
+    joinColumn: {
+      name: 'studentId',
+      referencedColumnName: 'id'
+    },
+    inverseJoinColumn: {
+      name: 'classId',
+      referencedColumnName: 'id'
+    }
+  })
+  classes: Class[];
 
   @Column({ default: () => 'NOW()' })
   createdAt: Date;
