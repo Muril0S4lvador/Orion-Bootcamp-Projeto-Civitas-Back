@@ -8,6 +8,7 @@ import {
 } from 'typeorm';
 
 import { Class } from './Class';
+import { PDI } from './PDI';
 
 @Entity('student')
 export class Student {
@@ -33,6 +34,9 @@ export class Student {
 
   @ManyToOne(() => Class, (classEntity) => classEntity.students)
   class: Class;
+
+  @ManyToOne(() => PDI, (pdi) => pdi.student)
+  pdis: PDI[];
 
   @Column({ default: () => 'NOW()' })
   createdAt: Date;

@@ -11,6 +11,7 @@ import {
 
 import { Role } from './Role';
 import { Token } from './Token';
+import { PDI } from './PDI';
 
 @Entity('user')
 export class User {
@@ -38,6 +39,9 @@ export class User {
 
   @OneToMany(() => Token, (token) => token.userId)
   tokens: Token[];
+
+  @OneToMany(() => PDI, (pdi) => pdi.teacher)
+  pdis: PDI[];
 
   @BeforeInsert()
   public setCreatedAt(): void {
