@@ -12,6 +12,12 @@ router.post('/login', new AuthController().login);
 
 router.get('/me', new AuthController().returnUserInfo);
 
+router.post(
+  '/classes',
+  ClassController.validateClassData,
+  ClassController.create
+);
+
 // Class
 router.get('/classes-options', new ClassController().getEnumsInfos);
 
