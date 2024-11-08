@@ -1,19 +1,115 @@
 import { Request, Response } from 'express';
+import { RouteResponse } from '../helpers/RouteResponse';
+import { ClassRepository } from '../repositories/ClassRepository';
+import { validationResult } from 'express-validator';
 import { ShiftRepository } from '../repositories/ShiftRepository';
 import { SchoolYearRepository } from '../repositories/SchoolYearRepository';
 import { TeachingRepository } from '../repositories/TeachingRepository';
-import { RouteResponse } from '../helpers/RouteResponse';
 import { Teaching } from '../entity/Teaching';
 import { SchoolYear } from '../entity/SchoolYear';
 import { Shift } from '../entity/Shift';
+import { validateClassData } from '../validators/ClassValidator';
 
 export class ClassController {
+  static validateClassData = validateClassData;
+
+  /**
+   * @swagger
+   * /classes:
+   *   post:
+   *     summary: Cria uma nova turma
+   *     description: Endpoint para criar uma nova turma com ano, turno, ensino e identificador.
+   *     tags:
+   *       - [Class]
+   *     requestBody:
+   *       required: true
+   *       content:
+   *         application/json:
+   *           schema:
+   *             type: object
+   *             properties:
+   *               year:
+   *                 type: string
+   *                 enum:
+   *                   - 1º ano
+   *                   - 2º ano
+   *                   - 3º ano
+   *                   - 4º ano
+   *                   - 5º ano
+   *                   - 6º ano
+   *               shift:
+   *                 type: string
+   *                 enum:
+   *                   - Manhã
+   *                   - Tarde
+   *                   - Noite
+   *               teaching:
+   *                 type: string
+   *                 enum:
+   *                   - Maternal
+   *                   - Pré-escola
+   *                   - Fundamental I
+   *               identifier:
+   *                 type: string
+   *                 maxLength: 20
+   *                 example: "TURMA 1-A"
+   *     responses:
+   *       201:
+   *         description: Turma criada com sucesso
+   *         content:
+   *           application/json:
+   *             schema:
+   *               type: object
+   *               properties:
+   *                 success:
+   *                   type: boolean
+   *                 data:
+   *                   type: object
+   *       400:
+   *         description: Dados inválidos
+   *       500:
+   *         description: Erro interno do servidor
+   */
+  static async create(req: Request, res: Response) {
+    const errors = validationResult(req);
+    const classRepository = new ClassRepository();
+
+    if (!errors.isEmpty()) {
+      return RouteResponse.error(res, 'Dados inválidos.');
+    }
+
+    const { year, shift, teaching, identifier } = req.body;
+
+    try {
+      const classExists =
+        await classRepository.findClassByIdentifier(identifier);
+      if (classExists) {
+        return RouteResponse.error(
+          res,
+          'Já existe uma turma com este identificador.'
+        );
+      }
+      const newClass = classRepository.create({
+        yearType: year,
+        shiftType: shift,
+        teachingType: teaching,
+        identifier: identifier
+      });
+
+      await classRepository.saveClass(newClass);
+
+      return RouteResponse.sucess(res, newClass);
+    } catch (error) {
+      return RouteResponse.error(res, 'Erro ao criar a turma');
+    }
+  }
+
   /**
    * @swagger
    * /classes-options:
    *   get:
    *     summary: Retorna as opções de criação de turma
-   *     tags: [class]
+   *     tags: [Class]
    *     produces:
    *       - application/json
    *     responses:
