@@ -1,11 +1,6 @@
-import {
-  MigrationInterface,
-  QueryRunner,
-  Table,
-  TableForeignKey
-} from 'typeorm';
+import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
-export class CreateStudentTable1731209097787 implements MigrationInterface {
+export class CreateStudentTable1730709097787 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.createTable(
       new Table({
@@ -45,11 +40,6 @@ export class CreateStudentTable1731209097787 implements MigrationInterface {
             isNullable: false
           },
           {
-            name: 'classId',
-            type: 'int',
-            isNullable: true
-          },
-          {
             name: 'createdAt',
             type: 'timestamp',
             default: 'NOW()'
@@ -63,24 +53,8 @@ export class CreateStudentTable1731209097787 implements MigrationInterface {
       }),
       true
     );
-
-    await queryRunner.createForeignKey(
-      'student',
-      new TableForeignKey({
-        columnNames: ['classId'],
-        referencedColumnNames: ['id'],
-        referencedTableName: 'classes',
-        onDelete: 'SET NULL'
-      })
-    );
   }
-
   public async down(queryRunner: QueryRunner): Promise<void> {
-    const table = await queryRunner.getTable('student');
-    const foreignKey = table.foreignKeys.find(
-      (fk) => fk.columnNames.indexOf('classId') !== -1
-    );
-    await queryRunner.dropForeignKey('student', foreignKey);
     await queryRunner.dropTable('student');
   }
 }

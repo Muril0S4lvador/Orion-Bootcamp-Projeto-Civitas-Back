@@ -1,10 +1,11 @@
 import { MigrationInterface, QueryRunner, Table } from 'typeorm';
+import { enumRoles } from '../../src/models/enums/EnumRoles';
 
-export class CreateShiftTable1234567890123 implements MigrationInterface {
+export class CreateRoleTable1730226965001 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.createTable(
       new Table({
-        name: 'shift',
+        name: 'role',
         columns: [
           {
             name: 'id',
@@ -14,19 +15,26 @@ export class CreateShiftTable1234567890123 implements MigrationInterface {
             generationStrategy: 'increment'
           },
           {
-            name: 'name',
-            type: 'varchar'
+            name: 'autenticacao',
+            type: 'enum',
+            enum: Object.values(enumRoles) as string[],
+            isNullable: false
+          },
+          {
+            name: 'description',
+            type: 'varchar',
+            length: '255',
+            isNullable: false
           },
           {
             name: 'createdAt',
             type: 'timestamp',
-            default: 'CURRENT_TIMESTAMP'
+            default: 'NOW()'
           },
           {
             name: 'updatedAt',
             type: 'timestamp',
-            default: 'CURRENT_TIMESTAMP',
-            onUpdate: 'CURRENT_TIMESTAMP'
+            default: 'NOW()'
           }
         ]
       }),
@@ -35,6 +43,6 @@ export class CreateShiftTable1234567890123 implements MigrationInterface {
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.dropTable('shift');
+    await queryRunner.dropTable('role');
   }
 }

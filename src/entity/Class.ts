@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToMany } from 'typeorm';
 
 import { enumYears } from '../models/enums/EnumYears';
 import { enumShifts } from '../models/enums/EnumShifts';
@@ -34,6 +34,6 @@ export class Class {
   @Column({ type: 'varchar', length: 20, nullable: false, unique: true })
   identifier: string;
 
-  @OneToMany(() => Student, (student) => student.class)
+  @ManyToMany(() => Student, (student) => student.classes)
   students: Student[];
 }

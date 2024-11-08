@@ -1,11 +1,12 @@
 import { MigrationInterface, QueryRunner, Table } from 'typeorm';
-import { enumRoles } from '../../src/models/enums/EnumRoles';
 
-export class CreateRoleTable1719209097787 implements MigrationInterface {
+export class CreateTeachingTable1730306094033 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
+    await queryRunner.query('USE orion');
+
     await queryRunner.createTable(
       new Table({
-        name: 'role',
+        name: 'teaching',
         columns: [
           {
             name: 'id',
@@ -15,26 +16,22 @@ export class CreateRoleTable1719209097787 implements MigrationInterface {
             generationStrategy: 'increment'
           },
           {
-            name: 'autenticacao',
-            type: 'enum',
-            enum: Object.values(enumRoles) as string[],
-            isNullable: false
-          },
-          {
-            name: 'description',
+            name: 'name',
             type: 'varchar',
-            length: '255',
-            isNullable: false
+            length: '100',
+            isNullable: false,
+            isUnique: true
           },
           {
             name: 'createdAt',
             type: 'timestamp',
-            default: 'NOW()'
+            default: 'CURRENT_TIMESTAMP'
           },
           {
             name: 'updatedAt',
             type: 'timestamp',
-            default: 'NOW()'
+            default: 'CURRENT_TIMESTAMP',
+            onUpdate: 'CURRENT_TIMESTAMP'
           }
         ]
       }),
@@ -43,6 +40,6 @@ export class CreateRoleTable1719209097787 implements MigrationInterface {
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.dropTable('role');
+    await queryRunner.dropTable('teaching');
   }
 }

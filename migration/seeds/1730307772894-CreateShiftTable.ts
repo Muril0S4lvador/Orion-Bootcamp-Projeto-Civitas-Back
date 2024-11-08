@@ -1,10 +1,10 @@
 import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
-export class CreateYearTable1720347891363 implements MigrationInterface {
+export class CreateShiftTable1730307772894 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.createTable(
       new Table({
-        name: 'schoolYear',
+        name: 'shift',
         columns: [
           {
             name: 'id',
@@ -15,10 +15,7 @@ export class CreateYearTable1720347891363 implements MigrationInterface {
           },
           {
             name: 'name',
-            type: 'varchar',
-            length: '50',
-            isNullable: false,
-            isUnique: true
+            type: 'varchar'
           },
           {
             name: 'createdAt',
@@ -32,11 +29,12 @@ export class CreateYearTable1720347891363 implements MigrationInterface {
             onUpdate: 'CURRENT_TIMESTAMP'
           }
         ]
-      })
+      }),
+      true
     );
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.dropTable('schoolYear');
+    await queryRunner.dropTable('shift');
   }
 }

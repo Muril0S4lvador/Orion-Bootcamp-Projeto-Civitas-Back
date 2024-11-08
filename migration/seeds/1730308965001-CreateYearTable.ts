@@ -1,12 +1,10 @@
 import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
-export class CreateTeachingTable1730202005887 implements MigrationInterface {
+export class CreateYearTable1730308965001 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.query('USE orion');
-
     await queryRunner.createTable(
       new Table({
-        name: 'teaching',
+        name: 'schoolYear',
         columns: [
           {
             name: 'id',
@@ -18,7 +16,7 @@ export class CreateTeachingTable1730202005887 implements MigrationInterface {
           {
             name: 'name',
             type: 'varchar',
-            length: '100',
+            length: '50',
             isNullable: false,
             isUnique: true
           },
@@ -34,12 +32,11 @@ export class CreateTeachingTable1730202005887 implements MigrationInterface {
             onUpdate: 'CURRENT_TIMESTAMP'
           }
         ]
-      }),
-      true
+      })
     );
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.dropTable('teaching');
+    await queryRunner.dropTable('schoolYear');
   }
 }
