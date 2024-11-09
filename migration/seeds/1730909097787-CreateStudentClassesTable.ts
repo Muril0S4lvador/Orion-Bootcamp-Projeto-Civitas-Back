@@ -22,11 +22,6 @@ export class CreateStudentClassesTable1730909097787
             name: 'classId',
             type: 'int',
             isPrimary: true
-          },
-          {
-            name: 'userId',
-            type: 'int',
-            isNullable: false
           }
         ]
       }),
@@ -49,16 +44,6 @@ export class CreateStudentClassesTable1730909097787
         columnNames: ['classId'],
         referencedColumnNames: ['id'],
         referencedTableName: 'classes',
-        onDelete: 'CASCADE'
-      })
-    );
-
-    await queryRunner.createForeignKey(
-      'student_classes',
-      new TableForeignKey({
-        columnNames: ['userId'],
-        referencedColumnNames: ['id'],
-        referencedTableName: 'user',
         onDelete: 'CASCADE'
       })
     );
