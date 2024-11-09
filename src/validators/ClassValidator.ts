@@ -4,6 +4,7 @@ import { enumShifts } from '../models/enums/EnumShifts';
 import { enumTeaching } from '../models/enums/EnumTeaching';
 
 export const validateClassData = () => {
+  console.log('2. Validating class data...');
   return [
     body('year')
       .notEmpty()
@@ -26,4 +27,5 @@ export const validateClassData = () => {
       .isLength({ max: 20 })
       .withMessage('O identificador deve ter no máximo 20 caracteres.')
   ];
+  console.log('2. passou class data...');
 };

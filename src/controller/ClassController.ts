@@ -8,11 +8,8 @@ import { TeachingRepository } from '../repositories/TeachingRepository';
 import { Teaching } from '../entity/Teaching';
 import { SchoolYear } from '../entity/SchoolYear';
 import { Shift } from '../entity/Shift';
-import { validateClassData } from '../validators/ClassValidator';
 
 export class ClassController {
-  static validateClassData = validateClassData;
-
   /**
    * @swagger
    * /classes:
@@ -29,26 +26,11 @@ export class ClassController {
    *             type: object
    *             properties:
    *               year:
-   *                 type: string
-   *                 enum:
-   *                   - 1º ano
-   *                   - 2º ano
-   *                   - 3º ano
-   *                   - 4º ano
-   *                   - 5º ano
-   *                   - 6º ano
+   *                 type: int
    *               shift:
-   *                 type: string
-   *                 enum:
-   *                   - Manhã
-   *                   - Tarde
-   *                   - Noite
+   *                 type: int
    *               teaching:
-   *                 type: string
-   *                 enum:
-   *                   - Maternal
-   *                   - Pré-escola
-   *                   - Fundamental I
+   *                 type: int
    *               identifier:
    *                 type: string
    *                 maxLength: 20
@@ -70,7 +52,7 @@ export class ClassController {
    *       500:
    *         description: Erro interno do servidor
    */
-  static async create(req: Request, res: Response) {
+  static async createClass(req: Request, res: Response) {
     const errors = validationResult(req);
     const classRepository = new ClassRepository();
 
@@ -89,10 +71,15 @@ export class ClassController {
           'Já existe uma turma com este identificador.'
         );
       }
+
+      const yearId = await SchoolYearRepository.findIdByName(year);
+      //const schoolYear = await SchoolYearRepository.getSchoolYearByName(year);
+      const shiftInfo = await ShiftRepository.findIdByName(shift);
+      const teachingInfo = await TeachingRepository.findIdByName(teaching);
       const newClass = classRepository.create({
-        yearType: year,
-        shiftType: shift,
-        teachingType: teaching,
+        schoolYear: yearId,
+        shift: shiftInfo,
+        teaching: teachingInfo,
         identifier: identifier
       });
 
@@ -184,9 +171,9 @@ export class ClassController {
       new SchoolYearRepository();
     const teachingRepository: TeachingRepository = new TeachingRepository();
 
-    const teachings: Teaching = await teachingRepository.getAllTeachings();
-    const shifts: Shift = await shiftRepository.getAllShifts();
-    const schoolYears: SchoolYear =
+    const teachings: Teaching[] = await teachingRepository.getAllTeachings();
+    const shifts: Shift[] = await shiftRepository.getAllShifts();
+    const schoolYears: SchoolYear[] =
       await schoolYearRepository.getAllSchoolYears();
 
     return RouteResponse.sucess(res, { teachings, shifts, schoolYears });
