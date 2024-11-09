@@ -17,7 +17,7 @@ export class ClassController {
    *     summary: Cria uma nova turma
    *     description: Endpoint para criar uma nova turma com ano, turno, ensino e identificador.
    *     tags:
-   *       - [Class]
+   *        - Class
    *     requestBody:
    *       required: true
    *       content:
@@ -96,7 +96,8 @@ export class ClassController {
    * /classes-options:
    *   get:
    *     summary: Retorna as opções de criação de turma
-   *     tags: [Class]
+   *     tags:
+   *        - Class
    *     produces:
    *       - application/json
    *     responses:
