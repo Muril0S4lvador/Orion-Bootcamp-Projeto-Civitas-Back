@@ -1,69 +1,61 @@
-import {
-  Entity,
-  PrimaryGeneratedColumn,
-  Column,
-  BeforeInsert,
-  JoinTable,
-  BeforeUpdate,
-  ManyToMany
-} from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, BeforeInsert, JoinTable, BeforeUpdate, ManyToMany, ManyToOne } from 'typeorm';
 
 import { Class } from './Class';
 import { PDI } from './PDI';
 
 @Entity('student')
 export class Student {
-  @PrimaryGeneratedColumn()
-  id: number;
+    @PrimaryGeneratedColumn()
+    id: number;
 
-  @Column({ type: 'varchar', length: 255, nullable: false })
-  name: string;
+    @Column({ type: 'varchar', length: 255, nullable: false })
+    name: string;
 
-  @Column({ type: 'int', nullable: false, unique: true })
-  registration: number;
+    @Column({ type: 'int', nullable: false, unique: true })
+    registration: number;
 
-  @Column({
-    type: 'varchar',
-    length: 11,
-    unique: true,
-    nullable: false
-  })
-  cpf: string;
+    @Column({
+        type: 'varchar',
+        length: 11,
+        unique: true,
+        nullable: false
+    })
+    cpf: string;
 
-  @Column({ type: 'varchar', length: 255, nullable: false, unique: true })
-  email: string;
+    @Column({ type: 'varchar', length: 255, nullable: false, unique: true })
+    email: string;
 
-  @ManyToMany(() => Class, (classEntity) => classEntity.students)
-  @JoinTable({
-    name: 'student_classes',
-    joinColumn: {
-      name: 'studentId',
-      referencedColumnName: 'id'
-    },
-    inverseJoinColumn: {
-      name: 'classId',
-      referencedColumnName: 'id'
+    @ManyToMany(() => Class, classEntity => classEntity.students)
+    @JoinTable({
+        name: 'student_classes',
+        joinColumn: {
+            name: 'studentId',
+            referencedColumnName: 'id'
+        },
+        inverseJoinColumn: {
+            name: 'classId',
+            referencedColumnName: 'id'
+        }
+    })
+    classes: Class[];
+
+    @ManyToOne(() => PDI, pdi => pdi.student)
+    pdis: PDI[];
+
+    @Column({ default: () => 'NOW()' })
+    createdAt: Date;
+
+    @Column({ default: () => 'NOW()' })
+    updatedAt: Date;
+
+    @BeforeInsert()
+    public setCreatedAt(): void {
+        this.createdAt = new Date();
     }
-  })
-  classes: Class[];
 
-  @ManyToOne(() => PDI, (pdi) => pdi.student)
-  pdis: PDI[];
-
-  @Column({ default: () => 'NOW()' })
-  createdAt: Date;
-
-  @Column({ default: () => 'NOW()' })
-  updatedAt: Date;
-
-  @BeforeInsert()
-  public setCreatedAt(): void {
-    this.createdAt = new Date();
-  }
-
-  @BeforeInsert()
-  @BeforeUpdate()
-  public setUpdateAt(): void {
-    this.updatedAt = new Date();
-  }
+    @BeforeInsert()
+    @BeforeUpdate()
+    public setUpdateAt(): void {
+        this.updatedAt = new Date();
+    }
 }

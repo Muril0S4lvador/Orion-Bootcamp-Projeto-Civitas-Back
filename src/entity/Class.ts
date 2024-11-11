@@ -7,33 +7,33 @@ import { Student } from './Student';
 
 @Entity('classes')
 export class Class {
-  @PrimaryGeneratedColumn()
-  id: number;
+    @PrimaryGeneratedColumn()
+    id: number;
 
-  @Column({
-    name: 'schoolYear',
-    type: 'enum',
-    enum: enumYears
-  })
-  public yearType: enumYears;
+    @Column({
+        name: 'schoolYear',
+        type: 'enum',
+        enum: enumYears
+    })
+    public yearType: enumYears;
 
-  @Column({
-    name: 'shift',
-    type: 'enum',
-    enum: enumShifts
-  })
-  public shiftType: enumShifts;
+    @Column({
+        name: 'shift',
+        type: 'enum',
+        enum: enumShifts
+    })
+    public shiftType: enumShifts;
 
-  @Column({
-    name: 'teaching',
-    type: 'enum',
-    enum: enumTeaching
-  })
-  public teachingType: enumTeaching;
+    @Column({
+        name: 'teaching',
+        type: 'enum',
+        enum: enumTeaching
+    })
+    public teachingType: enumTeaching;
 
-  @Column({ type: 'varchar', length: 20, nullable: false, unique: true })
-  identifier: string;
+    @Column({ type: 'varchar', length: 20, nullable: false, unique: true })
+    identifier: string;
 
-  @ManyToMany(() => Student, (student) => student.classes)
-  students: Student[];
+    @ManyToMany(() => Student, student => student.classes)
+    students: Student[];
 }

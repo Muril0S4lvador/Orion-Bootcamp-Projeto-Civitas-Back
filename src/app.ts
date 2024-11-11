@@ -10,12 +10,12 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 MysqlDataSource.initialize()
-  .then(() => {
-    console.log('Database initialized!');
-  })
-  .catch((err) => {
-    console.error('Database Error: ', err);
-  });
+    .then(() => {
+        console.log('Database initialized!');
+    })
+    .catch(err => {
+        console.error('Database Error: ', err);
+    });
 
 const app = express();
 
@@ -31,5 +31,5 @@ app.get('/swagger.json', (_req, res) => res.send(swaggerSpec));
 console.log(`Add swagger on /swagger`);
 
 app.listen(process.env.SERVER_PORT, () => {
-  console.log(`Server listening on port ${process.env.SERVER_PORT}`);
+    console.log(`Server listening on port ${process.env.SERVER_PORT}`);
 });
