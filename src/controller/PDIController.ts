@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { PDICreateRequestBody } from '../models/interfaces/PDICreateRequestBody';
+import { enumAnswers } from '../models/enums/EnumAnswers';
 import { StudentRepository } from '../repositories/StudentRepository';
 import { UserRepository } from '../repositories/UserRepository';
 import { PDIRepository } from '../repositories/PDIRepository';
@@ -82,20 +83,22 @@ export class PDIController {
      *                   example: 'Estudante selecionado não existente'
      */
     async createPDI(req: Request, res: Response) {
-        const {
-            studentId,
-            teacherId,
-            answersEmotionalInteligence,
-            answersAcademicDevelopment,
-            answersResponsability,
-            considerations
-        }: PDICreateRequestBody = req.body;
+        const { studentId, answersEmotionalInteligence, answersAcademicDevelopment, answersResponsability, considerations }: PDICreateRequestBody =
+            req.body;
+        const email: string = req.headers.email.toString();
+        console.log(req.headers);
         const studentRepository: StudentRepository = new StudentRepository();
         const userRepository: UserRepository = new UserRepository();
         const pdiRepository: PDIRepository = new PDIRepository();
 
-        const student: Student = await studentRepository.findStudentById(studentId);
-        const teacher: User = await userRepository.findUserById(teacherId);
+        const allAnswers = [...answersAcademicDevelopment, ...answersEmotionalInteligence, ...answersResponsability];
+
+        if (!allAnswers.every(answer => Object.values(enumAnswers).includes(answer))) {
+            return RouteResponse.error(res, 'Respostas enviadas inválidas');
+        }
+
+        const student: Student = await studentRepository.findStudentById(1);
+        const teacher: User = await userRepository.findUserByEmail(email);
 
         if (!student) {
             return RouteResponse.error(res, 'Estudante selecionado não existente');
@@ -112,6 +115,15 @@ export class PDIController {
             answersResponsability,
             considerations
         });
+
+        // const pdi = {
+        //     student,
+        //     // teacher,
+        //     answersAcademicDevelopment,
+        //     answersEmotionalInteligence,
+        //     answersResponsability,
+        //     considerations
+        // };
 
         return RouteResponse.sucessCreated(res, pdi);
     }

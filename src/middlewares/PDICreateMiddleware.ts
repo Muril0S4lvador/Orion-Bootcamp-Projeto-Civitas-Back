@@ -29,7 +29,6 @@ export async function PDICreateMiddleware(req: Request, res: Response, next: Nex
     }
 
     const existingUser: User | undefined = await userRepository.findUserByEmail(decoded.email);
-    console.log(existingUser);
 
     if (!existingUser) {
         return RouteResponse.error(res, 'Usuário não encontrado');
@@ -38,6 +37,8 @@ export async function PDICreateMiddleware(req: Request, res: Response, next: Nex
     if (!existingUser.roles.some(role => Object.values(enumRoles).includes(role.authType))) {
         return RouteResponse.unauthorizedError(res);
     }
+
+    req.headers.email = decoded.email;
 
     next();
 }
