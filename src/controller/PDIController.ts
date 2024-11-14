@@ -11,53 +11,65 @@ import { RouteResponse } from '../helpers/RouteResponse';
 export class PDIController {
     /**
      * @swagger
-     * /create-pdi
+     * /create-pdi:
      *   post:
      *     summary: Criação de PDI
      *     tags: [PDI]
      *     consumes:
-     *      - application/json
+     *       - application/json
      *     produces:
-     *      - application/json
+     *       - application/json
+     *     security:
+     *       - BearerAuth: []
      *     requestBody:
+     *       required: true
      *       content:
-     *        application/json:
-     *          schema:
-     *            type: object
-     *            required:
-     *              - studentId
-     *              - teacherId
-     *              - answersEmotionalInteligence
-     *              - answersAcademicDevelopment
-     *              - answersResponsability
-     *              - considerations
-     *            properties:
-     *              studentId:
-     *                type: number
-     *                example: 1
-     *              teacherId:
-     *                type: number
-     *                example: 1
-     *              answersEmotionalInteligence:
-     *                type: array
-     *                items:
-     *                  type: string
-     *                  example: ['Adequado, Excepcional']
-     *              answersAcademicDevelopment:
-     *                type: array
-     *                items:
-     *                  type: string
-     *                  example: ['Adequado, Excepcional']
-     *              answersResponsability:
-     *                type: array
-     *                items:
-     *                  type: string
-     *                  example: ['Adequado, Excepcional']
-     *              considerations:
-     *                type: string
-     *                example: 'Aluno excelente.'
+     *         application/json:
+     *           schema:
+     *             type: object
+     *             required:
+     *               - studentId
+     *               - teacherId
+     *               - answersEmotionalInteligence
+     *               - answersAcademicDevelopment
+     *               - answersResponsability
+     *               - considerations
+     *             properties:
+     *               studentId:
+     *                 type: number
+     *                 example: 1
+     *               teacherId:
+     *                 type: number
+     *                 example: 1
+     *               answersEmotionalInteligence:
+     *                 type: array
+     *                 items:
+     *                   type: string
+     *                 example: ["Adequado", "Excepcional"]
+     *               answersAcademicDevelopment:
+     *                 type: array
+     *                 items:
+     *                   type: string
+     *                 example: ["Adequado", "Excepcional"]
+     *               answersResponsability:
+     *                 type: array
+     *                 items:
+     *                   type: string
+     *                 example: ["Adequado", "Excepcional"]
+     *               considerations:
+     *                 type: string
+     *                 example: 'Aluno excelente.'
      *     responses:
      *       '201':
+     *         description: PDI criado com sucesso
+     *         content:
+     *           application/json:
+     *             schema:
+     *               type: object
+     *               properties:
+     *                 message:
+     *                   type: string
+     *                   example: 'PDI criado com sucesso'
      *       '400':
      *         description: Ids válidos, mas entidade não encontrada
      *         content:
@@ -92,7 +104,7 @@ export class PDIController {
             return RouteResponse.error(res, 'Professor selecionado não existente');
         }
 
-        const pdi: PDI = pdiRepository.save({
+        const pdi: PDI = await pdiRepository.save({
             student,
             teacher,
             answersAcademicDevelopment,

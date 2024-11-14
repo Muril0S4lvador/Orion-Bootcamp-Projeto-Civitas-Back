@@ -28,7 +28,7 @@ export class User {
     @JoinTable({ name: 'role_user' })
     roles: Role[];
 
-    @OneToMany(() => Token, token => token.userId)
+    @OneToMany(() => Token, token => token.user)
     tokens: Token[];
 
     @OneToMany(() => PDI, pdi => pdi.teacher)

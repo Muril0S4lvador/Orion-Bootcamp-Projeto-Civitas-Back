@@ -1,10 +1,9 @@
 import { Router } from 'express';
-import { validationResult } from 'express-validator';
 import { HomeController } from './controller/HomeController';
 import { AuthController } from './controller/AuthController';
 import { ClassController } from './controller/ClassController';
 import { PDIController } from './controller/PDIController';
-import { validatePDIData } from 'validators/PDIValidator';
+import { PDICreateMiddleware } from './middlewares/PDICreateMiddleware';
 
 const router = Router();
 
@@ -19,17 +18,6 @@ router.get('/me', new AuthController().returnUserInfo);
 router.get('/classes-options', new ClassController().getEnumsInfos);
 
 // PDI
-router.post(
-    '/create-pdi',
-    validatePDIData(),
-    (req, res, next) => {
-        const errors = validationResult(req);
-        if (!errors.isEmpty()) {
-            return res.status(400).json({ errors: errors.array() });
-        }
-        next();
-    },
-    new PDIController().createPDI
-);
+router.post('/create-pdi', PDICreateMiddleware, new PDIController().createPDI);
 
 export default router;
