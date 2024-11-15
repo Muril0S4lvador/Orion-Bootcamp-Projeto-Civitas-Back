@@ -6,21 +6,28 @@ export class SchoolYearRepository extends Repository<SchoolYear> {
     constructor() {
         super(SchoolYear, MysqlDataSource.manager);
     }
-
     /**
-     * @returns Todos os anos escolares da tabela SchoolYear
+     * Busca um ano escolar com base no nome
+     * @param name Nome do ano escolar
+     * @returns O ano escolar encontrado ou undefined
      */
     static async getSchoolYearByName(name: string): Promise<SchoolYear | undefined> {
         return MysqlDataSource.getRepository(SchoolYear).findOne({
             where: { name }
         });
     }
+    /**
+     * Retorna todos os anos escolares registrados na tabela SchoolYear
+     * @returns Uma lista de todos os anos escolares
+     */
     async getAllSchoolYears(): Promise<SchoolYear[]> {
         return this.find();
     }
     /**
-     * @param nameYear O nome do ano escolar para buscar.
-     * @returns O ano escolar com o nome fornecido, ou null se não encontrado.
+     * Busca o ID de um ano escolar com base no nome
+     * @param nameYear Nome do ano escolar (exemplo: 1º ano)
+     * @returns O ID do ano escolar ou null, caso não encontrado
+     * @throws Erro caso a busca pelo ID falhe
      */
     static async findIdByName(nameYear: string): Promise<number | null> {
         try {

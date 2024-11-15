@@ -6,11 +6,22 @@ export class TeachingRepository extends Repository<Teaching> {
     constructor() {
         super(Teaching, MysqlDataSource.manager);
     }
+    /**
+     * Busca um registro de ensino com base no nome
+     * @param name Nome do ensino
+     * @returns O registro de ensino encontrado ou undefined
+     */
     static async getTeachingByName(name: string): Promise<Teaching | undefined> {
         return MysqlDataSource.getRepository(Teaching).findOne({
             where: { name }
         });
     }
+    /**
+     * Busca o ID de um registro de ensino pelo nome
+     * @param nameTeaching Nome do ensino
+     * @returns O ID do ensino ou null, caso não encontrado
+     * @throws Erro caso a busca pelo ID falhe
+     */
     static async findIdByName(nameTeaching: string): Promise<number | null> {
         try {
             const result = await MysqlDataSource.getRepository(Teaching)
@@ -27,7 +38,8 @@ export class TeachingRepository extends Repository<Teaching> {
     }
 
     /**
-     * @returns Todos os turnos da tabela Teaching
+     * Retorna todos os registros de ensino da tabela Teaching
+     * @returns Uma lista de todos os registros de ensino ou undefined, caso nenhum seja encontrado
      */
     async getAllTeachings(): Promise<Teaching[] | undefined> {
         return this.find();

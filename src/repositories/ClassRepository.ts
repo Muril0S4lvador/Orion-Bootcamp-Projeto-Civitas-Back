@@ -7,6 +7,11 @@ export class ClassRepository extends Repository<Class> {
         super(Class, MysqlDataSource.manager);
     }
 
+    /**
+     * Salva um novo registro de turma no banco de dados
+     * @param schoolClass O objeto de turma que será salvo
+     * @returns A turma salva, incluindo qualquer modificação realizada durante o processo de salvamento
+     */
     async saveClass(schoolClass: Class): Promise<Class> {
         return await this.manager.save(schoolClass);
     }
