@@ -32,16 +32,12 @@ export class PDIController {
      *             type: object
      *             required:
      *               - studentId
-     *               - teacherId
      *               - bodyAnswersEmotionalInteligence
      *               - bodyAnswersAcademicDevelopment
      *               - bodyAnswersResponsability
      *               - considerations
      *             properties:
      *               studentId:
-     *                 type: number
-     *                 example: 1
-     *               teacherId:
      *                 type: number
      *                 example: 1
      *               bodyAnswersEmotionalInteligence:
