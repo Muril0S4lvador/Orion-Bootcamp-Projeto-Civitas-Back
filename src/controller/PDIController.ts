@@ -99,8 +99,6 @@ export class PDIController {
         const pdiRepository: PDIRepository = new PDIRepository();
         const answerRepository: AnswerRepository = new AnswerRepository();
 
-        console.log(`${bodyAnswersAcademicDevelopment}`);
-
         const allBodyAnswers = [...bodyAnswersAcademicDevelopment, ...bodyAnswersEmotionalInteligence, ...bodyAnswersResponsability];
 
         if (!allBodyAnswers.every(answer => Object.values(enumAnswers).includes(answer as enumAnswers))) {
@@ -131,33 +129,13 @@ export class PDIController {
             answer => bodyAnswersResponsability.includes(answer.answerType) && answer.questionType == enumQuestionType.RESPONSABILITY
         );
 
-        const pdi: PDI = await pdiRepository.save({
+        await pdiRepository.save({
             student,
             teacher,
             considerations,
             answers: [...answersAcademicDevelopment, ...answersEmotionalInteligence, ...answersResponsability]
         });
 
-        // const pdi = {
-        //     student,
-        //     // teacher,
-        //     bodyAnswersAcademicDevelopment,
-        //     bodyAnswersEmotionalInteligence,
-        //     bodyAnswersResponsability,
-        //     considerations
-        // };
-
-        return RouteResponse.sucessCreated(res, pdi);
+        return RouteResponse.successEmpty(res);
     }
 }
-
-/*
-
-    studentId: 1,
-    teacherId: 1,
-    answersEmotionalInteligence: [],
-    answersAcademicDevelopment: [],
-    answersResponsability: [],
-    considerations: ""
-
-*/
