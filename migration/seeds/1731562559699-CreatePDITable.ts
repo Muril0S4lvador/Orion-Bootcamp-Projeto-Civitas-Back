@@ -1,4 +1,3 @@
-import { enumAnswers } from '../../src/models/enums/EnumAnswers';
 import { MigrationInterface, QueryRunner, Table, TableForeignKey } from 'typeorm';
 
 export class CreatePDITable1731560096206 implements MigrationInterface {
@@ -31,24 +30,6 @@ export class CreatePDITable1731560096206 implements MigrationInterface {
                         default: 'NOW()'
                     },
                     {
-                        name: 'answersEmotionalInteligence',
-                        type: 'simple-array',
-                        length: '300',
-                        isNullable: false
-                    },
-                    {
-                        name: 'answersAcademicDevelopment',
-                        type: 'simple-array',
-                        length: '300',
-                        isNullable: false
-                    },
-                    {
-                        name: 'answersResponsability',
-                        type: 'simple-array',
-                        length: '300',
-                        isNullable: false
-                    },
-                    {
                         name: 'studentId',
                         type: 'int',
                         isNullable: false
@@ -63,7 +44,7 @@ export class CreatePDITable1731560096206 implements MigrationInterface {
         );
 
         await queryRunner.createForeignKey(
-            'token',
+            'pdi',
             new TableForeignKey({
                 columnNames: ['studentId'],
                 referencedColumnNames: ['id'],
@@ -72,7 +53,7 @@ export class CreatePDITable1731560096206 implements MigrationInterface {
             })
         );
         await queryRunner.createForeignKey(
-            'token',
+            'pdi',
             new TableForeignKey({
                 columnNames: ['teacherId'],
                 referencedColumnNames: ['id'],

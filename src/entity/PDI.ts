@@ -1,8 +1,8 @@
-import { PrimaryGeneratedColumn, Entity, Column, ManyToOne, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import { PrimaryGeneratedColumn, Entity, Column, ManyToMany, ManyToOne, CreateDateColumn, UpdateDateColumn, JoinTable } from 'typeorm';
 
 import { Student } from './Student';
 import { User } from './User';
-import { enumAnswers } from '../models/enums/EnumAnswers';
+import { Answer } from './Answer';
 
 @Entity('pdi')
 export class PDI {
@@ -18,14 +18,9 @@ export class PDI {
     @Column({ type: 'varchar', length: 600, nullable: true })
     considerations: string;
 
-    @Column('simple-array')
-    answersEmotionalInteligence: string;
-
-    @Column('simple-array')
-    answersAcademicDevelopment: string;
-
-    @Column('simple-array')
-    answersResponsability: string;
+    @ManyToMany(() => Answer, answer => answer.pdis)
+    @JoinTable({ name: 'pdi_answer' })
+    answers: Answer[];
 
     @CreateDateColumn()
     createdAt: Date;

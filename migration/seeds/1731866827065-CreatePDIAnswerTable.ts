@@ -1,32 +1,32 @@
 import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
-export class CreateRoleUserTable1730229097787 implements MigrationInterface {
+export class CreatePDIAnswerTable1731866827065 implements MigrationInterface {
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.createTable(
             new Table({
-                name: 'role_user',
+                name: 'pdi_answer',
                 columns: [
                     {
-                        name: 'userId',
+                        name: 'answerId',
                         type: 'int',
                         isPrimary: true
                     },
                     {
-                        name: 'roleId',
+                        name: 'pdiId',
                         type: 'int',
                         isPrimary: true
                     }
                 ],
                 foreignKeys: [
                     {
-                        columnNames: ['userId'],
-                        referencedTableName: 'user',
+                        columnNames: ['answerId'],
+                        referencedTableName: 'answer',
                         referencedColumnNames: ['id'],
                         onDelete: 'CASCADE'
                     },
                     {
-                        columnNames: ['roleId'],
-                        referencedTableName: 'role',
+                        columnNames: ['pdiId'],
+                        referencedTableName: 'pdi',
                         referencedColumnNames: ['id'],
                         onDelete: 'CASCADE'
                     }
@@ -35,7 +35,8 @@ export class CreateRoleUserTable1730229097787 implements MigrationInterface {
             true
         );
     }
+
     public async down(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.dropTable('role_user');
+        await queryRunner.dropTable('pdi_answer');
     }
 }

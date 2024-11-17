@@ -1,13 +1,16 @@
 import { Request, Response } from 'express';
 import { PDICreateRequestBody } from '../models/interfaces/PDICreateRequestBody';
 import { enumAnswers } from '../models/enums/EnumAnswers';
+import { enumQuestionType } from '../models/enums/EnumQuestionType';
 import { StudentRepository } from '../repositories/StudentRepository';
 import { UserRepository } from '../repositories/UserRepository';
 import { PDIRepository } from '../repositories/PDIRepository';
+import { AnswerRepository } from '../repositories/AnswerRepository';
 import { Student } from '../entity/Student';
 import { User } from '../entity/User';
 import { PDI } from '../entity/PDI';
 import { RouteResponse } from '../helpers/RouteResponse';
+import { Answer } from 'entity/Answer';
 
 export class PDIController {
     /**
@@ -31,9 +34,9 @@ export class PDIController {
      *             required:
      *               - studentId
      *               - teacherId
-     *               - answersEmotionalInteligence
-     *               - answersAcademicDevelopment
-     *               - answersResponsability
+     *               - bodyAnswersEmotionalInteligence
+     *               - bodyAnswersAcademicDevelopment
+     *               - bodyAnswersResponsability
      *               - considerations
      *             properties:
      *               studentId:
@@ -42,17 +45,17 @@ export class PDIController {
      *               teacherId:
      *                 type: number
      *                 example: 1
-     *               answersEmotionalInteligence:
+     *               bodyAnswersEmotionalInteligence:
      *                 type: array
      *                 items:
      *                   type: string
      *                 example: ["Adequado", "Excepcional"]
-     *               answersAcademicDevelopment:
+     *               bodyAnswersAcademicDevelopment:
      *                 type: array
      *                 items:
      *                   type: string
      *                 example: ["Adequado", "Excepcional"]
-     *               answersResponsability:
+     *               bodyAnswersResponsability:
      *                 type: array
      *                 items:
      *                   type: string
@@ -72,7 +75,7 @@ export class PDIController {
      *                   type: string
      *                   example: 'PDI criado com sucesso'
      *       '400':
-     *         description: Ids válidos, mas entidade não encontrada
+     *         description: Ids válidos, mas entidade não encontrada ou respostas inválidas
      *         content:
      *           application/json:
      *             schema:
@@ -83,16 +86,24 @@ export class PDIController {
      *                   example: 'Estudante selecionado não existente'
      */
     async createPDI(req: Request, res: Response) {
-        const { studentId, answersEmotionalInteligence, answersAcademicDevelopment, answersResponsability, considerations }: PDICreateRequestBody =
-            req.body;
+        const {
+            studentId,
+            bodyAnswersEmotionalInteligence,
+            bodyAnswersAcademicDevelopment,
+            bodyAnswersResponsability,
+            considerations
+        }: PDICreateRequestBody = req.body;
         const email: string = req.headers.email.toString() || '';
         const studentRepository: StudentRepository = new StudentRepository();
         const userRepository: UserRepository = new UserRepository();
         const pdiRepository: PDIRepository = new PDIRepository();
+        const answerRepository: AnswerRepository = new AnswerRepository();
 
-        const allAnswers = [...answersAcademicDevelopment, ...answersEmotionalInteligence, ...answersResponsability];
+        console.log(`${bodyAnswersAcademicDevelopment}`);
 
-        if (!allAnswers.every(answer => Object.values(enumAnswers).includes(answer as enumAnswers))) {
+        const allBodyAnswers = [...bodyAnswersAcademicDevelopment, ...bodyAnswersEmotionalInteligence, ...bodyAnswersResponsability];
+
+        if (!allBodyAnswers.every(answer => Object.values(enumAnswers).includes(answer as enumAnswers))) {
             return RouteResponse.error(res, 'Respostas enviadas inválidas');
         }
 
@@ -106,28 +117,33 @@ export class PDIController {
             return RouteResponse.error(res, 'Professor selecionado não existente');
         }
 
-        console.log(`\n\nREspostas entrando: ${answersEmotionalInteligence}\n${typeof answersEmotionalInteligence}\n`);
-        let i: number = 0;
-        for (const a in answersEmotionalInteligence) {
-            console.log(`${i}: ${answersEmotionalInteligence[a]} - ${typeof answersEmotionalInteligence[a]}`);
-            i++;
-        }
+        const allPossibleAnswers: Answer[] = await answerRepository.getAllPossibleAnswers();
+
+        const answersAcademicDevelopment: Answer[] = allPossibleAnswers.filter(
+            answer => bodyAnswersAcademicDevelopment.includes(answer.answerType) && answer.questionType == enumQuestionType.ACADEMIC_DEVELOPMENT
+        );
+
+        const answersEmotionalInteligence: Answer[] = allPossibleAnswers.filter(
+            answer => bodyAnswersEmotionalInteligence.includes(answer.answerType) && answer.questionType == enumQuestionType.EMOTIONAL_INTELLIGENCE
+        );
+
+        const answersResponsability: Answer[] = allPossibleAnswers.filter(
+            answer => bodyAnswersResponsability.includes(answer.answerType) && answer.questionType == enumQuestionType.RESPONSABILITY
+        );
 
         const pdi: PDI = await pdiRepository.save({
             student,
             teacher,
-            answersAcademicDevelopment,
-            answersEmotionalInteligence,
-            answersResponsability,
-            considerations
+            considerations,
+            answers: [...answersAcademicDevelopment, ...answersEmotionalInteligence, ...answersResponsability]
         });
 
         // const pdi = {
         //     student,
         //     // teacher,
-        //     answersAcademicDevelopment,
-        //     answersEmotionalInteligence,
-        //     answersResponsability,
+        //     bodyAnswersAcademicDevelopment,
+        //     bodyAnswersEmotionalInteligence,
+        //     bodyAnswersResponsability,
         //     considerations
         // };
 
