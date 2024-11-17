@@ -32,47 +32,52 @@ export class CreatePDITable1731560096206 implements MigrationInterface {
                     },
                     {
                         name: 'answersEmotionalInteligence',
-                        type: 'enum',
-                        isNullable: false,
-                        enum: Object.values(enumAnswers) as string[]
+                        type: 'simple-array',
+                        length: '300',
+                        isNullable: false
                     },
                     {
                         name: 'answersAcademicDevelopment',
-                        type: 'enum',
-                        isNullable: false,
-                        enum: Object.values(enumAnswers) as string[]
+                        type: 'simple-array',
+                        length: '300',
+                        isNullable: false
                     },
                     {
                         name: 'answersResponsability',
-                        type: 'enum',
-                        isNullable: false,
-                        enum: Object.values(enumAnswers) as string[]
+                        type: 'simple-array',
+                        length: '300',
+                        isNullable: false
                     },
                     {
-                        name: 'student',
+                        name: 'studentId',
                         type: 'int',
                         isNullable: false
                     },
                     {
-                        name: 'teacher',
+                        name: 'teacherId',
                         type: 'int',
                         isNullable: false
                     }
-                ],
-                foreignKeys: [
-                    new TableForeignKey({
-                        columnNames: ['student'],
-                        referencedTableName: 'student',
-                        referencedColumnNames: ['id'], // Referencia o campo 'id' da tabela 'student'
-                        onDelete: 'CASCADE'
-                    }),
-                    new TableForeignKey({
-                        columnNames: ['teacher'],
-                        referencedTableName: 'user',
-                        referencedColumnNames: ['id'], // Referencia o campo 'id' da tabela 'teacher'
-                        onDelete: 'CASCADE'
-                    })
                 ]
+            })
+        );
+
+        await queryRunner.createForeignKey(
+            'token',
+            new TableForeignKey({
+                columnNames: ['studentId'],
+                referencedColumnNames: ['id'],
+                referencedTableName: 'student',
+                onDelete: 'CASCADE'
+            })
+        );
+        await queryRunner.createForeignKey(
+            'token',
+            new TableForeignKey({
+                columnNames: ['teacherId'],
+                referencedColumnNames: ['id'],
+                referencedTableName: 'user',
+                onDelete: 'CASCADE'
             })
         );
     }

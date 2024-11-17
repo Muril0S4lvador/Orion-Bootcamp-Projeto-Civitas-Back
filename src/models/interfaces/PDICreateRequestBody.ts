@@ -1,9 +1,7 @@
-import { enumAnswers } from 'models/enums/EnumAnswers';
-
 export interface PDICreateRequestBody {
     studentId: number;
-    answersEmotionalInteligence: enumAnswers[];
-    answersAcademicDevelopment: enumAnswers[];
-    answersResponsability: enumAnswers[];
+    answersEmotionalInteligence: string[];
+    answersAcademicDevelopment: string[];
+    answersResponsability: string[];
     considerations: string;
 }

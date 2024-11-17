@@ -18,14 +18,14 @@ export class PDI {
     @Column({ type: 'varchar', length: 600, nullable: true })
     considerations: string;
 
-    @Column({ type: 'enum', enum: enumAnswers })
-    answersEmotionalInteligence: enumAnswers[];
+    @Column('simple-array')
+    answersEmotionalInteligence: string;
 
-    @Column({ type: 'enum', enum: enumAnswers })
-    answersAcademicDevelopment: enumAnswers[];
+    @Column('simple-array')
+    answersAcademicDevelopment: string;
 
-    @Column({ type: 'enum', enum: enumAnswers })
-    answersResponsability: enumAnswers[];
+    @Column('simple-array')
+    answersResponsability: string;
 
     @CreateDateColumn()
     createdAt: Date;

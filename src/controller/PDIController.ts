@@ -85,19 +85,18 @@ export class PDIController {
     async createPDI(req: Request, res: Response) {
         const { studentId, answersEmotionalInteligence, answersAcademicDevelopment, answersResponsability, considerations }: PDICreateRequestBody =
             req.body;
-        const email: string = req.headers.email.toString();
-        console.log(req.headers);
+        const email: string = req.headers.email.toString() || '';
         const studentRepository: StudentRepository = new StudentRepository();
         const userRepository: UserRepository = new UserRepository();
         const pdiRepository: PDIRepository = new PDIRepository();
 
         const allAnswers = [...answersAcademicDevelopment, ...answersEmotionalInteligence, ...answersResponsability];
 
-        if (!allAnswers.every(answer => Object.values(enumAnswers).includes(answer))) {
+        if (!allAnswers.every(answer => Object.values(enumAnswers).includes(answer as enumAnswers))) {
             return RouteResponse.error(res, 'Respostas enviadas inválidas');
         }
 
-        const student: Student = await studentRepository.findStudentById(1);
+        const student: Student = await studentRepository.findStudentById(studentId);
         const teacher: User = await userRepository.findUserByEmail(email);
 
         if (!student) {
@@ -105,6 +104,13 @@ export class PDIController {
         }
         if (!teacher) {
             return RouteResponse.error(res, 'Professor selecionado não existente');
+        }
+
+        console.log(`\n\nREspostas entrando: ${answersEmotionalInteligence}\n${typeof answersEmotionalInteligence}\n`);
+        let i: number = 0;
+        for (const a in answersEmotionalInteligence) {
+            console.log(`${i}: ${answersEmotionalInteligence[a]} - ${typeof answersEmotionalInteligence[a]}`);
+            i++;
         }
 
         const pdi: PDI = await pdiRepository.save({
