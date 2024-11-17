@@ -3,8 +3,6 @@ import { RouteResponse } from '../helpers/RouteResponse';
 import { StudentRepository } from '../repositories/StudentRepository';
 import { ClassRepository } from '../repositories/ClassRepository';
 import { validationResult } from 'express-validator';
-import { Class } from '../entity/Class';
-import { MysqlDataSource } from '../config/database';
 
 export class StudentController {
     /**
@@ -59,7 +57,6 @@ export class StudentController {
         const errors = validationResult(req);
         const studentRepository = new StudentRepository();
         const classRepository = new ClassRepository();
-        console.log('chegou aqui 1');
 
         if (!errors.isEmpty()) {
             return RouteResponse.error(res, 'Dados inválidos.');
@@ -80,13 +77,6 @@ export class StudentController {
             if (!classExists) {
                 return RouteResponse.error(res, 'Essa turma não existe.');
             }
-            console.log('chegou aqui 4');
-            console.log('classExists:', classExists);
-            console.log('classExists Type:', typeof classExists);
-            console.log('classExists Instance:', classExists instanceof Class);
-            console.log('Entidades registradas:', MysqlDataSource.options.entities);
-            console.log('Status do DataSource:', MysqlDataSource.isInitialized);
-
             const newStudent = studentRepository.create({
                 name: name,
                 registration: registration,
@@ -94,11 +84,9 @@ export class StudentController {
                 cpf: cpf,
                 email: email
             });
-            console.log('chegou aqui 5');
             await studentRepository.saveStudent(newStudent);
             return RouteResponse.sucess(res, newStudent);
         } catch (error) {
-            console.error('Erro ao criar o estudante:', error);
             return RouteResponse.error(res, error);
         }
     }
