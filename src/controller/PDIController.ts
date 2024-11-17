@@ -8,7 +8,6 @@ import { PDIRepository } from '../repositories/PDIRepository';
 import { AnswerRepository } from '../repositories/AnswerRepository';
 import { Student } from '../entity/Student';
 import { User } from '../entity/User';
-import { PDI } from '../entity/PDI';
 import { RouteResponse } from '../helpers/RouteResponse';
 import { Answer } from 'entity/Answer';
 
