@@ -24,18 +24,20 @@ export class StudentController {
      *                 type: string
      *                 example: "Thais Oliveira"
      *               registration:
-     *                 type: int
+     *                 type: integer
      *                 example: 111
      *               schoolClassIdentifier:
+     *                 type: array
+     *                 items:
      *                 type: string
-     *                 example: "TURMA 1-A"
+     *                 example: ["TURMA 1-A", "TURMA 2-B"]
      *               cpf:
      *                 type: string
      *                 maxLength: 11
      *                 example: "00000000000"
      *               email:
      *                  type: string
-     *                  example: "example@gmail.com.br"
+     *                  example: "example@gmail.com"
      *     responses:
      *       201:
      *         description: Estudante criado com sucesso
@@ -73,14 +75,24 @@ export class StudentController {
         }
 
         try {
-            const classExists = await classRepository.findClassByIdentifier(schoolClassIdentifier);
-            if (!classExists) {
-                return RouteResponse.error(res, 'Essa turma não existe.');
+            const classIdentifiers = Array.isArray(schoolClassIdentifier) ? schoolClassIdentifier : [schoolClassIdentifier];
+
+            const classes = await Promise.all(classIdentifiers.map(identifier => classRepository.findClassByIdentifier(identifier)));
+            const invalidClasses = classes.filter(cls => cls === undefined);
+
+            if (invalidClasses.length > 0) {
+                return RouteResponse.error(
+                    res,
+                    `As seguintes turmas são inválidas ou não existem: ${schoolClassIdentifier.filter((_, index) => classes[index] === undefined).join(', ')}`
+                );
             }
+
+            const validClasses = classes.filter(cls => cls !== undefined);
+
             const newStudent = studentRepository.create({
                 name: name,
                 registration: registration,
-                classes: [classExists],
+                classes: validClasses,
                 cpf: cpf,
                 email: email
             });
