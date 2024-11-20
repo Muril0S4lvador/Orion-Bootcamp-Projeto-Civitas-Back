@@ -16,6 +16,11 @@ export class CreateAnswerTable1731866819481 implements MigrationInterface {
                         generationStrategy: 'increment'
                     },
                     {
+                        name: 'points',
+                        type: 'int',
+                        isNullable: false
+                    },
+                    {
                         name: 'updatedAt',
                         type: 'timestamp',
                         default: 'NOW()'

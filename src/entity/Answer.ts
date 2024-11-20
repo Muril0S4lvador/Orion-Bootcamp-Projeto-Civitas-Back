@@ -8,6 +8,9 @@ export class Answer {
     @PrimaryGeneratedColumn()
     id: number;
 
+    @Column({ type: 'int', nullable: false })
+    points: number;
+
     @ManyToMany(() => PDI, pdi => pdi.answers)
     pdis: PDI;
 
@@ -17,9 +20,9 @@ export class Answer {
     @Column({ name: 'questionType', type: 'enum', enum: enumQuestionType })
     public questionType: enumQuestionType;
 
-    @CreateDateColumn()
+    @CreateDateColumn({ default: () => 'NOW()' })
     createdAt: Date;
 
-    @UpdateDateColumn()
+    @UpdateDateColumn({ default: () => 'NOW()' })
     updatedAt: Date;
 }

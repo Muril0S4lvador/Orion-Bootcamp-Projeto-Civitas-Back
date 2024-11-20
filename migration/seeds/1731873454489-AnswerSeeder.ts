@@ -3,23 +3,23 @@ import { MigrationInterface, QueryRunner } from 'typeorm';
 export class AnswerSeeder1731873454489 implements MigrationInterface {
     private table = 'answer';
     private readonly answers = [
-        { answerType: 'Excepcional', questionType: 'Inteligencia emocional' },
-        { answerType: 'Acima das expectativas', questionType: 'Inteligencia emocional' },
-        { answerType: 'Adequado', questionType: 'Inteligencia emocional' },
-        { answerType: 'Abaixo das expectativas', questionType: 'Inteligencia emocional' },
-        { answerType: 'Precisa de melhorias', questionType: 'Inteligencia emocional' },
+        { answerType: 'Excepcional', questionType: 'Inteligencia emocional', points: 5 },
+        { answerType: 'Acima das expectativas', questionType: 'Inteligencia emocional', points: 4 },
+        { answerType: 'Adequado', questionType: 'Inteligencia emocional', points: 3 },
+        { answerType: 'Abaixo das expectativas', questionType: 'Inteligencia emocional', points: 2 },
+        { answerType: 'Precisa de melhorias', questionType: 'Inteligencia emocional', points: 1 },
 
-        { answerType: 'Excepcional', questionType: 'Desenvolvimento academico' },
-        { answerType: 'Acima das expectativas', questionType: 'Desenvolvimento academico' },
-        { answerType: 'Adequado', questionType: 'Desenvolvimento academico' },
-        { answerType: 'Abaixo das expectativas', questionType: 'Desenvolvimento academico' },
-        { answerType: 'Precisa de melhorias', questionType: 'Desenvolvimento academico' },
+        { answerType: 'Excepcional', questionType: 'Desenvolvimento academico', points: 5 },
+        { answerType: 'Acima das expectativas', questionType: 'Desenvolvimento academico', points: 4 },
+        { answerType: 'Adequado', questionType: 'Desenvolvimento academico', points: 3 },
+        { answerType: 'Abaixo das expectativas', questionType: 'Desenvolvimento academico', points: 2 },
+        { answerType: 'Precisa de melhorias', questionType: 'Desenvolvimento academico', points: 1 },
 
-        { answerType: 'Excepcional', questionType: 'Responsabilidade' },
-        { answerType: 'Acima das expectativas', questionType: 'Responsabilidade' },
-        { answerType: 'Adequado', questionType: 'Responsabilidade' },
-        { answerType: 'Abaixo das expectativas', questionType: 'Responsabilidade' },
-        { answerType: 'Precisa de melhorias', questionType: 'Responsabilidade' }
+        { answerType: 'Excepcional', questionType: 'Responsabilidade', points: 5 },
+        { answerType: 'Acima das expectativas', questionType: 'Responsabilidade', points: 4 },
+        { answerType: 'Adequado', questionType: 'Responsabilidade', points: 3 },
+        { answerType: 'Abaixo das expectativas', questionType: 'Responsabilidade', points: 2 },
+        { answerType: 'Precisa de melhorias', questionType: 'Responsabilidade', points: 1 }
     ];
 
     public async up(queryRunner: QueryRunner): Promise<void> {
