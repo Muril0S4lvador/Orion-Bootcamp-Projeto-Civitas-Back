@@ -18,6 +18,6 @@ router.get('/me', new AuthController().returnUserInfo);
 router.get('/classes-options', new ClassController().getEnumsInfos);
 
 // PDI
-router.post('/create-pdi', PDICreateMiddleware, new PDIController().createPDI);
+router.post('/pdi', PDICreateMiddleware, new PDIController().createPDI);
 
 export default router;

@@ -14,7 +14,7 @@ import { Answer } from 'entity/Answer';
 export class PDIController {
     /**
      * @swagger
-     * /create-pdi:
+     * /pdi:
      *   post:
      *     summary: Criação de PDI
      *     tags: [PDI]
