@@ -6,11 +6,4 @@ export class ShiftRepository extends Repository<Shift> {
     constructor() {
         super(Shift, MysqlDataSource.manager);
     }
-
-    /**
-     * @returns Todos os turnos da tabela Shift
-     */
-    async getAllShifts(): Promise<Shift | undefined> {
-        return this.find();
-    }
 }

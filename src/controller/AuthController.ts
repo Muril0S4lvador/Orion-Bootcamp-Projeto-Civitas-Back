@@ -5,11 +5,9 @@ import { RouteResponse } from '../helpers/RouteResponse';
 import { TokenRepository } from '../repositories/TokenRepository';
 import { UserRepository } from '../repositories/UserRepository';
 import { LoginRequestBody } from '../models/interfaces/LoginRequestBody';
-import { UserReturn } from '../models/interfaces/UserReturn';
 import { DecodedToken } from '../models/interfaces/DecodedToken';
 import { User } from '../entity/User';
 import { Token } from '../entity/Token';
-import { Role } from '../entity/Role';
 
 export class AuthController {
     /**
@@ -197,14 +195,6 @@ export class AuthController {
             return RouteResponse.notFound(res, 'Usuário não encontrado');
         }
 
-        const userReturn: UserReturn = {} as UserReturn;
-        userReturn.id = existingUser.id;
-        userReturn.roles = existingUser?.roles.map((role: Role) => role.authType);
-        userReturn.email = existingUser.email;
-        userReturn.name = existingUser.name;
-        userReturn.createdAt = existingUser.createdAt;
-        userReturn.updatedAt = existingUser.updatedAt;
-
-        return RouteResponse.sucess(res, userReturn);
+        return RouteResponse.sucess(res, existingUser);
     }
 }

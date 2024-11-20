@@ -110,7 +110,7 @@ export class PDIController {
             return RouteResponse.error(res, 'Professor selecionado não existente');
         }
 
-        const allPossibleAnswers: Answer[] = await answerRepository.getAllPossibleAnswers();
+        const allPossibleAnswers: Answer[] = await answerRepository.find();
 
         const answersAcademicDevelopment: Answer[] = allPossibleAnswers.filter(
             answer => bodyAnswersAcademicDevelopment.includes(answer.answerType) && answer.questionType == enumQuestionType.ACADEMIC_DEVELOPMENT

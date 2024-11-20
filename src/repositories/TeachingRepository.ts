@@ -6,11 +6,4 @@ export class TeachingRepository extends Repository<Teaching> {
     constructor() {
         super(Teaching, MysqlDataSource.manager);
     }
-
-    /**
-     * @returns Todos os turnos da tabela Teaching
-     */
-    async getAllTeachings(): Promise<Teaching | undefined> {
-        return this.find();
-    }
 }
