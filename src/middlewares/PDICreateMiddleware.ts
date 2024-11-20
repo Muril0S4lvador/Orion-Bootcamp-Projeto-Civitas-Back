@@ -34,7 +34,7 @@ export async function PDICreateMiddleware(req: Request, res: Response, next: Nex
         return RouteResponse.error(res, 'Usuário não encontrado');
     }
 
-    if (!existingUser.roles.some(role => Object.values(enumRoles).includes(role.authType))) {
+    if (existingUser.roles.some(role => role.authType != enumRoles.TEACHER)) {
         return RouteResponse.unauthorizedError(res);
     }
 
