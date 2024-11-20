@@ -1,7 +1,7 @@
 export interface PDICreateRequestBody {
     studentId: number;
-    bodyAnswersEmotionalInteligence: string[];
-    bodyAnswersAcademicDevelopment: string[];
-    bodyAnswersResponsability: string[];
+    answersEmotionalInteligenceId: number[];
+    answersAcademicDevelopmentId: number[];
+    answersResponsabilityId: number[];
     considerations: string;
 }

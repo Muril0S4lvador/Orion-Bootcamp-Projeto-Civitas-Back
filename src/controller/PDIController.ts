@@ -1,6 +1,5 @@
 import { Request, Response } from 'express';
 import { PDICreateRequestBody } from '../models/interfaces/PDICreateRequestBody';
-import { enumAnswers } from '../models/enums/EnumAnswers';
 import { enumQuestionType } from '../models/enums/EnumQuestionType';
 import { StudentRepository } from '../repositories/StudentRepository';
 import { UserRepository } from '../repositories/UserRepository';
@@ -83,9 +82,9 @@ export class PDIController {
     async createPDI(req: Request, res: Response) {
         const {
             studentId,
-            bodyAnswersEmotionalInteligence,
-            bodyAnswersAcademicDevelopment,
-            bodyAnswersResponsability,
+            answersEmotionalInteligenceId,
+            answersAcademicDevelopmentId,
+            answersResponsabilityId,
             considerations
         }: PDICreateRequestBody = req.body;
         const email: string = req.headers.email.toString() || '';
@@ -94,10 +93,13 @@ export class PDIController {
         const pdiRepository: PDIRepository = new PDIRepository();
         const answerRepository: AnswerRepository = new AnswerRepository();
 
-        const allBodyAnswers = [...bodyAnswersAcademicDevelopment, ...bodyAnswersEmotionalInteligence, ...bodyAnswersResponsability];
+        const allPossibleAnswers: Answer[] = await answerRepository.find();
+        const allPossibleIds: number[] = allPossibleAnswers.map(answer => answer.id);
 
-        if (!allBodyAnswers.every(answer => Object.values(enumAnswers).includes(answer as enumAnswers))) {
-            return RouteResponse.error(res, 'Respostas enviadas inválidas');
+        const allBodyAnswersId = [...answersAcademicDevelopmentId, ...answersEmotionalInteligenceId, ...answersResponsabilityId];
+
+        if (allBodyAnswersId.some(bodyId => !allPossibleIds.includes(bodyId))) {
+            return RouteResponse.error(res, 'Ids enviados inválidos');
         }
 
         const student: Student = await studentRepository.findStudentById(studentId);
@@ -110,18 +112,16 @@ export class PDIController {
             return RouteResponse.error(res, 'Professor selecionado não existente');
         }
 
-        const allPossibleAnswers: Answer[] = await answerRepository.find();
-
         const answersAcademicDevelopment: Answer[] = allPossibleAnswers.filter(
-            answer => bodyAnswersAcademicDevelopment.includes(answer.answerType) && answer.questionType == enumQuestionType.ACADEMIC_DEVELOPMENT
+            answer => answersEmotionalInteligenceId.includes(answer.id) && answer.questionType == enumQuestionType.EMOTIONAL_INTELLIGENCE
         );
 
         const answersEmotionalInteligence: Answer[] = allPossibleAnswers.filter(
-            answer => bodyAnswersEmotionalInteligence.includes(answer.answerType) && answer.questionType == enumQuestionType.EMOTIONAL_INTELLIGENCE
+            answer => answersEmotionalInteligenceId.includes(answer.id) && answer.questionType == enumQuestionType.EMOTIONAL_INTELLIGENCE
         );
 
         const answersResponsability: Answer[] = allPossibleAnswers.filter(
-            answer => bodyAnswersResponsability.includes(answer.answerType) && answer.questionType == enumQuestionType.RESPONSABILITY
+            answer => answersResponsabilityId.includes(answer.id) && answer.questionType == enumQuestionType.RESPONSABILITY
         );
 
         await pdiRepository.save({
