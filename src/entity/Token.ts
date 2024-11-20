@@ -13,7 +13,7 @@ export class Token {
     @Column()
     expiresAt: Date;
 
-    @CreateDateColumn()
+    @CreateDateColumn({ default: () => 'NOW()' })
     createdAt: Date;
 
     @ManyToOne(() => User, user => user.tokens)
