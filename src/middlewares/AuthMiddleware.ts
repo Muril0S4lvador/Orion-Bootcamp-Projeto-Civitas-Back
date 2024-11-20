@@ -8,7 +8,7 @@ import { Token } from '../entity/Token';
 import { User } from '../entity/User';
 import { enumRoles } from '../models/enums/EnumRoles';
 
-export async function PDICreateMiddleware(req: Request, res: Response, next: NextFunction) {
+export async function AuthMiddleware(req: Request, res: Response, next: NextFunction) {
     const userRepository: UserRepository = new UserRepository();
     const tokenRepository: TokenRepository = new TokenRepository();
     if (!req.headers.authorization || !req.headers.authorization.includes('Bearer')) {

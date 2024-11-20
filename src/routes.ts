@@ -3,7 +3,7 @@ import { HomeController } from './controller/HomeController';
 import { AuthController } from './controller/AuthController';
 import { ClassController } from './controller/ClassController';
 import { PDIController } from './controller/PDIController';
-import { PDICreateMiddleware } from './middlewares/PDICreateMiddleware';
+import { AuthMiddleware } from './middlewares/AuthMiddleware';
 
 const router = Router();
 
@@ -18,6 +18,6 @@ router.get('/me', new AuthController().returnUserInfo);
 router.get('/classes-options', new ClassController().getEnumsInfos);
 
 // PDI
-router.post('/pdi', PDICreateMiddleware, new PDIController().createPDI);
+router.post('/pdi', AuthMiddleware, new PDIController().createPDI);
 
 export default router;
