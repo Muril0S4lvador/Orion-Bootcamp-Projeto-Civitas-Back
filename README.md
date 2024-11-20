@@ -29,17 +29,17 @@ Código base para o desenvolvimento do backend dos projeto Civitas
 
 -   Ao executar o projeto, terão 3 atores no banco de dados, cada um com uma role diferente.
 
-### Administrador
+##### Administrador
 
-Email: `admin@email.com`
+Email: `admin@email.com`  
 Senha: `senha`
 
-### Professor
+##### Professor
 
-Email: `professor@email.com`
+Email: `professor@email.com`  
 Senha: `senha`
 
-### Responsável
+##### Responsável
 
-Email: `responsavel@email.com`
+Email: `responsavel@email.com`  
 Senha: `senha`
