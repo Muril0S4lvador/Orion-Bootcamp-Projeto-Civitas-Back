@@ -4,10 +4,22 @@ export class UserSeeder1731550525552 implements MigrationInterface {
     private table = 'user';
     private readonly users = [
         {
+            name: 'admin',
+            email: 'admin@email.com',
+            password: '$2b$12$OoNb4ONmNct9ExjiZu8EbORGq/Kgbk8xgs0QicSvPUGmx4xpHmuVu',
+            roles: '[ADMIN]'
+        },
+        {
             name: 'professor',
             email: 'professor@email.com',
             password: '$2b$12$OoNb4ONmNct9ExjiZu8EbORGq/Kgbk8xgs0QicSvPUGmx4xpHmuVu',
             roles: '[TEACHER]'
+        },
+        {
+            name: 'responsavel',
+            email: 'responsavel@email.com',
+            password: '$2b$12$OoNb4ONmNct9ExjiZu8EbORGq/Kgbk8xgs0QicSvPUGmx4xpHmuVu',
+            roles: '[GUARDIAN]'
         }
     ];
 
