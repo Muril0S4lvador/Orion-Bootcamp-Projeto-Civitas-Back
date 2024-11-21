@@ -29,7 +29,7 @@ export class CreateStudentTable1730709097787 implements MigrationInterface {
                         name: 'cpf',
                         type: 'varchar',
                         length: '11',
-                        isUnique: true,
+                        isUnique: false,
                         isNullable: false
                     },
                     {

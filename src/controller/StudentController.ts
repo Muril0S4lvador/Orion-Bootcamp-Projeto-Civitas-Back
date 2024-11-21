@@ -29,7 +29,6 @@ export class StudentController {
      *               schoolClassIdentifier:
      *                 type: array
      *                 items:
-     *                 type: string
      *                 example: ["TURMA 1-A", "TURMA 2-B"]
      *               cpf:
      *                 type: string
@@ -78,13 +77,11 @@ export class StudentController {
             const classIdentifiers = Array.isArray(schoolClassIdentifier) ? schoolClassIdentifier : [schoolClassIdentifier];
 
             const classes = await Promise.all(classIdentifiers.map(identifier => classRepository.findClassByIdentifier(identifier)));
-            const invalidClasses = classes.filter(cls => cls === undefined);
+
+            const invalidClasses = classes.filter(cls => cls === null);
 
             if (invalidClasses.length > 0) {
-                return RouteResponse.error(
-                    res,
-                    `As seguintes turmas são inválidas ou não existem: ${schoolClassIdentifier.filter((_, index) => classes[index] === undefined).join(', ')}`
-                );
+                return RouteResponse.error(res, `Uma ou mais turmas informadas são inválidas.`);
             }
 
             const validClasses = classes.filter(cls => cls !== undefined);
