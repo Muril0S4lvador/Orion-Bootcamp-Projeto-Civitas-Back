@@ -7,36 +7,17 @@ export class ShiftRepository extends Repository<Shift> {
         super(Shift, MysqlDataSource.manager);
     }
     /**
-     * Busca um turno com base no nome
-     * @param name Nome do turno
-     * @returns O turno encontrado ou undefined
+     * Verifica se um registro correspondente ao `id` existe na tabela `shift`.
+     *
+     * @param id - O identificador único do turno
+     * @returns Uma Promise que resolve para `true` se o registro existir, ou `false` caso contrário.
      */
-    static async getShiftByName(name: string): Promise<Shift | undefined> {
-        return MysqlDataSource.getRepository(Shift).findOne({
-            where: { name }
+    static async findShiftById(id: number): Promise<boolean> {
+        const result = await MysqlDataSource.getRepository(Shift).findOne({
+            where: { id }
         });
+        return !!result;
     }
-    /**
-     * Busca o ID de um turno pelo nome
-     * @param nameShift Nome do turno (Manhã, Tarde ou Noite)
-     * @returns O ID do turno ou null, caso não encontrado
-     * @throws Erro caso a busca pelo ID falhe
-     */
-    static async findIdByName(nameShift: string): Promise<number | null> {
-        try {
-            const result = await MysqlDataSource.getRepository(Shift)
-                .createQueryBuilder('shift')
-                .select('shift.id')
-                .where('shift.name = :name', { name: nameShift })
-                .getOne();
-
-            return result ? result.id : null;
-        } catch (error) {
-            console.error('Error finding id by name:', error);
-            throw new Error('Failed to find id by name');
-        }
-    }
-
     /**
      * Retorna todos os turnos registrados na tabela Shift
      * @returns Uma lista de todos os turnos ou undefined, caso nenhum turno seja encontrado
