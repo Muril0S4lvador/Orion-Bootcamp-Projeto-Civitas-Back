@@ -64,7 +64,6 @@ export class ClassController {
         }
 
         const { year, shift, teaching, identifier } = req.body;
-        console.log(year, shift, teaching, identifier);
 
         try {
             const classExists = await classRepository.findClassByIdentifier(identifier);
