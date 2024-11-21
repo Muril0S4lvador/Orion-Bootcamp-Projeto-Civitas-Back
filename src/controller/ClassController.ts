@@ -26,14 +26,14 @@ export class ClassController {
      *             type: object
      *             properties:
      *               year:
-     *                 type: string
-     *                 example: "1º ano"
+     *                 type: int
+     *                 example: 1
      *               shift:
-     *                 type: string
-     *                 example: "Manhã"
+     *                 type: int
+     *                 example: 1
      *               teaching:
-     *                 type: string
-     *                 example: "Maternal"
+     *                 type: int
+     *                 example: 1
      *               identifier:
      *                 type: string
      *                 maxLength: 20
@@ -64,25 +64,22 @@ export class ClassController {
         }
 
         const { year, shift, teaching, identifier } = req.body;
+        console.log(year, shift, teaching, identifier);
 
         try {
             const classExists = await classRepository.findClassByIdentifier(identifier);
+
             if (classExists) {
                 return RouteResponse.error(res, 'Já existe uma turma com este identificador.');
             }
-
-            const yearId = await SchoolYearRepository.findIdByName(year);
-            //const schoolYear = await SchoolYearRepository.getSchoolYearByName(year);
-            const shiftInfo = await ShiftRepository.findIdByName(shift);
-            const teachingInfo = await TeachingRepository.findIdByName(teaching);
             const newClass = classRepository.create({
-                schoolYear: yearId,
-                shift: shiftInfo,
-                teaching: teachingInfo,
+                schoolYear: year,
+                shift: shift,
+                teaching: teaching,
                 identifier: identifier
             });
 
-            await classRepository.saveClass(newClass);
+            await classRepository.save(newClass);
 
             return RouteResponse.sucess(res, newClass);
         } catch (error) {

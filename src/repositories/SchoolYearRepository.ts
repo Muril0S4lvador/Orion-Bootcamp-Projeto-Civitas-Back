@@ -7,14 +7,16 @@ export class SchoolYearRepository extends Repository<SchoolYear> {
         super(SchoolYear, MysqlDataSource.manager);
     }
     /**
-     * Busca um ano escolar com base no nome
-     * @param name Nome do ano escolar
-     * @returns O ano escolar encontrado ou undefined
+     * Verifica se um registro correspondente ao `id` existe na tabela `schoolYear`.
+     *
+     * @param id - O identificador único do ano escolar
+     * @returns Uma Promise que resolve para `true` se o registro existir, ou `false` caso contrário.
      */
-    static async getSchoolYearByName(name: string): Promise<SchoolYear | undefined> {
-        return MysqlDataSource.getRepository(SchoolYear).findOne({
-            where: { name }
+    static async findYearById(id: number): Promise<boolean> {
+        const result = await MysqlDataSource.getRepository(SchoolYear).findOne({
+            where: { id }
         });
+        return !!result;
     }
     /**
      * Retorna todos os anos escolares registrados na tabela SchoolYear
@@ -22,25 +24,5 @@ export class SchoolYearRepository extends Repository<SchoolYear> {
      */
     async getAllSchoolYears(): Promise<SchoolYear[]> {
         return this.find();
-    }
-    /**
-     * Busca o ID de um ano escolar com base no nome
-     * @param nameYear Nome do ano escolar (exemplo: 1º ano)
-     * @returns O ID do ano escolar ou null, caso não encontrado
-     * @throws Erro caso a busca pelo ID falhe
-     */
-    static async findIdByName(nameYear: string): Promise<number | null> {
-        try {
-            const result = await MysqlDataSource.getRepository(SchoolYear)
-                .createQueryBuilder('schoolYear')
-                .select('schoolYear.id')
-                .where('schoolYear.name = :name', { name: nameYear })
-                .getOne();
-
-            return result ? result.id : null;
-        } catch (error) {
-            console.error('Error finding id by name:', error);
-            throw new Error('Failed to find id by name');
-        }
     }
 }

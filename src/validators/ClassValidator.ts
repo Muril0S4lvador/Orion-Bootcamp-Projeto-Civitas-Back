@@ -1,17 +1,40 @@
 import { body } from 'express-validator';
-import { enumYears } from '../models/enums/EnumYears';
-import { enumShifts } from '../models/enums/EnumShifts';
-import { enumTeaching } from '../models/enums/EnumTeaching';
+import { SchoolYearRepository } from '../repositories/SchoolYearRepository';
+import { TeachingRepository } from '../repositories/TeachingRepository';
+import { ShiftRepository } from '../repositories/ShiftRepository';
 
 export const validateClassData = () => {
     return [
         body('year')
             .notEmpty()
             .withMessage('O campo do ano escolar é obrigatório.')
-            .isIn(Object.values(enumYears))
-            .withMessage('Ano escolar inválido.'),
-        body('shift').notEmpty().withMessage('O campo do turno é obrigatório.').isIn(Object.values(enumShifts)).withMessage('Turno inválido.'),
-        body('teaching').notEmpty().withMessage('O campo de ensino é obrigatório.').isIn(Object.values(enumTeaching)).withMessage('Ensino inválido.'),
+            .custom(async year => {
+                const isValid = await SchoolYearRepository.findYearById(year);
+                if (!isValid) {
+                    throw new Error('Ano escolar inválido.');
+                }
+                return true;
+            }),
+        body('shift')
+            .notEmpty()
+            .withMessage('O campo do turno é obrigatório.')
+            .custom(async shift => {
+                const isValid = await ShiftRepository.findShiftById(shift);
+                if (!isValid) {
+                    throw new Error('Turno inválido.');
+                }
+                return true;
+            }),
+        body('teaching')
+            .notEmpty()
+            .withMessage('O campo de ensino é obrigatório.')
+            .custom(async teaching => {
+                const isValid = await TeachingRepository.findTeachingById(teaching);
+                if (!isValid) {
+                    throw new Error('Nível de ensino inválido.');
+                }
+                return true;
+            }),
         body('identifier')
             .notEmpty()
             .withMessage('O campo de identificador é obrigatório.')
