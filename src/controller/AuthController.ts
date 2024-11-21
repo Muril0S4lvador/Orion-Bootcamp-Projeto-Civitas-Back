@@ -195,6 +195,8 @@ export class AuthController {
             return RouteResponse.notFound(res, 'Usuário não encontrado');
         }
 
+        delete existingUser.password;
+
         return RouteResponse.sucess(res, existingUser);
     }
 }

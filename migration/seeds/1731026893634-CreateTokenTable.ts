@@ -1,4 +1,4 @@
-import { MigrationInterface, QueryRunner, Table, TableColumn, TableForeignKey } from 'typeorm';
+import { MigrationInterface, QueryRunner, Table, TableForeignKey } from 'typeorm';
 
 export class CreateTokenTable1731026893634 implements MigrationInterface {
     public async up(queryRunner: QueryRunner): Promise<void> {
@@ -28,20 +28,17 @@ export class CreateTokenTable1731026893634 implements MigrationInterface {
                         name: 'createdAt',
                         type: 'timestamp',
                         default: 'NOW()'
+                    },
+                    {
+                        name: 'userId',
+                        type: 'int',
+                        isNullable: true
                     }
                 ]
             })
         );
 
-        await queryRunner.addColumn(
-            'token',
-            new TableColumn({
-                name: 'userId',
-                type: 'int',
-                isNullable: false
-            })
-        );
-
+        // Chave estrangeira para a relação `ManyToOne` entre `token` e `user`
         await queryRunner.createForeignKey(
             'token',
             new TableForeignKey({
@@ -51,17 +48,6 @@ export class CreateTokenTable1731026893634 implements MigrationInterface {
                 onDelete: 'CASCADE'
             })
         );
-
-        // Chave estrangeira para a relação `ManyToOne` entre `token` e `user`
-        // await queryRunner.createForeignKey(
-        //     'token',
-        //     new TableForeignKey({
-        //         columnNames: ['user'],
-        //         referencedColumnNames: ['tokens'],
-        //         referencedTableName: 'user',
-        //         onDelete: 'CASCADE'
-        //     })
-        // );
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {
