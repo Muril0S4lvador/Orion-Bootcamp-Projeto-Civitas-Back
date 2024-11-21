@@ -1,39 +1,39 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToMany } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, ManyToOne, JoinColumn } from 'typeorm';
 
-import { enumYears } from '../models/enums/EnumYears';
-import { enumShifts } from '../models/enums/EnumShifts';
-import { enumTeaching } from '../models/enums/EnumTeaching';
 import { Student } from './Student';
+import { Shift } from './Shift';
+import { SchoolYear } from './SchoolYear';
+import { Teaching } from './Teaching';
 
 @Entity('classes')
 export class Class {
-  @PrimaryGeneratedColumn()
-  id: number;
+    @PrimaryGeneratedColumn()
+    id: number;
 
-  @Column({
-    name: 'schoolYear',
-    type: 'enum',
-    enum: enumYears
-  })
-  public yearType: enumYears;
+    @Column({ type: 'int', nullable: false })
+    schoolYear: number;
 
-  @Column({
-    name: 'shift',
-    type: 'enum',
-    enum: enumShifts
-  })
-  public shiftType: enumShifts;
+    @ManyToOne(() => SchoolYear)
+    @JoinColumn({ name: 'schoolYear' })
+    schoolYearRelation: SchoolYear;
 
-  @Column({
-    name: 'teaching',
-    type: 'enum',
-    enum: enumTeaching
-  })
-  public teachingType: enumTeaching;
+    @Column({ type: 'int', nullable: false })
+    shift: number;
 
-  @Column({ type: 'varchar', length: 20, nullable: false, unique: true })
-  identifier: string;
+    @ManyToOne(() => Shift)
+    @JoinColumn({ name: 'shift' })
+    shiftRelation: Shift;
 
-  @ManyToMany(() => Student, (student) => student.classes)
-  students: Student[];
+    @Column({ type: 'int', nullable: false })
+    teaching: number;
+
+    @ManyToOne(() => Teaching)
+    @JoinColumn({ name: 'teaching' })
+    teachingRelation: Teaching;
+
+    @Column({ type: 'varchar', length: 20, nullable: false, unique: true })
+    identifier: string;
+
+    @ManyToMany(() => Student, student => student.classes)
+    students: Student[];
 }

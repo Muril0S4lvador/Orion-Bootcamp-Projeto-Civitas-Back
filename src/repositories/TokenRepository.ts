@@ -3,11 +3,11 @@ import { MysqlDataSource } from '../config/database';
 import { Token } from '../entity/Token';
 
 export class TokenRepository extends Repository<Token> {
-  constructor() {
-    super(Token, MysqlDataSource.manager);
-  }
+    constructor() {
+        super(Token, MysqlDataSource.manager);
+    }
 
-  async findToken(token: string): Promise<Token | undefined> {
-    return this.findOne({ where: { token } });
-  }
+    async findToken(token: string): Promise<Token | undefined> {
+        return this.findOne({ where: { token } });
+    }
 }
