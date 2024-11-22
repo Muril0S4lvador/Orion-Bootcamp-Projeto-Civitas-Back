@@ -23,4 +23,10 @@ export class UserRepository extends Repository<User> {
 
         return user;
     }
+    async findUserByRegistration(registration: number): Promise<User | undefined> {
+        const user = await this.findOne({
+            where: { registration }
+        });
+        return user;
+    }
 }

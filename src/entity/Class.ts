@@ -1,6 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, ManyToOne, JoinColumn } from 'typeorm';
 
 import { Student } from './Student';
+import { User } from './User';
 import { Shift } from './Shift';
 import { SchoolYear } from './SchoolYear';
 import { Teaching } from './Teaching';
@@ -36,4 +37,7 @@ export class Class {
 
     @ManyToMany(() => Student, student => student.classes)
     students: Student[];
+
+    @ManyToMany(() => User, user => user.classes)
+    users: User[];
 }
