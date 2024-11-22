@@ -34,7 +34,7 @@ export async function AuthMiddleware(req: Request, res: Response, next: NextFunc
         return RouteResponse.error(res, 'Usuário não encontrado');
     }
 
-    if (existingUser.roles.some(role => role.authType != enumRoles.TEACHER)) {
+    if (!existingUser.roles.some(role => role == enumRoles.TEACHER)) {
         return RouteResponse.unauthorizedError(res);
     }
 

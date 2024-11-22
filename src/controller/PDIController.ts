@@ -31,45 +31,48 @@ export class PDIController {
      *             type: object
      *             required:
      *               - studentId
-     *               - bodyAnswersEmotionalInteligence
-     *               - bodyAnswersAcademicDevelopment
-     *               - bodyAnswersResponsability
+     *               - answersEmotionalInteligenceId
+     *               - answersAcademicDevelopmentId
+     *               - answersResponsabilityId
      *               - considerations
      *             properties:
      *               studentId:
      *                 type: number
      *                 example: 1
-     *               bodyAnswersEmotionalInteligence:
+     *               answersEmotionalInteligenceId:
      *                 type: array
      *                 items:
      *                   type: string
-     *                 example: ["Adequado", "Excepcional"]
-     *               bodyAnswersAcademicDevelopment:
+     *                 example: [3, 1]
+     *               answersAcademicDevelopmentId:
      *                 type: array
      *                 items:
      *                   type: string
-     *                 example: ["Adequado", "Excepcional"]
-     *               bodyAnswersResponsability:
+     *                 example: [8, 6]
+     *               answersResponsabilityId:
      *                 type: array
      *                 items:
      *                   type: string
-     *                 example: ["Adequado", "Excepcional"]
+     *                 example: [15, 12]
      *               considerations:
      *                 type: string
      *                 example: 'Aluno excelente.'
      *     responses:
      *       '201':
-     *         description: PDI criado com sucesso
+     *         description: PDI cadastrado com sucesso
      *         content:
      *           application/json:
      *             schema:
      *               type: object
      *               properties:
-     *                 message:
+     *                 sucess:
+     *                   type: boolean
+     *                   example: true
+     *                 data:
      *                   type: string
-     *                   example: 'PDI criado com sucesso'
+     *                   example: 'PDI cadastrado com sucesso'
      *       '400':
-     *         description: Ids válidos, mas entidade não encontrada ou respostas inválidas
+     *         description: Token inválido, Ids de resposta inválidos ou entidade não encontrada
      *         content:
      *           application/json:
      *             schema:
@@ -78,6 +81,16 @@ export class PDIController {
      *                 message:
      *                   type: string
      *                   example: 'Estudante selecionado não existente'
+     *       '401':
+     *         description: Usuário não possui role correta para criar PDI
+     *         content:
+     *           application/json:
+     *             schema:
+     *               type: object
+     *               properties:
+     *                 message:
+     *                   type: string
+     *                   example: 'Unauthorized Access'
      */
     async createPDI(req: Request, res: Response) {
         const {
@@ -113,7 +126,7 @@ export class PDIController {
         }
 
         const answersAcademicDevelopment: Answer[] = allPossibleAnswers.filter(
-            answer => answersEmotionalInteligenceId.includes(answer.id) && answer.questionType == enumQuestionType.EMOTIONAL_INTELLIGENCE
+            answer => answersAcademicDevelopmentId.includes(answer.id) && answer.questionType == enumQuestionType.ACADEMIC_DEVELOPMENT
         );
 
         const answersEmotionalInteligence: Answer[] = allPossibleAnswers.filter(
@@ -131,6 +144,6 @@ export class PDIController {
             answers: [...answersAcademicDevelopment, ...answersEmotionalInteligence, ...answersResponsability]
         });
 
-        return RouteResponse.successEmpty(res);
+        return RouteResponse.sucessCreated(res, 'PDI cadastrado com sucesso');
     }
 }
