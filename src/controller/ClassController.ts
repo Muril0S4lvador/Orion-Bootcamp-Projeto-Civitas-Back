@@ -80,7 +80,7 @@ export class ClassController {
 
             await classRepository.save(newClass);
 
-            return RouteResponse.sucess(res, newClass);
+            return RouteResponse.sucessCreated(res, newClass);
         } catch (error) {
             return RouteResponse.error(res, 'Erro ao criar a turma');
         }

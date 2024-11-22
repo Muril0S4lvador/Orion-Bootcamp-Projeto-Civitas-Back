@@ -21,20 +21,25 @@ export class StudentController {
      *             type: object
      *             properties:
      *               name:
+     *                 description: nome completo do estudante
      *                 type: string
      *                 example: "Thais Oliveira"
      *               registration:
+     *                 description: matrícula do estudante
      *                 type: integer
      *                 example: 111
-     *               schoolClassIdentifier:
+     *               schoolClassIds:
+     *                 description: id(s) da(s) turma(s)
      *                 type: array
      *                 items:
-     *                 example: ["TURMA 1-A", "TURMA 2-B"]
+     *                 example: [1, 2]
      *               cpf:
+     *                 description: cpf do responsável do estudante
      *                 type: string
      *                 maxLength: 11
      *                 example: "00000000000"
      *               email:
+     *                  description: email do responsável do estudante
      *                  type: string
      *                  example: "example@gmail.com"
      *     responses:
@@ -63,7 +68,7 @@ export class StudentController {
             return RouteResponse.error(res, 'Dados inválidos.');
         }
 
-        const { name, registration, schoolClassIdentifier, cpf, email } = req.body;
+        const { name, registration, schoolClassIds, cpf, email } = req.body;
         const registrationExists = await studentRepository.findStudentByRegistration(registration);
         if (registrationExists) {
             return RouteResponse.error(res, 'Já existe um estudante com essa matrícula.');
@@ -74,17 +79,16 @@ export class StudentController {
         }
 
         try {
-            const classIdentifiers = Array.isArray(schoolClassIdentifier) ? schoolClassIdentifier : [schoolClassIdentifier];
+            const classIds = Array.isArray(schoolClassIds) ? schoolClassIds : [schoolClassIds];
+            const classList = await classRepository.findClassesByIds(classIds);
 
-            const classes = await Promise.all(classIdentifiers.map(identifier => classRepository.findClassByIdentifier(identifier)));
+            const notFoundClasses = classList.map((cls, index) => (cls === null ? classIds[index] : null)).filter(id => id !== null);
 
-            const invalidClasses = classes.filter(cls => cls === null);
-
-            if (invalidClasses.length > 0) {
+            if (notFoundClasses.length > 0) {
                 return RouteResponse.error(res, `Uma ou mais turmas informadas são inválidas.`);
             }
 
-            const validClasses = classes.filter(cls => cls !== undefined);
+            const validClasses = classList.filter(cls => cls !== undefined);
 
             const newStudent = studentRepository.create({
                 name: name,
@@ -93,8 +97,8 @@ export class StudentController {
                 cpf: cpf,
                 email: email
             });
-            await studentRepository.saveStudent(newStudent);
-            return RouteResponse.sucess(res, newStudent);
+            await studentRepository.save(newStudent);
+            return RouteResponse.sucessCreated(res, newStudent);
         } catch (error) {
             return RouteResponse.error(res, error);
         }

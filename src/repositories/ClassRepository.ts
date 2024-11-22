@@ -18,4 +18,19 @@ export class ClassRepository extends Repository<Class> {
 
         return schoolClass;
     }
+    /**
+     * Busca uma turma com base no id
+     * @param id o array de ids das turmas no banco
+     * @returns As turmas encontradas e/ou undefined
+     */
+    async findClassesByIds(ids: number[]): Promise<(Class | null)[]> {
+        const repository = MysqlDataSource.getRepository(Class);
+        const result = await Promise.all(
+            ids.map(async id => {
+                const schoolClass = await repository.findOne({ where: { id } });
+                return schoolClass || null;
+            })
+        );
+        return result;
+    }
 }

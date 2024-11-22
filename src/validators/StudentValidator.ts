@@ -17,7 +17,7 @@ export const validateStudentData = () => {
             .withMessage('O campo de matrícula é obrigatório.')
             .isNumeric()
             .withMessage('A matrícula deve ter apenas números.'),
-        body('schoolClassIdentifier').notEmpty().withMessage('O campo de turma é obrigatório.'),
+        body('schoolClassIds').notEmpty().withMessage('O campo de turma é obrigatório.'),
         body('email')
             .notEmpty()
             .withMessage('O campo de e-mail do responsável é obrigatório.')

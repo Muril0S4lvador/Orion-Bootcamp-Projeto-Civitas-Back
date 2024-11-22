@@ -6,10 +6,6 @@ export class StudentRepository extends Repository<Student> {
     constructor() {
         super(Student, MysqlDataSource.manager);
     }
-
-    async saveStudent(student: Student): Promise<Student> {
-        return await this.manager.save(student);
-    }
     /**
      * Busca um estudante no banco de dados utilizando o número de matrícula.
      *
