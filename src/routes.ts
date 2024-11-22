@@ -45,6 +45,5 @@ router.post(
     StudentController.createStudent
 );
 
-router.post('/students', StudentController.createStudent);
 
 export default router;
