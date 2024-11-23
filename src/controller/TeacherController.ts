@@ -4,10 +4,10 @@ import { ClassRepository } from '../repositories/ClassRepository';
 import { UserRepository } from '../repositories/UserRepository';
 import { validationResult } from 'express-validator';
 
-export class StudentController {
+export class TeacherController {
     /**
      * @swagger
-     * /students:
+     * /teachers:
      *   post:
      *     summary: Cria um novo professor
      *     description: Endpoint para criar um novo professor com nome, e-mail, número de matrícula e turmas.
@@ -24,15 +24,15 @@ export class StudentController {
      *                 description: nome completo do professor
      *                 type: string
      *                 example: "Maria da Silva"
-     *                e-mail:
+     *                email:
      *                 description: e-mail do professor
      *                 type: string
      *                 example: teacher@gmail.com
-     *               registration:
+     *                registration:
      *                 description: matrícula do professor
      *                 type: integer
      *                 example: 1
-     *               schoolClassIds:
+     *                schoolClassIds:
      *                 description: id(s) da(s) turma(s) do professor
      *                 type: array
      *                 items:
@@ -54,7 +54,7 @@ export class StudentController {
      *       500:
      *         description: Erro interno do servidor
      */
-    static async createStudent(req: Request, res: Response) {
+    static async createTeacher(req: Request, res: Response) {
         const errors = validationResult(req);
         const classRepository = new ClassRepository();
         const userRepository = new UserRepository();
