@@ -5,7 +5,7 @@ import { ClassController } from './controller/ClassController';
 import { validateClassData } from './validators/ClassValidator';
 import { validationResult } from 'express-validator';
 import { PDIController } from './controller/PDIController';
-import { AuthMiddleware } from './middlewares/AuthMiddleware';
+import { AuthTeacherMiddleware } from './middlewares/AuthMiddleware';
 
 const router = Router();
 
@@ -33,6 +33,8 @@ router.post(
 router.get('/classes-options', new ClassController().getEnumsInfos);
 
 // PDI
-router.post('/pdi', AuthMiddleware, new PDIController().createPDI);
+router.post('/pdi', AuthTeacherMiddleware, new PDIController().createPDI);
+
+router.get('/pdi', new PDIController().getPDI);
 
 export default router;

@@ -8,7 +8,8 @@ import { AnswerRepository } from '../repositories/AnswerRepository';
 import { Student } from '../entity/Student';
 import { User } from '../entity/User';
 import { RouteResponse } from '../helpers/RouteResponse';
-import { Answer } from 'entity/Answer';
+import { Answer } from '../entity/Answer';
+import { PDI } from '../entity/PDI';
 
 export class PDIController {
     /**
@@ -145,5 +146,82 @@ export class PDIController {
         });
 
         return RouteResponse.sucessCreated(res, 'PDI cadastrado com sucesso');
+    }
+
+    /**
+     * @swagger
+     * /pdi:
+     *   get:
+     *     summary: Retorno de PDI
+     *     tags: [PDI]
+     *     produces:
+     *       - application/json
+     *     security:
+     *       - BearerAuth: []
+     *     responses:
+     *       '201':
+     *         description: PDI cadastrado com sucesso
+     *         content:
+     *           application/json:
+     *             schema:
+     *               type: object
+     *               properties:
+     *                 sucess:
+     *                   type: boolean
+     *                   example: true
+     *                 data:
+     *                   type: string
+     *                   example: 'PDI cadastrado com sucesso'
+     *       '400':
+     *         description: Token inválido, Ids de resposta inválidos ou entidade não encontrada
+     *         content:
+     *           application/json:
+     *             schema:
+     *               type: object
+     *               properties:
+     *                 message:
+     *                   type: string
+     *                   example: 'Estudante selecionado não existente'
+     *       '401':
+     *         description: Usuário não possui role correta para criar PDI
+     *         content:
+     *           application/json:
+     *             schema:
+     *               type: object
+     *               properties:
+     *                 message:
+     *                   type: string
+     *                   example: 'Unauthorized Access'
+     */
+    async getPDI(req: Request, res: Response) {
+        const pdiId = 1;
+        const pdiRepository: PDIRepository = new PDIRepository();
+
+        const pdi: PDI = await pdiRepository.findPDIById(pdiId);
+
+        const considerations = pdi.considerations;
+
+        const pointsEmotionalInteligence = pdi.answers.reduce((points, answer) => {
+            if (answer.questionType == enumQuestionType.EMOTIONAL_INTELLIGENCE) {
+                return points + answer.points;
+            }
+            return points;
+        }, 0);
+
+        const pointsAcademicDevelopment = pdi.answers.reduce((points, answer) => {
+            if (answer.questionType == enumQuestionType.ACADEMIC_DEVELOPMENT) {
+                return points + answer.points;
+            }
+            return points;
+        }, 0);
+
+        const pointsResponsability = pdi.answers.reduce((points, answer) => {
+            if (answer.questionType == enumQuestionType.RESPONSABILITY) {
+                return points + answer.points;
+            }
+            return points;
+        }, 0);
+
+        return RouteResponse.sucess(res, { pointsAcademicDevelopment, pointsEmotionalInteligence, pointsResponsability, considerations });
     }
 }
