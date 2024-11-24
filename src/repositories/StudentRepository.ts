@@ -44,4 +44,13 @@ export class StudentRepository extends Repository<Student> {
             throw new Error('Failed to find student by email');
         }
     }
+    async findStudentsByClassId(classId: number): Promise<Student[] | undefined> {
+        const students = await MysqlDataSource.getRepository(Student)
+            .createQueryBuilder('student')
+            .innerJoin('student.classes', 'class')
+            .where('class.id = :classId', { classId })
+            .getMany();
+
+        return students;
+    }
 }

@@ -3,6 +3,7 @@ import { RouteResponse } from '../helpers/RouteResponse';
 import { StudentRepository } from '../repositories/StudentRepository';
 import { ClassRepository } from '../repositories/ClassRepository';
 import { validationResult } from 'express-validator';
+import { Student } from '../entity/Student';
 
 export class StudentController {
     /**
@@ -101,6 +102,97 @@ export class StudentController {
             return RouteResponse.sucessCreated(res, newStudent);
         } catch (error) {
             return RouteResponse.error(res, error);
+        }
+    }
+    /**
+     * @swagger
+     * /students-classes:
+     *   post:
+     *     summary: Retorna os estudantes por ID da turma
+     *     tags:
+     *       - Student
+     *     requestBody:
+     *       content:
+     *         application/json:
+     *           schema:
+     *             type: object
+     *             properties:
+     *               classId:
+     *                 type: int
+     *                 example: 1
+     *                 description: O ID da turma para buscar os estudantes.
+     *     responses:
+     *       '200':
+     *         description: Lista de estudantes retornada com sucesso.
+     *         content:
+     *           application/json:
+     *             schema:
+     *               type: object
+     *               properties:
+     *                 success:
+     *                   type: boolean
+     *                   example: true
+     *                 data:
+     *                   type: array
+     *                   items:
+     *                     type: object
+     *                     properties:
+     *                       id:
+     *                         type: int
+     *                         example: 1
+     *                         description: ID do estudante.
+     *                       name:
+     *                         type: string
+     *                         example: "João da Silva"
+     *                         description: Nome do estudante.
+     *                       registration:
+     *                         type: int
+     *                         example: 12345
+     *                         description: Matrícula única do estudante.
+     *                       cpf:
+     *                         type: string
+     *                         example: "00000000000"
+     *                         description: CPF do responsável pelo estudante.
+     *                       email:
+     *                         type: string
+     *                         example: "joao.silva@gmail.com"
+     *                         description: Email único do responsável pelo estudante.
+     *                       createdAt:
+     *                         type: string
+     *                         format: date-time
+     *                         example: "2024-11-24T10:00:00Z"
+     *                         description: Timestamp de criação do registro.
+     *                       updatedAt:
+     *                         type: string
+     *                         format: date-time
+     *                         example: "2024-11-24T12:00:00Z"
+     *                         description: Timestamp da última atualização do registro.
+     *       400:
+     *         description: Dados inválidos
+     *       500:
+     *         description: Erro interno do servidor
+     */
+    static async getStudentsByClassId(req: Request, res: Response) {
+        const studentRepository = new StudentRepository();
+        const errors = validationResult(req);
+
+        if (!errors.isEmpty()) {
+            return RouteResponse.error(res, 'Dados inválidos.');
+        }
+        const { classId } = req.body;
+        console.log(classId);
+
+        try {
+            const students: Student[] = await studentRepository.findStudentsByClassId(classId);
+            console.log('students:', students);
+            if (students == null) {
+                return RouteResponse.error(res, 'Não há estudantes nessa turma.');
+            }
+
+            students.sort((a, b) => a.name.localeCompare(b.name));
+            return RouteResponse.sucess(res, students);
+        } catch (error) {
+            return RouteResponse.error(res, 'Erro ao tentar encontrar estudantes.');
         }
     }
 }
