@@ -150,10 +150,16 @@ export class PDIController {
 
     /**
      * @swagger
-     * /pdi:
+     * /pdi/{id}:
      *   get:
      *     summary: Retorno de PDI
      *     tags: [PDI]
+     *     parameters:
+     *     - in: path
+     *       name: id
+     *       type: integer
+     *       required: true
+     *       description: Id do PDI a ser retornado.
      *     produces:
      *       - application/json
      *     security:
@@ -170,10 +176,22 @@ export class PDIController {
      *                   type: boolean
      *                   example: true
      *                 data:
-     *                   type: string
-     *                   example: 'PDI cadastrado com sucesso'
-     *       '400':
-     *         description: Token inválido, Ids de resposta inválidos ou entidade não encontrada
+     *                   type: object
+     *                   properties:
+     *                     pointsAcademicDevelopment:
+     *                       type: number
+     *                       example: 10
+     *                     pointsEmotionalInteligence:
+     *                       type: number
+     *                       example: 10
+     *                     pointsResponsability:
+     *                       type: number
+     *                       example: 10
+     *                     considerations:
+     *                       type: string
+     *                       example: 'Aluno excelente'
+     *       '404':
+     *         description: PDI procurado não encontrado
      *         content:
      *           application/json:
      *             schema:
@@ -181,7 +199,7 @@ export class PDIController {
      *               properties:
      *                 message:
      *                   type: string
-     *                   example: 'Estudante selecionado não existente'
+     *                   example: 'PDI selecionado não encontrado'
      *       '401':
      *         description: Usuário não possui role correta para criar PDI
      *         content:
@@ -194,33 +212,29 @@ export class PDIController {
      *                   example: 'Unauthorized Access'
      */
     async getPDI(req: Request, res: Response) {
-        const pdiId = 1;
+        const pdiId = req.params.id;
         const pdiRepository: PDIRepository = new PDIRepository();
 
         const pdi: PDI = await pdiRepository.findPDIById(pdiId);
 
+        if (!pdi) {
+            return RouteResponse.notFound(res, 'PDI selecionado não encontrado');
+        }
+
         const considerations = pdi.considerations;
 
-        const pointsEmotionalInteligence = pdi.answers.reduce((points, answer) => {
-            if (answer.questionType == enumQuestionType.EMOTIONAL_INTELLIGENCE) {
-                return points + answer.points;
+        let pointsEmotionalInteligence = 0,
+            pointsAcademicDevelopment = 0,
+            pointsResponsability = 0;
+        pdi.answers.forEach(answer => {
+            if (answer.questionType === enumQuestionType.EMOTIONAL_INTELLIGENCE) {
+                pointsEmotionalInteligence += answer.points;
+            } else if (answer.questionType === enumQuestionType.ACADEMIC_DEVELOPMENT) {
+                pointsAcademicDevelopment += answer.points;
+            } else if (answer.questionType === enumQuestionType.RESPONSABILITY) {
+                pointsResponsability += answer.points;
             }
-            return points;
-        }, 0);
-
-        const pointsAcademicDevelopment = pdi.answers.reduce((points, answer) => {
-            if (answer.questionType == enumQuestionType.ACADEMIC_DEVELOPMENT) {
-                return points + answer.points;
-            }
-            return points;
-        }, 0);
-
-        const pointsResponsability = pdi.answers.reduce((points, answer) => {
-            if (answer.questionType == enumQuestionType.RESPONSABILITY) {
-                return points + answer.points;
-            }
-            return points;
-        }, 0);
+        });
 
         return RouteResponse.sucess(res, { pointsAcademicDevelopment, pointsEmotionalInteligence, pointsResponsability, considerations });
     }
