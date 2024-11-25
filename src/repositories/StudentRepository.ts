@@ -44,6 +44,13 @@ export class StudentRepository extends Repository<Student> {
             throw new Error('Failed to find student by email');
         }
     }
+     /**
+     * Busca estudantes associados ao id de uma turma
+     *
+     * @param classId - Id da turma
+     * @returns O(s) estudante(s) encontrado(s) ou `undefined` caso nenhum seja encontrado.
+     * @throws Lança um erro caso ocorra um problema na consulta ao banco de dados.
+     */
     async findStudentsByClassId(classId: number): Promise<Student[] | undefined> {
         const students = await MysqlDataSource.getRepository(Student)
             .createQueryBuilder('student')
