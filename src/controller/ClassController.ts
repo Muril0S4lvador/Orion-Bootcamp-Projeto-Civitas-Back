@@ -12,7 +12,7 @@ import { Shift } from '../entity/Shift';
 export class ClassController {
     /**
      * @swagger
-     * /classes:
+     * /admin/classes:
      *   post:
      *     summary: Cria uma nova turma
      *     description: Endpoint para criar uma nova turma com ano, turno, ensino e identificador.
@@ -88,7 +88,7 @@ export class ClassController {
 
     /**
      * @swagger
-     * /classes-options:
+     * /teacher/classes-options:
      *   get:
      *     summary: Retorna as opções de criação de turma
      *     tags:

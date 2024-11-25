@@ -3,8 +3,16 @@ import { AuthController } from './controller/AuthController';
 import { ClassController } from './controller/ClassController';
 import { validateClassData } from './validators/ClassValidator';
 import { validationResult } from 'express-validator';
+import { TeacherAuthMiddleware } from './middlewares/TeacherAuthMiddleware';
+import { TutorAuthMiddleware } from './middlewares/TutorAuthMiddleware';
+import { AdminAuthMiddleware } from './middlewares/AdminAuthMiddleware';
 
 const router = Router();
+
+// Middlewares
+router.use('/admin', TeacherAuthMiddleware); // Middleware para todas as rotas que comecem com '/admin'
+router.use('/teacher', AdminAuthMiddleware);
+router.use('/tutor', TutorAuthMiddleware);
 
 // Auth
 router.post('/login', new AuthController().login);
@@ -12,7 +20,7 @@ router.post('/login', new AuthController().login);
 router.get('/me', new AuthController().returnUserInfo);
 
 router.post(
-    '/classes',
+    '/admin/classes',
     validateClassData(), // Note os parênteses aqui - a função retorna um array de validadores
     (req, res, next) => {
         const errors = validationResult(req);
@@ -25,6 +33,6 @@ router.post(
 );
 
 // Class
-router.get('/classes-options', new ClassController().getEnumsInfos);
+router.get('/teacher/classes-options', new ClassController().getEnumsInfos);
 
 export default router;
