@@ -5,7 +5,8 @@ import { ClassController } from './controller/ClassController';
 import { validateClassData } from './validators/ClassValidator';
 import { validationResult } from 'express-validator';
 import { PDIController } from './controller/PDIController';
-import { AuthMiddleware } from './middlewares/AuthMiddleware';
+import { authMiddleware } from './middlewares/AuthMiddleware';
+import { enumRoles } from './models/enums/EnumRoles';
 
 const router = Router();
 
@@ -18,6 +19,7 @@ router.get('/me', new AuthController().returnUserInfo);
 
 router.post(
     '/classes',
+    authMiddleware([enumRoles.TEACHER]) ,
     validateClassData(), // Note os parênteses aqui - a função retorna um array de validadores
     (req, res, next) => {
         const errors = validationResult(req);
@@ -30,9 +32,9 @@ router.post(
 );
 
 // Class
-router.get('/classes-options', new ClassController().getEnumsInfos);
+router.get('/classes-options', authMiddleware([enumRoles.TEACHER]), new ClassController().getEnumsInfos);
 
 // PDI
-router.post('/pdi', AuthMiddleware, new PDIController().createPDI);
+router.post('/pdi', authMiddleware([enumRoles.TEACHER]), new PDIController().createPDI);
 
 export default router;
