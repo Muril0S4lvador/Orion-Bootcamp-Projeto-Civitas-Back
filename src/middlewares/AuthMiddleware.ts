@@ -8,37 +8,41 @@ import { Token } from '../entity/Token';
 import { User } from '../entity/User';
 import { enumRoles } from '../models/enums/EnumRoles';
 
-export async function AuthMiddleware(req: Request, res: Response, next: NextFunction) {
-    const userRepository: UserRepository = new UserRepository();
-    const tokenRepository: TokenRepository = new TokenRepository();
-    if (!req.headers.authorization || !req.headers.authorization.includes('Bearer')) {
-        return RouteResponse.error(res, 'Token inválido ou ausente');
-    }
+export const authMiddleware = (roles: enumRoles[]) => {
+    return async (req, res, next) => {
+        console.log(`As roles permitidas são: ${roles}`);
 
-    const token: string = req.headers.authorization.replace('Bearer ', '');
-    let decoded: DecodedToken | null = null;
-
-    try {
-        decoded = jwt.verify(token, process.env.JWT_SECRET as string);
-        const tokenFound: Token = await tokenRepository.findToken(token);
-        if (!decoded || !decoded.email || !tokenFound) {
-            throw new Error();
+        const userRepository: UserRepository = new UserRepository();
+        const tokenRepository: TokenRepository = new TokenRepository();
+        if (!req.headers.authorization || !req.headers.authorization.includes('Bearer')) {
+            return RouteResponse.error(res, 'Token inválido ou ausente');
         }
-    } catch (error) {
-        return RouteResponse.error(res, 'Token inválido ou ausente');
-    }
 
-    const existingUser: User | undefined = await userRepository.findUserByEmail(decoded.email);
+        const token: string = req.headers.authorization.replace('Bearer ', '');
+        let decoded: DecodedToken | null = null;
 
-    if (!existingUser) {
-        return RouteResponse.error(res, 'Usuário não encontrado');
-    }
+        try {
+            decoded = jwt.verify(token, process.env.JWT_SECRET as string);
+            const tokenFound: Token = await tokenRepository.findToken(token);
+            if (!decoded || !decoded.email || !tokenFound) {
+                throw new Error();
+            }
+        } catch (error) {
+            return RouteResponse.error(res, 'Token inválido ou ausente');
+        }
 
-    if (!existingUser.roles.some(role => role == enumRoles.TEACHER)) {
-        return RouteResponse.unauthorizedError(res);
-    }
+        const existingUser: User | undefined = await userRepository.findUserByEmail(decoded.email);
 
-    req.headers.email = decoded.email;
+        if (!existingUser) {
+            return RouteResponse.error(res, 'Usuário não encontrado');
+        }
 
-    next();
-}
+        if (!existingUser.roles.some(role => roles.includes(role.authType))) {
+            return RouteResponse.unauthorizedError(res);
+        }
+
+        req.headers.email = decoded.email;
+
+        next();
+    };
+};
