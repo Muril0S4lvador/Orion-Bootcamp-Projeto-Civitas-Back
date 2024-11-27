@@ -180,13 +180,13 @@ export class PDIController {
      *                   properties:
      *                     pointsAcademicDevelopment:
      *                       type: number
-     *                       example: 10
+     *                       example: 1
      *                     pointsEmotionalInteligence:
      *                       type: number
-     *                       example: 10
+     *                       example: 6
      *                     pointsResponsability:
      *                       type: number
-     *                       example: 10
+     *                       example: 11
      *                     considerations:
      *                       type: string
      *                       example: 'Aluno excelente'

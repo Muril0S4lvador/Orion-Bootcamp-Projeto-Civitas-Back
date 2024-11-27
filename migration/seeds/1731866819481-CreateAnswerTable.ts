@@ -32,14 +32,8 @@ export class CreateAnswerTable1731866819481 implements MigrationInterface {
                     },
                     {
                         name: 'answer',
-                        type: 'enum',
-                        enum: Object.values(enumAnswers) as string[],
-                        isNullable: false
-                    },
-                    {
-                        name: 'questionType',
-                        type: 'enum',
-                        enum: Object.values(enumQuestionType) as string[],
+                        type: 'varchar',
+                        length: '100',
                         isNullable: false
                     }
                 ]
