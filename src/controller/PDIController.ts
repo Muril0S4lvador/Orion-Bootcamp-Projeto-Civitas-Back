@@ -7,7 +7,8 @@ import { AnswerRepository } from '../repositories/AnswerRepository';
 import { Student } from '../entity/Student';
 import { User } from '../entity/User';
 import { RouteResponse } from '../helpers/RouteResponse';
-import { Answer } from 'entity/Answer';
+import { Answer } from '../entity/Answer';
+import { PDI } from '../entity/PDI';
 
 export class PDIController {
     /**
@@ -38,21 +39,21 @@ export class PDIController {
      *               studentId:
      *                 type: number
      *                 example: 1
-     *               answersEmotionalInteligenceId:
-     *                 type: array
-     *                 items:
-     *                   type: string
-     *                 example: [3, 1, 5]
      *               answersAcademicDevelopmentId:
      *                 type: array
      *                 items:
      *                   type: string
-     *                 example: [4, 2, 2]
+     *                 example: [1]
+     *               answersEmotionalInteligenceId:
+     *                 type: array
+     *                 items:
+     *                   type: string
+     *                 example: [3]
      *               answersResponsabilityId:
      *                 type: array
      *                 items:
      *                   type: string
-     *                 example: [4, 3, 4]
+     *                 example: [4]
      *               considerations:
      *                 type: string
      *                 example: 'Aluno excelente.'
@@ -64,12 +65,125 @@ export class PDIController {
      *             schema:
      *               type: object
      *               properties:
-     *                 sucess:
+     *                 success:
      *                   type: boolean
      *                   example: true
      *                 data:
-     *                   type: string
-     *                   example: 'PDI cadastrado com sucesso'
+     *                   type: object
+     *                   properties:
+     *                     student:
+     *                       type: object
+     *                       properties:
+     *                         id:
+     *                           type: number
+     *                           example: 1
+     *                         name:
+     *                           type: string
+     *                           example: 'Aluno'
+     *                         registration:
+     *                           type: number
+     *                           example: 123
+     *                         email:
+     *                           type: string
+     *                           example: 'aluno@email.com'
+     *                         cpf:
+     *                           type: string
+     *                           example: '11122233399'
+     *                         createdAt:
+     *                           type: string
+     *                           example: '2024-11-29T20:53:35.000Z'
+     *                         updatedAt:
+     *                           type: string
+     *                           example: '2024-11-29T20:53:35.000Z'
+     *                     teacher:
+     *                       type: object
+     *                       properties:
+     *                         id:
+     *                           type: number
+     *                           example: 2
+     *                         name:
+     *                           type: string
+     *                           example: 'professor'
+     *                         email:
+     *                           type: string
+     *                           example: 'professor@email.com'
+     *                         createdAt:
+     *                           type: string
+     *                           example: '2024-11-29T20:53:35.000Z'
+     *                         updatedAt:
+     *                           type: string
+     *                           example: '2024-11-29T20:53:35.000Z'
+     *                         roles:
+     *                           type: array
+     *                           items:
+     *                             type: string
+     *                             example: 'TEACHER'
+     *                     considerations:
+     *                       type: string
+     *                       example: 'Aluno excelente.'
+     *                     answersAcademicDevelopment:
+     *                       type: object
+     *                       properties:
+     *                         id:
+     *                           type: number
+     *                           example: 1
+     *                         points:
+     *                           type: number
+     *                           example: 5
+     *                         answer:
+     *                           type: string
+     *                           example: 'Excepcional'
+     *                         createdAt:
+     *                           type: string
+     *                           example: '2024-11-29T20:53:35.000Z'
+     *                         updatedAt:
+     *                           type: string
+     *                           example: '2024-11-29T20:53:35.000Z'
+     *                     answersEmotionalInteligence:
+     *                       type: object
+     *                       properties:
+     *                         id:
+     *                           type: number
+     *                           example: 3
+     *                         points:
+     *                           type: number
+     *                           example: 3
+     *                         answer:
+     *                           type: string
+     *                           example: 'Adequado'
+     *                         createdAt:
+     *                           type: string
+     *                           example: '2024-11-29T20:53:35.000Z'
+     *                         updatedAt:
+     *                           type: string
+     *                           example: '2024-11-29T20:53:35.000Z'
+     *                     answersResponsability:
+     *                       type: object
+     *                       properties:
+     *                         id:
+     *                           type: number
+     *                           example: 4
+     *                         points:
+     *                           type: number
+     *                           example: 2
+     *                         answer:
+     *                           type: string
+     *                           example: 'Abaixo das expectativas'
+     *                         createdAt:
+     *                           type: string
+     *                           example: '2024-11-29T20:53:35.000Z'
+     *                         updatedAt:
+     *                           type: string
+     *                           example: '2024-11-29T20:53:35.000Z'
+     *                     id:
+     *                       type: number
+     *                       example: 123
+     *                     createdAt:
+     *                       type: string
+     *                       example: '2024-11-29T20:53:35.000Z'
+     *                     updatedAt:
+     *                       type: string
+     *                       example: '2024-11-29T20:53:35.000Z'
      *       '400':
      *         description: Token inválido, Ids de resposta inválidos ou entidade não encontrada
      *         content:
@@ -130,7 +244,7 @@ export class PDIController {
 
         const answersResponsability: Answer[] = allPossibleAnswers.filter(answer => answersResponsabilityId.includes(answer.id));
 
-        await pdiRepository.save({
+        const pdi: PDI = await pdiRepository.save({
             student,
             teacher,
             considerations,
@@ -139,6 +253,8 @@ export class PDIController {
             answersResponsability
         });
 
-        return RouteResponse.sucessCreated(res, 'PDI cadastrado com sucesso');
+        delete pdi.teacher.password;
+
+        return RouteResponse.sucessCreated(res, pdi);
     }
 }
