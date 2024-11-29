@@ -42,17 +42,17 @@ export class PDIController {
      *                 type: array
      *                 items:
      *                   type: string
-     *                 example: [3, 1]
+     *                 example: [3, 1, 5]
      *               answersAcademicDevelopmentId:
      *                 type: array
      *                 items:
      *                   type: string
-     *                 example: [8, 6]
+     *                 example: [4, 2, 2]
      *               answersResponsabilityId:
      *                 type: array
      *                 items:
      *                   type: string
-     *                 example: [15, 12]
+     *                 example: [4, 3, 4]
      *               considerations:
      *                 type: string
      *                 example: 'Aluno excelente.'
@@ -126,14 +126,16 @@ export class PDIController {
 
         const answersAcademicDevelopment: Answer[] = allPossibleAnswers.filter(answer => answersAcademicDevelopmentId.includes(answer.id));
 
-        const answersEmotionalInteligence: Answer[] = allPossibleAnswers.filter(answer => answersAcademicDevelopmentId.includes(answer.id));
+        const answersEmotionalInteligence: Answer[] = allPossibleAnswers.filter(answer => answersEmotionalInteligenceId.includes(answer.id));
 
-        const answersResponsability: Answer[] = allPossibleAnswers.filter(answer => answersAcademicDevelopmentId.includes(answer.id));
+        const answersResponsability: Answer[] = allPossibleAnswers.filter(answer => answersResponsabilityId.includes(answer.id));
 
         await pdiRepository.save({
             student,
             teacher,
             considerations,
+            answersAcademicDevelopment,
+            answersEmotionalInteligence,
             answersResponsability
         });
 
