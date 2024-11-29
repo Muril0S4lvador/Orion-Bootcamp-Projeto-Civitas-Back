@@ -45,5 +45,4 @@ router.post(
     StudentController.createStudent
 );
 
-
 export default router;
