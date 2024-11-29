@@ -1,10 +1,11 @@
-import { MigrationInterface, QueryRunner, Table } from 'typeorm';
+import { MigrationInterface, QueryRunner, Table } from "typeorm"
 
-export class CreatePDIAnswerTable1731878167185 implements MigrationInterface {
+export class CreateResponsabilityAnswerTable1732891345325 implements MigrationInterface {
+
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.createTable(
             new Table({
-                name: 'pdi_answer',
+                name: 'pdi_answer_responsability',
                 columns: [
                     { name: 'answerId', type: 'int', isPrimary: true },
                     {
@@ -34,4 +35,5 @@ export class CreatePDIAnswerTable1731878167185 implements MigrationInterface {
     public async down(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.dropTable('pdi_answer');
     }
+
 }

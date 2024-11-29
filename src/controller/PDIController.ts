@@ -1,6 +1,5 @@
 import { Request, Response } from 'express';
 import { PDICreateRequestBody } from '../models/interfaces/PDICreateRequestBody';
-import { enumQuestionType } from '../models/enums/EnumQuestionType';
 import { StudentRepository } from '../repositories/StudentRepository';
 import { UserRepository } from '../repositories/UserRepository';
 import { PDIRepository } from '../repositories/PDIRepository';
@@ -125,23 +124,17 @@ export class PDIController {
             return RouteResponse.error(res, 'Professor selecionado não existente');
         }
 
-        const answersAcademicDevelopment: Answer[] = allPossibleAnswers.filter(
-            answer => answersAcademicDevelopmentId.includes(answer.id) && answer.questionType == enumQuestionType.ACADEMIC_DEVELOPMENT
-        );
+        const answersAcademicDevelopment: Answer[] = allPossibleAnswers.filter(answer => answersAcademicDevelopmentId.includes(answer.id));
 
-        const answersEmotionalInteligence: Answer[] = allPossibleAnswers.filter(
-            answer => answersEmotionalInteligenceId.includes(answer.id) && answer.questionType == enumQuestionType.EMOTIONAL_INTELLIGENCE
-        );
+        const answersEmotionalInteligence: Answer[] = allPossibleAnswers.filter(answer => answersAcademicDevelopmentId.includes(answer.id));
 
-        const answersResponsability: Answer[] = allPossibleAnswers.filter(
-            answer => answersResponsabilityId.includes(answer.id) && answer.questionType == enumQuestionType.RESPONSABILITY
-        );
+        const answersResponsability: Answer[] = allPossibleAnswers.filter(answer => answersAcademicDevelopmentId.includes(answer.id));
 
         await pdiRepository.save({
             student,
             teacher,
             considerations,
-            answers: [...answersAcademicDevelopment, ...answersEmotionalInteligence, ...answersResponsability]
+            answersResponsability
         });
 
         return RouteResponse.sucessCreated(res, 'PDI cadastrado com sucesso');

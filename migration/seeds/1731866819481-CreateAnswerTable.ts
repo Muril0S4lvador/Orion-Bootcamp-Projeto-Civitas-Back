@@ -1,5 +1,4 @@
 import { MigrationInterface, QueryRunner, Table } from 'typeorm';
-import { enumQuestionType } from '../../src/models/enums/EnumQuestionType';
 
 export class CreateAnswerTable1731866819481 implements MigrationInterface {
     public async up(queryRunner: QueryRunner): Promise<void> {
@@ -33,12 +32,6 @@ export class CreateAnswerTable1731866819481 implements MigrationInterface {
                         name: 'answer',
                         type: 'varchar',
                         length: '100',
-                        isNullable: false
-                    },
-                    {
-                        name: 'questionType',
-                        type: 'enum',
-                        enum: Object.values(enumQuestionType) as string[],
                         isNullable: false
                     }
                 ]

@@ -18,9 +18,17 @@ export class PDI {
     @Column({ type: 'varchar', length: 600, nullable: true })
     considerations: string;
 
-    @ManyToMany(() => Answer, answer => answer.pdis)
-    @JoinTable({ name: 'pdi_answer' })
-    answers: Answer[];
+    @ManyToMany(() => Answer)
+    @JoinTable({ name: 'pdi_answer_emotional_inteligence' })
+    answersEmotionalInteligence: Answer[];
+
+    @ManyToMany(() => Answer)
+    @JoinTable({ name: 'pdi_answer_academic_development' })
+    answersAcademicDevelopment: Answer[];
+
+    @ManyToMany(() => Answer)
+    @JoinTable({ name: 'pdi_answer_responsability' })
+    answersResponsability: Answer[];
 
     @CreateDateColumn()
     createdAt: Date;
