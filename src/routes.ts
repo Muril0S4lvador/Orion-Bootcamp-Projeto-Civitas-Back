@@ -60,6 +60,6 @@ router.post(
     TeacherController.createTeacher
 );
 
-router.post('/students-classes', StudentController.getStudentsByClassId);
+router.get('/classes/:id/students', StudentController.getStudentsByClassId);
 
 export default router;

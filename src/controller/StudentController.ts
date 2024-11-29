@@ -106,21 +106,18 @@ export class StudentController {
     }
     /**
      * @swagger
-     * /students-classes:
-     *   post:
+     * /classes/{id}/students:
+     *   get:
      *     summary: Retorna os estudantes por ID da turma
      *     tags:
-     *       - Student
-     *     requestBody:
-     *       content:
-     *         application/json:
-     *           schema:
-     *             type: object
-     *             properties:
-     *               classId:
-     *                 type: int
-     *                 example: 1
-     *                 description: O ID da turma para buscar os estudantes.
+     *       - Class
+     *     parameters:
+     *       - in: path
+     *         name: id
+     *         required: true
+     *         schema:
+     *           type: integer
+     *         description: O ID da turma para buscar os estudantes.
      *     responses:
      *       '200':
      *         description: Lista de estudantes retornada com sucesso.
@@ -138,7 +135,7 @@ export class StudentController {
      *                     type: object
      *                     properties:
      *                       id:
-     *                         type: int
+     *                         type: integer
      *                         example: 1
      *                         description: ID do estudante.
      *                       name:
@@ -146,7 +143,7 @@ export class StudentController {
      *                         example: "João da Silva"
      *                         description: Nome do estudante.
      *                       registration:
-     *                         type: int
+     *                         type: integer
      *                         example: 12345
      *                         description: Matrícula única do estudante.
      *                       cpf:
@@ -172,6 +169,7 @@ export class StudentController {
      *       500:
      *         description: Erro interno do servidor
      */
+
     static async getStudentsByClassId(req: Request, res: Response) {
         const studentRepository = new StudentRepository();
         const errors = validationResult(req);
@@ -179,13 +177,13 @@ export class StudentController {
         if (!errors.isEmpty()) {
             return RouteResponse.error(res, 'Dados inválidos.');
         }
-        const { classId } = req.body;
-        console.log(classId);
+        const { id } = req.params;
+        console.log(id);
 
         try {
-            const students: Student[] = await studentRepository.findStudentsByClassId(classId);
-            console.log('students:', students);
-            if (students == null) {
+            const students: Student[] = await studentRepository.findStudentsByClassId(id);
+
+            if (students[0] == null) {
                 return RouteResponse.error(res, 'Não há estudantes nessa turma.');
             }
 
