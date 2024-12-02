@@ -16,6 +16,6 @@ export class Token {
     @CreateDateColumn()
     createdAt: Date;
 
-    @ManyToOne(() => User, user => user.id)
-    userId: number;
+    @ManyToOne(() => User, user => user.tokens)
+    user: User;
 }
