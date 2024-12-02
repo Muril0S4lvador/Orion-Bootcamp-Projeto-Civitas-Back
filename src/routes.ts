@@ -4,8 +4,8 @@ import { AuthController } from './controller/AuthController';
 import { ClassController } from './controller/ClassController';
 import { validateClassData } from './validators/ClassValidator';
 import { validationResult } from 'express-validator';
-import { authMiddleware } from 'middlewares/AuthMiddleware';
-import { enumRoles } from 'models/enums/EnumRoles';
+import { authMiddleware } from './middlewares/AuthMiddleware';
+import { enumRoles } from './models/enums/EnumRoles';
 
 const router = Router();
 
@@ -31,6 +31,6 @@ router.post(
 );
 
 // Class
-router.get('/classes-options', authMiddleware([enumRoles.TEACHER]),new ClassController().getEnumsInfos);
+router.get('/classes-options', authMiddleware([enumRoles.TEACHER]), new ClassController().getEnumsInfos);
 
 export default router;
