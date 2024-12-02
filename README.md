@@ -24,3 +24,22 @@ Código base para o desenvolvimento do backend dos projeto Civitas
 - URL base: http://localhost:4444
 - Documentação Swagger: http://localhost:4444/swagger
 - Banco de dados MySQL: mysql://orion_root:j5m966qp7jiypfda@localhost:3306
+
+#### Logins
+
+-   Ao executar o projeto, terão 3 atores no banco de dados, cada um com uma role diferente.
+
+##### Administrador
+
+Email: `admin@email.com`  
+Senha: `senha`
+
+##### Professor
+
+Email: `professor@email.com`  
+Senha: `senha`
+
+##### Responsável
+
+Email: `responsavel@email.com`  
+Senha: `senha`
