@@ -3,6 +3,7 @@ import { RouteResponse } from '../helpers/RouteResponse';
 import { ClassRepository } from '../repositories/ClassRepository';
 import { UserRepository } from '../repositories/UserRepository';
 import { validationResult } from 'express-validator';
+import bcrypt from 'bcrypt';
 
 export class TeacherController {
     /**
@@ -87,10 +88,14 @@ export class TeacherController {
 
             const validClasses = classList.filter(cls => cls !== undefined);
 
+            const rawPassword = userRepository.generateRandomPassword();
+            const hashedPassword = await bcrypt.hash(rawPassword, 10);
+
             const newTeacher = userRepository.create({
                 name: name,
                 email: email,
-                password: '1',
+                password: hashedPassword,
+                isFirstPassword: true,
                 registration: registration,
                 classes: validClasses
             });
