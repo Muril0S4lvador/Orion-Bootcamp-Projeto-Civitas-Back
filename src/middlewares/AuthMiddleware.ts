@@ -10,8 +10,6 @@ import { enumRoles } from '../models/enums/EnumRoles';
 
 export const authMiddleware = (roles: enumRoles[]) => {
     return async (req: Request, res: Response, next: NextFunction) => {
-        console.log(`As roles permitidas são: ${roles}`);
-
         const userRepository: UserRepository = new UserRepository();
         const tokenRepository: TokenRepository = new TokenRepository();
         if (!req.headers.authorization || !req.headers.authorization.includes('Bearer')) {
@@ -37,7 +35,7 @@ export const authMiddleware = (roles: enumRoles[]) => {
             return RouteResponse.error(res, 'Usuário não encontrado');
         }
 
-        if (!existingUser.roles.some(role => roles.includes(role.authType))) {
+        if (!existingUser.roles.some(role => roles.includes(role))) {
             return RouteResponse.unauthorizedError(res);
         }
 
