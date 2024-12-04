@@ -13,6 +13,7 @@ import { PDIAnswer } from '../entity/PDIAnswer';
 import { enumQuestionType } from '../models/enums/EnumQuestionType';
 import { PDITransactionService } from '../services/PDITransactionService';
 import { applyTypeIndexToAnswersService } from '../services/ApplyTypeIndexToAnswersService';
+import { PDITransactionResult } from '../models/interfaces/PDITransactionResult';
 
 export class PDIController {
     /**
@@ -163,7 +164,7 @@ export class PDIController {
         );
 
         try {
-            const result = await PDITransactionService(pdi, [
+            const result: PDITransactionResult = await PDITransactionService(pdi, [
                 ...answersAcademicDevelopment,
                 ...answersEmotionalInteligence,
                 ...answersResponsability
