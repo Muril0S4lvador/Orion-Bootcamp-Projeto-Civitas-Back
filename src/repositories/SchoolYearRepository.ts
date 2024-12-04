@@ -18,11 +18,4 @@ export class SchoolYearRepository extends Repository<SchoolYear> {
         });
         return !!result;
     }
-    /**
-     * Retorna todos os anos escolares registrados na tabela SchoolYear
-     * @returns Uma lista de todos os anos escolares
-     */
-    async getAllSchoolYears(): Promise<SchoolYear[]> {
-        return this.find();
-    }
 }

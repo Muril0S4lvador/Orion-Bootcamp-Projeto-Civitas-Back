@@ -170,9 +170,9 @@ export class ClassController {
         const schoolYearRepository: SchoolYearRepository = new SchoolYearRepository();
         const teachingRepository: TeachingRepository = new TeachingRepository();
 
-        const teachings: Teaching[] = await teachingRepository.getAllTeachings();
-        const shifts: Shift[] = await shiftRepository.getAllShifts();
-        const schoolYears: SchoolYear[] = await schoolYearRepository.getAllSchoolYears();
+        const teachings: Teaching[] = await teachingRepository.find();
+        const shifts: Shift[] = await shiftRepository.find();
+        const schoolYears: SchoolYear[] = await schoolYearRepository.find();
 
         return RouteResponse.sucess(res, { teachings, shifts, schoolYears });
     }

@@ -6,6 +6,7 @@ import { validateClassData } from './validators/ClassValidator';
 import { validationResult } from 'express-validator';
 import { authMiddleware } from './middlewares/AuthMiddleware';
 import { enumRoles } from './models/enums/EnumRoles';
+import { PDIController } from './controller/PDIController';
 
 const router = Router();
 
@@ -32,5 +33,8 @@ router.post(
 
 // Class
 router.get('/classes-options', authMiddleware([enumRoles.TEACHER]), new ClassController().getEnumsInfos);
+
+// PDI
+router.post('/pdi', authMiddleware([enumRoles.TEACHER]), new PDIController().createPDI);
 
 export default router;

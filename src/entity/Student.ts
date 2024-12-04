@@ -1,6 +1,7 @@
-import { Entity, PrimaryGeneratedColumn, Column, BeforeInsert, JoinTable, BeforeUpdate, ManyToMany } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, BeforeInsert, JoinTable, BeforeUpdate, ManyToMany, OneToMany } from 'typeorm';
 
 import { Class } from './Class';
+import { PDI } from './PDI';
 
 @Entity('student')
 export class Student {
@@ -37,6 +38,9 @@ export class Student {
         }
     })
     classes: Class[];
+
+    @OneToMany(() => PDI, pdi => pdi.student)
+    pdis: PDI[];
 
     @Column({ default: () => 'NOW()' })
     createdAt: Date;
