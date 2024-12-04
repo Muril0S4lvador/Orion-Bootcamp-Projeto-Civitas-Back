@@ -2,6 +2,7 @@ import { Entity, PrimaryGeneratedColumn, Column, BeforeInsert, BeforeUpdate, Man
 
 import { Role } from './Role';
 import { Token } from './Token';
+import { PDI } from './PDI';
 
 @Entity('user')
 export class User {
@@ -27,8 +28,11 @@ export class User {
     @JoinTable({ name: 'role_user' })
     roles: Role[];
 
-    @OneToMany(() => Token, token => token.userId)
+    @OneToMany(() => Token, token => token.user)
     tokens: Token[];
+
+    @OneToMany(() => PDI, pdi => pdi.teacher)
+    pdis: PDI[];
 
     @BeforeInsert()
     public setCreatedAt(): void {

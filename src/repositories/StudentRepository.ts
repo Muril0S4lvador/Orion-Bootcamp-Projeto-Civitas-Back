@@ -43,5 +43,16 @@ export class StudentRepository extends Repository<Student> {
             console.error('Error finding student by email:', error);
             throw new Error('Failed to find student by email');
         }
+    /**
+     * Busca um aluno com base no id
+     * @param id Id do aluno
+     * @returns O aluno encontrado ou undefined
+     */
+    async findStudentById(id: number): Promise<Student | undefined> {
+        const student = await this.findOne({
+            where: { id }
+        });
+
+        return student;
     }
 }

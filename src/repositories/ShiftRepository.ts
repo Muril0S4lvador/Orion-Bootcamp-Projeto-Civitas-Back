@@ -18,11 +18,4 @@ export class ShiftRepository extends Repository<Shift> {
         });
         return !!result;
     }
-    /**
-     * Retorna todos os turnos registrados na tabela Shift
-     * @returns Uma lista de todos os turnos ou undefined, caso nenhum turno seja encontrado
-     */
-    async getAllShifts(): Promise<Shift[] | undefined> {
-        return this.find();
-    }
 }
