@@ -85,7 +85,7 @@ export class PDIController {
      *                       type: string
      *                       example: '2024-11-29T20:53:35.000Z'
      *       '400':
-     *         description: Token inválido, Ids de resposta inválidos ou entidade não encontrada
+     *         description: Token inválido, Ids de resposta inválidos, entidade não encontrada ou transação no banco de dados não efetuada
      *         content:
      *           application/json:
      *             schema:
@@ -162,12 +162,20 @@ export class PDIController {
             enumQuestionType.RESPONSABILITY
         );
 
-        const result = await PDITransactionService(pdi, [...answersAcademicDevelopment, ...answersEmotionalInteligence, ...answersResponsability]);
+        try {
+            const result = await PDITransactionService(pdi, [
+                ...answersAcademicDevelopment,
+                ...answersEmotionalInteligence,
+                ...answersResponsability
+            ]);
 
-        delete result.pdi.student;
-        delete result.pdi.teacher;
-        delete result.pdi.considerations;
+            delete result.pdi.student;
+            delete result.pdi.teacher;
+            delete result.pdi.considerations;
 
-        return RouteResponse.sucessCreated(res, result.pdi);
+            return RouteResponse.sucessCreated(res, result.pdi);
+        } catch (error) {
+            return RouteResponse.error(res, error.message);
+        }
     }
 }
