@@ -1,6 +1,6 @@
-import { MigrationInterface, QueryRunner } from 'typeorm';
+import { MigrationInterface, QueryRunner } from "typeorm"
 
-export class UserSeeder1731550525552 implements MigrationInterface {
+export class UserSeeder1733160713109 implements MigrationInterface {
     private table = 'user';
     private readonly users = [
         {
@@ -31,4 +31,5 @@ export class UserSeeder1731550525552 implements MigrationInterface {
         const emails = this.users.map(user => user.email);
         await queryRunner.manager.createQueryBuilder().delete().from(this.table).where('email IN (:...emails)', { emails }).execute();
     }
+
 }

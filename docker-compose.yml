@@ -16,26 +16,26 @@ services:
             SERVER_PORT: 4444
             DB_DATABASE: orion
             DB_CONNECTION_STRING: mysql://orion_root:j5m966qp7jiypfda@orion-mysql:3306
-            JWT_SECRET: Rizon-Bootcamp
+            JWT_SECRET: Rizon
         networks:
             - orion-connect
 
-    orion-mysql:
-        container_name: orion-mysql
-        image: mysql
-        environment:
-            MYSQL_USER: orion_root
-            MYSQL_PASSWORD: j5m966qp7jiypfda
-            MYSQL_ROOT_PASSWORD: m45ug42qkr5pdzbb
-            MYSQL_DATABASE: orion
-        ports:
-            - 3306:3306
-        volumes:
-            - ~/docker/volumes/OrionApi_MySQL:/var/lib/mysql
-        networks:
-            - orion-connect
-        logging:
-            driver: none
+        orion-mysql:
+            container_name: orion-mysql
+            image: mysql
+            environment:
+                MYSQL_USER: orion_root
+                MYSQL_PASSWORD: j5m966qp7jiypfda
+                MYSQL_ROOT_PASSWORD: m45ug42qkr5pdzbb
+                MYSQL_DATABASE: orion
+            ports:
+                - 3306:3306
+            volumes:
+                - ~/docker/volumes/OrionApi_MySQL:/var/lib/mysql
+            networks:
+                - orion-connect
+            logging:
+                driver: none
 
 networks:
     orion-connect:
