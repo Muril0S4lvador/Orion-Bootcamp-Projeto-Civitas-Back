@@ -8,6 +8,9 @@ import { validateClassData } from './validators/ClassValidator';
 import { validateTeacherData } from './validators/TeacherValidator';
 import { validateStudentData } from './validators/StudentValidator';
 import { validationResult } from 'express-validator';
+import { authMiddleware } from './middlewares/AuthMiddleware';
+import { enumRoles } from './models/enums/EnumRoles';
+import { PDIController } from './controller/PDIController';
 
 const router = Router();
 
@@ -20,7 +23,8 @@ router.get('/me', new AuthController().returnUserInfo);
 
 router.post(
     '/classes',
-    validateClassData(),
+    authMiddleware([enumRoles.TEACHER]),
+    validateClassData(), 
     (req, res, next) => {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
@@ -32,7 +36,10 @@ router.post(
 );
 
 // Class
-router.get('/classes-options', new ClassController().getEnumsInfos);
+router.get('/classes-options', authMiddleware([enumRoles.TEACHER]), new ClassController().getEnumsInfos);
+
+// PDI
+router.post('/pdi', authMiddleware([enumRoles.TEACHER]), new PDIController().createPDI);
 
 router.post(
     '/students',

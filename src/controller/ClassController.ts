@@ -18,6 +18,8 @@ export class ClassController {
      *     description: Endpoint para criar uma nova turma com ano, turno, ensino e identificador.
      *     tags:
      *        - Class
+     *     security:
+     *        - BearerAuth: []
      *     requestBody:
      *       required: true
      *       content:
@@ -93,6 +95,8 @@ export class ClassController {
      *     summary: Retorna as opções de criação de turma
      *     tags:
      *        - Class
+     *     security:
+     *        - BearerAuth: []
      *     produces:
      *       - application/json
      *     responses:
@@ -166,9 +170,9 @@ export class ClassController {
         const schoolYearRepository: SchoolYearRepository = new SchoolYearRepository();
         const teachingRepository: TeachingRepository = new TeachingRepository();
 
-        const teachings: Teaching[] = await teachingRepository.getAllTeachings();
-        const shifts: Shift[] = await shiftRepository.getAllShifts();
-        const schoolYears: SchoolYear[] = await schoolYearRepository.getAllSchoolYears();
+        const teachings: Teaching[] = await teachingRepository.find();
+        const shifts: Shift[] = await shiftRepository.find();
+        const schoolYears: SchoolYear[] = await schoolYearRepository.find();
 
         return RouteResponse.sucess(res, { teachings, shifts, schoolYears });
     }

@@ -18,11 +18,4 @@ export class TeachingRepository extends Repository<Teaching> {
         });
         return !!result;
     }
-    /**
-     * Retorna todos os registros de ensino da tabela Teaching
-     * @returns Uma lista de todos os registros de ensino ou undefined, caso nenhum seja encontrado
-     */
-    async getAllTeachings(): Promise<Teaching[] | undefined> {
-        return this.find();
-    }
 }

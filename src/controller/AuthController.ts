@@ -99,7 +99,7 @@ export class AuthController {
         const decoded: DecodedToken = jwt.verify(token, process.env.JWT_SECRET as string);
         const expiresAt: Date = new Date(decoded.exp * 1000);
 
-        tokenRepository.save({ token, expiresAt, userId: existingUser.id });
+        await tokenRepository.save({ token, expiresAt, user: existingUser });
 
         return RouteResponse.sucess(response, token);
     }
