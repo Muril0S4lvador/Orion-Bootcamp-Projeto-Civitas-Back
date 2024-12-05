@@ -37,11 +37,37 @@ export class StudentRepository extends Repository<Student> {
             const student = await MysqlDataSource.getRepository(Student).findOne({
                 where: { email }
             });
-
             return student;
         } catch (error) {
             console.error('Error finding student by email:', error);
             throw new Error('Failed to find student by email');
         }
+    }
+     /**
+     * Busca estudantes associados ao id de uma turma
+     *
+     * @param classId - Id da turma
+     * @returns O(s) estudante(s) encontrado(s) ou `undefined` caso nenhum seja encontrado.
+     * @throws Lança um erro caso ocorra um problema na consulta ao banco de dados.
+     */
+    async findStudentsByClassId(classId: number): Promise<Student[] | undefined> {
+        const students = await MysqlDataSource.getRepository(Student)
+            .createQueryBuilder('student')
+            .innerJoin('student.classes', 'class')
+            .where('class.id = :classId', { classId })
+            .getMany();
+
+        return students;
+    /**
+     * Busca um aluno com base no id
+     * @param id Id do aluno
+     * @returns O aluno encontrado ou undefined
+     */
+    async findStudentById(id: number): Promise<Student | undefined> {
+        const student = await this.findOne({
+            where: { id }
+        });
+
+        return student;
     }
 }

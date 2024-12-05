@@ -19,7 +19,22 @@ export class UserRepository extends Repository<User> {
             relations: ['roles']
         });
 
-        if (user) user.roles = user?.roles.map((role: Role) => role.authType);
+        if (user) {
+            user.roles = user?.roles.map((role: Role) => role.authType);
+        }
+
+        return user;
+    }
+
+    /**
+     * Busca um usuário com base no id
+     * @param id Id do usuário
+     * @returns O usuário encontrado ou undefined
+     */
+    async findUserById(id: number): Promise<User | undefined> {
+        const user = await this.findOne({
+            where: { id }
+        });
 
         return user;
     }
