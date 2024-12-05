@@ -3,7 +3,7 @@ import { MigrationInterface, QueryRunner, TableColumn, TableForeignKey } from 't
 export class AddNewPasswordCheck1731026893637 implements MigrationInterface {
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.addColumn(
-            'users',
+            'user',
             new TableColumn({
                 name: 'isFirstPassword',
                 type: 'boolean',
@@ -14,6 +14,6 @@ export class AddNewPasswordCheck1731026893637 implements MigrationInterface {
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.dropColumn('users', 'isFirstPassword');
+        await queryRunner.dropColumn('user', 'isFirstPassword');
     }
 }
