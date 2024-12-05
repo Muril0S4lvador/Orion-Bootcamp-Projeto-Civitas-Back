@@ -37,7 +37,6 @@ export class StudentRepository extends Repository<Student> {
             const student = await MysqlDataSource.getRepository(Student).findOne({
                 where: { email }
             });
-
             return student;
         } catch (error) {
             console.error('Error finding student by email:', error);

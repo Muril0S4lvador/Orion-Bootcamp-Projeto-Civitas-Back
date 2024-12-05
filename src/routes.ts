@@ -53,7 +53,6 @@ router.post(
     },
     StudentController.createStudent
 );
-
 router.post(
     '/teachers',
     validateTeacherData(),
