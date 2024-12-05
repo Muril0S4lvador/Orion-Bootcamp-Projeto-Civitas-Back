@@ -197,8 +197,8 @@ export class PDIController {
      *     security:
      *       - BearerAuth: []
      *     responses:
-     *       '201':
-     *         description: PDI cadastrado com sucesso
+     *       '200':
+     *         description: Requisição realizada com sucesso
      *         content:
      *           application/json:
      *             schema:
@@ -233,7 +233,7 @@ export class PDIController {
      *                   type: string
      *                   example: 'PDI selecionado não encontrado'
      *       '401':
-     *         description: Usuário não possui role correta para criar PDI
+     *         description: Usuário não possui role correta para buscar PDI
      *         content:
      *           application/json:
      *             schema:
