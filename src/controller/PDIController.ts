@@ -179,4 +179,95 @@ export class PDIController {
             return RouteResponse.error(res, error.message);
         }
     }
+
+    /**
+     * @swagger
+     * /pdi/{id}:
+     *   get:
+     *     summary: Retorno de PDI
+     *     tags: [PDI]
+     *     parameters:
+     *     - in: path
+     *       name: id
+     *       type: integer
+     *       required: true
+     *       description: Id do PDI a ser retornado.
+     *     produces:
+     *       - application/json
+     *     security:
+     *       - BearerAuth: []
+     *     responses:
+     *       '201':
+     *         description: PDI cadastrado com sucesso
+     *         content:
+     *           application/json:
+     *             schema:
+     *               type: object
+     *               properties:
+     *                 sucess:
+     *                   type: boolean
+     *                   example: true
+     *                 data:
+     *                   type: object
+     *                   properties:
+     *                     pointsAcademicDevelopment:
+     *                       type: number
+     *                       example: 1
+     *                     pointsEmotionalInteligence:
+     *                       type: number
+     *                       example: 6
+     *                     pointsResponsability:
+     *                       type: number
+     *                       example: 11
+     *                     considerations:
+     *                       type: string
+     *                       example: 'Aluno excelente'
+     *       '404':
+     *         description: PDI procurado não encontrado
+     *         content:
+     *           application/json:
+     *             schema:
+     *               type: object
+     *               properties:
+     *                 message:
+     *                   type: string
+     *                   example: 'PDI selecionado não encontrado'
+     *       '401':
+     *         description: Usuário não possui role correta para criar PDI
+     *         content:
+     *           application/json:
+     *             schema:
+     *               type: object
+     *               properties:
+     *                 message:
+     *                   type: string
+     *                   example: 'Unauthorized Access'
+     */
+    async getPDI(req: Request, res: Response) {
+        const pdiId = req.params.id;
+        const pdiRepository: PDIRepository = new PDIRepository();
+
+        const pdi: PDI = await pdiRepository.findPDIById(pdiId);
+
+        if (!pdi) {
+            return RouteResponse.notFound(res, 'PDI selecionado não encontrado');
+        }
+
+        const considerations: string = pdi.considerations;
+
+        let pointsEmotionalInteligence: number = 0,
+            pointsAcademicDevelopment: number = 0,
+            pointsResponsability: number = 0;
+        pdi.answers.forEach(answer => {
+            if (answer.questionType === enumQuestionType.EMOTIONAL_INTELLIGENCE) {
+                pointsEmotionalInteligence += answer.answerRelation.points;
+            } else if (answer.questionType === enumQuestionType.ACADEMIC_DEVELOPMENT) {
+                pointsAcademicDevelopment += answer.answerRelation.points;
+            } else if (answer.questionType === enumQuestionType.RESPONSABILITY) {
+                pointsResponsability += answer.answerRelation.points;
+            }
+        });
+
+        return RouteResponse.sucess(res, { pointsAcademicDevelopment, pointsEmotionalInteligence, pointsResponsability, considerations });
+    }
 }
