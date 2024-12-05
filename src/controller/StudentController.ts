@@ -1,0 +1,106 @@
+import { Request, Response } from 'express';
+import { RouteResponse } from '../helpers/RouteResponse';
+import { StudentRepository } from '../repositories/StudentRepository';
+import { ClassRepository } from '../repositories/ClassRepository';
+import { validationResult } from 'express-validator';
+
+export class StudentController {
+    /**
+     * @swagger
+     * /students:
+     *   post:
+     *     summary: Cria um novo estudante
+     *     description: Endpoint para criar um novo estudante com turma, matricula, nome, cpf e email.
+     *     tags:
+     *        - Student
+     *     requestBody:
+     *       required: true
+     *       content:
+     *         application/json:
+     *           schema:
+     *             type: object
+     *             properties:
+     *               name:
+     *                 description: nome completo do estudante
+     *                 type: string
+     *                 example: "Thais Oliveira"
+     *               registration:
+     *                 description: matrícula do estudante
+     *                 type: integer
+     *                 example: 111
+     *               schoolClassIds:
+     *                 description: id(s) da(s) turma(s)
+     *                 type: array
+     *                 items:
+     *                 example: [1, 2]
+     *               cpf:
+     *                 description: cpf do responsável do estudante
+     *                 type: string
+     *                 maxLength: 11
+     *                 example: "00000000000"
+     *               email:
+     *                  description: email do responsável do estudante
+     *                  type: string
+     *                  example: "example@gmail.com"
+     *     responses:
+     *       201:
+     *         description: Estudante criado com sucesso
+     *         content:
+     *           application/json:
+     *             schema:
+     *               type: object
+     *               properties:
+     *                 success:
+     *                   type: boolean
+     *                 data:
+     *                   type: object
+     *       400:
+     *         description: Dados inválidos
+     *       500:
+     *         description: Erro interno do servidor
+     */
+    static async createStudent(req: Request, res: Response) {
+        const errors = validationResult(req);
+        const studentRepository = new StudentRepository();
+        const classRepository = new ClassRepository();
+
+        if (!errors.isEmpty()) {
+            return RouteResponse.error(res, 'Dados inválidos.');
+        }
+
+        const { name, registration, schoolClassIds, cpf, email } = req.body;
+        const registrationExists = await studentRepository.findStudentByRegistration(registration);
+        if (registrationExists) {
+            return RouteResponse.error(res, 'Já existe um estudante com essa matrícula.');
+        }
+        const emailExists = await studentRepository.findStudentByEmail(email);
+        if (emailExists) {
+            return RouteResponse.error(res, 'Já existe um estudante com esse e-mail cadastrado.');
+        }
+
+        try {
+            const classIds = Array.isArray(schoolClassIds) ? schoolClassIds : [schoolClassIds];
+            const classList = await classRepository.findClassesByIds(classIds);
+
+            const notFoundClasses = classList.map((cls, index) => (cls === null ? classIds[index] : null)).filter(id => id !== null);
+
+            if (notFoundClasses.length > 0) {
+                return RouteResponse.error(res, `Uma ou mais turmas informadas são inválidas.`);
+            }
+
+            const validClasses = classList.filter(cls => cls !== undefined);
+
+            const newStudent = studentRepository.create({
+                name: name,
+                registration: registration,
+                classes: validClasses,
+                cpf: cpf,
+                email: email
+            });
+            await studentRepository.save(newStudent);
+            return RouteResponse.sucessCreated(res, newStudent);
+        } catch (error) {
+            return RouteResponse.error(res, error);
+        }
+    }
+}

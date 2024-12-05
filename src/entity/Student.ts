@@ -17,7 +17,7 @@ export class Student {
     @Column({
         type: 'varchar',
         length: 11,
-        unique: true,
+        unique: false,
         nullable: false
     })
     cpf: string;
@@ -29,11 +29,11 @@ export class Student {
     @JoinTable({
         name: 'student_classes',
         joinColumn: {
-            name: 'studentId',
+            name: 'student_id',
             referencedColumnName: 'id'
         },
         inverseJoinColumn: {
-            name: 'classId',
+            name: 'class_id',
             referencedColumnName: 'id'
         }
     })

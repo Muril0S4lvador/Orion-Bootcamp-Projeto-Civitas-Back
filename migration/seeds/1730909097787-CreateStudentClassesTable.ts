@@ -7,12 +7,12 @@ export class CreateStudentClassesTable1730909097787 implements MigrationInterfac
                 name: 'student_classes',
                 columns: [
                     {
-                        name: 'studentId',
+                        name: 'student_id',
                         type: 'int',
                         isPrimary: true
                     },
                     {
-                        name: 'classId',
+                        name: 'class_id',
                         type: 'int',
                         isPrimary: true
                     }
@@ -24,7 +24,7 @@ export class CreateStudentClassesTable1730909097787 implements MigrationInterfac
         await queryRunner.createForeignKey(
             'student_classes',
             new TableForeignKey({
-                columnNames: ['studentId'],
+                columnNames: ['student_id'],
                 referencedColumnNames: ['id'],
                 referencedTableName: 'student',
                 onDelete: 'CASCADE'
@@ -34,7 +34,7 @@ export class CreateStudentClassesTable1730909097787 implements MigrationInterfac
         await queryRunner.createForeignKey(
             'student_classes',
             new TableForeignKey({
-                columnNames: ['classId'],
+                columnNames: ['class_id'],
                 referencedColumnNames: ['id'],
                 referencedTableName: 'classes',
                 onDelete: 'CASCADE'

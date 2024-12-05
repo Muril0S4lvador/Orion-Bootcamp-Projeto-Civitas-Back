@@ -6,7 +6,43 @@ export class StudentRepository extends Repository<Student> {
     constructor() {
         super(Student, MysqlDataSource.manager);
     }
+    /**
+     * Busca um estudante no banco de dados utilizando o número de matrícula.
+     *
+     * @param registration - Número de matrícula do estudante.
+     * @returns O estudante encontrado ou `undefined` caso nenhum seja encontrado.
+     * @throws Lança um erro caso ocorra um problema na consulta ao banco de dados.
+     */
+    async findStudentByRegistration(registration: number): Promise<Student | undefined> {
+        try {
+            const student = await MysqlDataSource.getRepository(Student).findOne({
+                where: { registration }
+            });
 
+            return student;
+        } catch (error) {
+            console.error('Error finding student by registration:', error);
+            throw new Error('Failed to find student by registration');
+        }
+    }
+    /**
+     * Busca um estudante no banco de dados utilizando o endereço de e-mail.
+     *
+     * @param email - Endereço de e-mail do responsável do estudante.
+     * @returns O estudante encontrado ou `undefined` caso nenhum seja encontrado.
+     * @throws Lança um erro caso ocorra um problema na consulta ao banco de dados.
+     */
+    async findStudentByEmail(email: string): Promise<Student | undefined> {
+        try {
+            const student = await MysqlDataSource.getRepository(Student).findOne({
+                where: { email }
+            });
+
+            return student;
+        } catch (error) {
+            console.error('Error finding student by email:', error);
+            throw new Error('Failed to find student by email');
+        }
     /**
      * Busca um aluno com base no id
      * @param id Id do aluno
