@@ -2,6 +2,7 @@ import { Entity, PrimaryGeneratedColumn, Column, BeforeInsert, BeforeUpdate, Man
 
 import { Role } from './Role';
 import { Token } from './Token';
+import { Class } from './Class';
 import { PDI } from './PDI';
 
 @Entity('user')
@@ -17,6 +18,23 @@ export class User {
 
     @Column({ type: 'varchar', length: 255, nullable: false })
     password: string;
+
+    @Column({ type: 'int', nullable: true, unique: true })
+    registration: number;
+
+    @ManyToMany(() => Class, classEntity => classEntity.users)
+    @JoinTable({
+        name: 'user_classes',
+        joinColumn: {
+            name: 'user_id',
+            referencedColumnName: 'id'
+        },
+        inverseJoinColumn: {
+            name: 'class_id',
+            referencedColumnName: 'id'
+        }
+    })
+    classes: Class[];
 
     @Column({ default: () => 'NOW()' })
     createdAt: Date;

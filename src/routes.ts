@@ -1,9 +1,11 @@
 import { Router } from 'express';
 import { HomeController } from './controller/HomeController';
+import { TeacherController } from './controller/TeacherController';
 import { AuthController } from './controller/AuthController';
 import { ClassController } from './controller/ClassController';
 import { StudentController } from './controller/StudentController';
 import { validateClassData } from './validators/ClassValidator';
+import { validateTeacherData } from './validators/TeacherValidator';
 import { validateStudentData } from './validators/StudentValidator';
 import { validationResult } from 'express-validator';
 import { authMiddleware } from './middlewares/AuthMiddleware';
@@ -51,5 +53,19 @@ router.post(
     },
     StudentController.createStudent
 );
+router.post(
+    '/teachers',
+    validateTeacherData(),
+    (req, res, next) => {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
+        next();
+    },
+    TeacherController.createTeacher
+);
+
+router.get('/classes/:id/students', StudentController.getStudentsByClassId);
 
 export default router;
