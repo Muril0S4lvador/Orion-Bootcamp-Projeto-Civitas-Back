@@ -37,4 +37,6 @@ router.get('/classes-options', authMiddleware([enumRoles.TEACHER]), new ClassCon
 // PDI
 router.post('/pdi', authMiddleware([enumRoles.TEACHER]), new PDIController().createPDI);
 
+router.get('/pdi/:id', authMiddleware([enumRoles.ADMIN, enumRoles.TUTOR]), new PDIController().getPDI);
+
 export default router;
