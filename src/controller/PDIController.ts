@@ -242,6 +242,16 @@ export class PDIController {
      *                 message:
      *                   type: string
      *                   example: 'Unauthorized Access'
+     *       '400':
+     *         description: Token inválido ou ausente
+     *         content:
+     *           application/json:
+     *             schema:
+     *               type: object
+     *               properties:
+     *                 message:
+     *                   type: string
+     *                   example: 'Estudante selecionado não existente'
      */
     async getPDI(req: Request, res: Response) {
         const pdiId = req.params.id;
