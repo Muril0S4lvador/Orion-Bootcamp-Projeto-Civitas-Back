@@ -251,7 +251,7 @@ export class PDIController {
      *               properties:
      *                 message:
      *                   type: string
-     *                   example: 'Estudante selecionado não existente'
+     *                   example: 'Token inválido ou ausente'
      */
     async getPDI(req: Request, res: Response) {
         const pdiId = req.params.id;
