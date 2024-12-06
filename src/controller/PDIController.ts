@@ -135,8 +135,8 @@ export class PDIController {
         if (!student) {
             return RouteResponse.error(res, 'Estudante selecionado não existente');
         }
-        if (student.pdis.length > 0) {
-            await pdiRepository.remove(student.pdis);
+        if (student.pdi) {
+            await pdiRepository.remove(student.pdi);
         }
 
         if (!teacher) {
@@ -186,16 +186,16 @@ export class PDIController {
 
     /**
      * @swagger
-     * /pdi/{id}:
+     * /student/{id}/pdi:
      *   get:
-     *     summary: Retorno de PDI
+     *     summary: Retorno de PDI por aluno
      *     tags: [PDI]
      *     parameters:
      *     - in: path
      *       name: id
      *       type: integer
      *       required: true
-     *       description: Id do PDI a ser retornado.
+     *       description: Id do aluno
      *     produces:
      *       - application/json
      *     security:
@@ -258,14 +258,20 @@ export class PDIController {
      *                   example: 'Token inválido ou ausente'
      */
     async getPDI(req: Request, res: Response) {
-        const pdiId = req.params.id;
+        const studentId = req.params.id;
+        const studentRepository: StudentRepository = new StudentRepository();
         const pdiRepository: PDIRepository = new PDIRepository();
 
-        const pdi: PDI = await pdiRepository.findPDIById(pdiId);
+        const student: Student = await studentRepository.findStudentById(parseInt(studentId));
 
-        if (!pdi) {
-            return RouteResponse.notFound(res, 'PDI selecionado não encontrado');
+        if (!student) {
+            return RouteResponse.notFound(res, 'Aluno selecionado não encontrado');
         }
+        if (!student.pdi) {
+            return RouteResponse.error(res, 'Aluno selecionado sem PDI cadastrado');
+        }
+
+        const pdi: PDI = await pdiRepository.findPDIById(student.pdi.id);
 
         const considerations: string = pdi.considerations;
 
