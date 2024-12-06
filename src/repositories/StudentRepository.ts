@@ -43,7 +43,7 @@ export class StudentRepository extends Repository<Student> {
             throw new Error('Failed to find student by email');
         }
     }
-     /**
+    /**
      * Busca estudantes associados ao id de uma turma
      *
      * @param classId - Id da turma
@@ -58,6 +58,7 @@ export class StudentRepository extends Repository<Student> {
             .getMany();
 
         return students;
+    }
     /**
      * Busca um aluno com base no id
      * @param id Id do aluno

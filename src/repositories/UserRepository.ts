@@ -48,7 +48,7 @@ export class UserRepository extends Repository<User> {
      * Gera uma senha aleatória de 12 caracteres
      * @returns A senha gerada
      */
-    async generateRandomPassword(): Promise<String | undefined> {
+    async generateRandomPassword(): Promise<string | undefined> {
         const length = 12;
         const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+';
         return Array.from({ length }, () => chars.charAt(Math.floor(Math.random() * chars.length))).join('');
