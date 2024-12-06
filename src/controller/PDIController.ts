@@ -135,6 +135,10 @@ export class PDIController {
         if (!student) {
             return RouteResponse.error(res, 'Estudante selecionado não existente');
         }
+        if (student.pdis.length > 0) {
+            await pdiRepository.remove(student.pdis);
+        }
+
         if (!teacher) {
             return RouteResponse.error(res, 'Professor selecionado não existente');
         }
