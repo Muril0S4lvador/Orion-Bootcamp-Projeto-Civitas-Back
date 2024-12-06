@@ -2,6 +2,7 @@ import { Repository } from 'typeorm';
 import { MysqlDataSource } from '../config/database';
 import { User } from '../entity/User';
 import { Role } from '../entity/Role';
+import { Class } from '../entity/Class';
 
 export class UserRepository extends Repository<User> {
     constructor() {
@@ -43,5 +44,30 @@ export class UserRepository extends Repository<User> {
             where: { registration }
         });
         return user;
+    }
+    /**
+     * Gera uma senha aleatória de 12 caracteres
+     * @returns A senha gerada
+     */
+    async generateRandomPassword(): Promise<string | undefined> {
+        const length = 12;
+        const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+';
+        return Array.from({ length }, () => chars.charAt(Math.floor(Math.random() * chars.length))).join('');
+    }
+    /**
+     * Busca turmas associados ao id de um professor
+     *
+     * @param teacherId - Id do professor
+     * @returns A(s) turma(s) encontrada(s) ou `undefined` caso nenhuma seja encontrada.
+     * @throws Lança um erro caso ocorra um problema na consulta ao banco de dados.
+     */
+    async findClassesByTeacherId(teacherId: number): Promise<Class[] | undefined> {
+        const classes = await MysqlDataSource.getRepository(Class)
+            .createQueryBuilder('classes')
+            .innerJoin('classes.users', 'user')
+            .where('user.id = :teacherId', { teacherId })
+            .getMany();
+
+        return classes;
     }
 }

@@ -19,6 +19,9 @@ export class User {
     @Column({ type: 'varchar', length: 255, nullable: false })
     password: string;
 
+    @Column({ type: 'boolean', nullable: true })
+    isFirstPassword: boolean;
+
     @Column({ type: 'int', nullable: true, unique: true })
     registration: number;
 

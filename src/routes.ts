@@ -72,4 +72,6 @@ router.get('/classes/:id/students', authMiddleware([enumRoles.TEACHER, enumRoles
 
 router.get('/pdi/:id', authMiddleware([enumRoles.ADMIN, enumRoles.TUTOR]), new PDIController().getPDI);
 
+router.get('/classes/:id/teachers', TeacherController.getClassesByTeacherId);
+
 export default router;
