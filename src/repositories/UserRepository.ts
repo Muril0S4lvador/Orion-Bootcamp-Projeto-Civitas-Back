@@ -55,10 +55,10 @@ export class UserRepository extends Repository<User> {
         return Array.from({ length }, () => chars.charAt(Math.floor(Math.random() * chars.length))).join('');
     }
     /**
-     * Busca estudantes associados ao id de uma turma
+     * Busca turmas associados ao id de um professor
      *
-     * @param classId - Id da turma
-     * @returns O(s) estudante(s) encontrado(s) ou `undefined` caso nenhum seja encontrado.
+     * @param teacherId - Id do professor
+     * @returns A(s) turma(s) encontrada(s) ou `undefined` caso nenhuma seja encontrada.
      * @throws Lança um erro caso ocorra um problema na consulta ao banco de dados.
      */
     async findClassesByTeacherId(teacherId: number): Promise<Class[] | undefined> {
