@@ -48,6 +48,7 @@ router.post('/pdi', authMiddleware([enumRoles.TEACHER, enumRoles.ADMIN]), new PD
 
 router.get('/student/:id/pdi', authMiddleware([enumRoles.ADMIN, enumRoles.TUTOR]), new PDIController().getPDI);
 
+// Student
 router.post(
     '/students',
     authMiddleware([enumRoles.ADMIN]),
@@ -76,10 +77,6 @@ router.post(
     },
     TeacherController.createTeacher
 );
-
-router.get('/classes/:id/students', authMiddleware([enumRoles.TEACHER, enumRoles.ADMIN]), StudentController.getStudentsByClassId);
-
-router.get('/classes/:id/teachers', TeacherController.getClassesByTeacherId);
 
 // User
 router.post('/change-password', authMiddleware([enumRoles.ADMIN, enumRoles.TEACHER, enumRoles.TUTOR]), new UserController().changePassword);
