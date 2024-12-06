@@ -3,7 +3,6 @@ import { MigrationInterface, QueryRunner } from 'typeorm';
 export class AnswerSeeder1731873454489 implements MigrationInterface {
     private table = 'answer';
     private readonly answers = [
-
         { answer: 'Excepcional', points: 5 },
         { answer: 'Acima das expectativas', points: 4 },
         { answer: 'Adequado', points: 3 },

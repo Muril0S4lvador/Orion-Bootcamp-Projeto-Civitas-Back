@@ -33,4 +33,7 @@ export class ClassRepository extends Repository<Class> {
         );
         return result;
     }
+    async findAllClasses(): Promise<Class[]> {
+        return await MysqlDataSource.getRepository(Class).find();
+    }
 }

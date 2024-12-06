@@ -1,7 +1,6 @@
-import { MigrationInterface, QueryRunner, Table } from "typeorm"
+import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
 export class CreateResponsabilityAnswerTable1732891345325 implements MigrationInterface {
-
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.createTable(
             new Table({
@@ -35,5 +34,4 @@ export class CreateResponsabilityAnswerTable1732891345325 implements MigrationIn
     public async down(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.dropTable('pdi_answer_responsability');
     }
-
 }

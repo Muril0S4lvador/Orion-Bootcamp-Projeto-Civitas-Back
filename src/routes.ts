@@ -70,4 +70,6 @@ router.get('/classes/:id/students', StudentController.getStudentsByClassId);
 
 router.get('/classes/:id/teachers', TeacherController.getClassesByTeacherId);
 
+router.get('/all-classes', ClassController.getAllClasses);
+
 export default router;
