@@ -9,6 +9,11 @@ import { User } from '../entity/User';
 import { RouteResponse } from '../helpers/RouteResponse';
 import { Answer } from '../entity/Answer';
 import { PDI } from '../entity/PDI';
+import { PDIAnswer } from '../entity/PDIAnswer';
+import { enumQuestionType } from '../models/enums/EnumQuestionType';
+import { PDITransactionService } from '../services/PDITransactionService';
+import { applyTypeIndexToAnswersService } from '../services/ApplyTypeIndexToAnswersService';
+import { PDITransactionResult } from '../models/interfaces/PDITransactionResult';
 
 export class PDIController {
     /**
@@ -71,110 +76,6 @@ export class PDIController {
      *                 data:
      *                   type: object
      *                   properties:
-     *                     student:
-     *                       type: object
-     *                       properties:
-     *                         id:
-     *                           type: number
-     *                           example: 1
-     *                         name:
-     *                           type: string
-     *                           example: 'Aluno'
-     *                         registration:
-     *                           type: number
-     *                           example: 123
-     *                         email:
-     *                           type: string
-     *                           example: 'aluno@email.com'
-     *                         cpf:
-     *                           type: string
-     *                           example: '11122233399'
-     *                         createdAt:
-     *                           type: string
-     *                           example: '2024-11-29T20:53:35.000Z'
-     *                         updatedAt:
-     *                           type: string
-     *                           example: '2024-11-29T20:53:35.000Z'
-     *                     teacher:
-     *                       type: object
-     *                       properties:
-     *                         id:
-     *                           type: number
-     *                           example: 2
-     *                         name:
-     *                           type: string
-     *                           example: 'professor'
-     *                         email:
-     *                           type: string
-     *                           example: 'professor@email.com'
-     *                         createdAt:
-     *                           type: string
-     *                           example: '2024-11-29T20:53:35.000Z'
-     *                         updatedAt:
-     *                           type: string
-     *                           example: '2024-11-29T20:53:35.000Z'
-     *                         roles:
-     *                           type: array
-     *                           items:
-     *                             type: string
-     *                             example: 'TEACHER'
-     *                     considerations:
-     *                       type: string
-     *                       example: 'Aluno excelente.'
-     *                     answersAcademicDevelopment:
-     *                       type: object
-     *                       properties:
-     *                         id:
-     *                           type: number
-     *                           example: 1
-     *                         points:
-     *                           type: number
-     *                           example: 5
-     *                         answer:
-     *                           type: string
-     *                           example: 'Excepcional'
-     *                         createdAt:
-     *                           type: string
-     *                           example: '2024-11-29T20:53:35.000Z'
-     *                         updatedAt:
-     *                           type: string
-     *                           example: '2024-11-29T20:53:35.000Z'
-     *                     answersEmotionalInteligence:
-     *                       type: object
-     *                       properties:
-     *                         id:
-     *                           type: number
-     *                           example: 3
-     *                         points:
-     *                           type: number
-     *                           example: 3
-     *                         answer:
-     *                           type: string
-     *                           example: 'Adequado'
-     *                         createdAt:
-     *                           type: string
-     *                           example: '2024-11-29T20:53:35.000Z'
-     *                         updatedAt:
-     *                           type: string
-     *                           example: '2024-11-29T20:53:35.000Z'
-     *                     answersResponsability:
-     *                       type: object
-     *                       properties:
-     *                         id:
-     *                           type: number
-     *                           example: 4
-     *                         points:
-     *                           type: number
-     *                           example: 2
-     *                         answer:
-     *                           type: string
-     *                           example: 'Abaixo das expectativas'
-     *                         createdAt:
-     *                           type: string
-     *                           example: '2024-11-29T20:53:35.000Z'
-     *                         updatedAt:
-     *                           type: string
-     *                           example: '2024-11-29T20:53:35.000Z'
      *                     id:
      *                       type: number
      *                       example: 123
@@ -185,7 +86,7 @@ export class PDIController {
      *                       type: string
      *                       example: '2024-11-29T20:53:35.000Z'
      *       '400':
-     *         description: Token inválido, Ids de resposta inválidos ou entidade não encontrada
+     *         description: Token inválido, Ids de resposta inválidos, entidade não encontrada ou transação no banco de dados não efetuada
      *         content:
      *           application/json:
      *             schema:
@@ -238,23 +139,145 @@ export class PDIController {
             return RouteResponse.error(res, 'Professor selecionado não existente');
         }
 
-        const answersAcademicDevelopment: Answer[] = allPossibleAnswers.filter(answer => answersAcademicDevelopmentId.includes(answer.id));
-
-        const answersEmotionalInteligence: Answer[] = allPossibleAnswers.filter(answer => answersEmotionalInteligenceId.includes(answer.id));
-
-        const answersResponsability: Answer[] = allPossibleAnswers.filter(answer => answersResponsabilityId.includes(answer.id));
-
-        const pdi: PDI = await pdiRepository.save({
+        const pdi: PDI = pdiRepository.create({
             student,
             teacher,
-            considerations,
-            answersAcademicDevelopment,
-            answersEmotionalInteligence,
-            answersResponsability
+            considerations
         });
 
-        delete pdi.teacher.password;
+        const answersAcademicDevelopment: Partial<PDIAnswer>[] = applyTypeIndexToAnswersService(
+            answersAcademicDevelopmentId,
+            allPossibleAnswers,
+            enumQuestionType.ACADEMIC_DEVELOPMENT
+        );
 
-        return RouteResponse.sucessCreated(res, pdi);
+        const answersEmotionalInteligence: Partial<PDIAnswer>[] = applyTypeIndexToAnswersService(
+            answersEmotionalInteligenceId,
+            allPossibleAnswers,
+            enumQuestionType.EMOTIONAL_INTELLIGENCE
+        );
+
+        const answersResponsability: Partial<PDIAnswer>[] = applyTypeIndexToAnswersService(
+            answersResponsabilityId,
+            allPossibleAnswers,
+            enumQuestionType.RESPONSABILITY
+        );
+
+        try {
+            const result: PDITransactionResult = await PDITransactionService(pdi, [
+                ...answersAcademicDevelopment,
+                ...answersEmotionalInteligence,
+                ...answersResponsability
+            ]);
+
+            delete result.pdi.student;
+            delete result.pdi.teacher;
+            delete result.pdi.considerations;
+
+            return RouteResponse.sucessCreated(res, result.pdi);
+        } catch (error) {
+            return RouteResponse.error(res, error.message);
+        }
+    }
+
+    /**
+     * @swagger
+     * /pdi/{id}:
+     *   get:
+     *     summary: Retorno de PDI
+     *     tags: [PDI]
+     *     parameters:
+     *     - in: path
+     *       name: id
+     *       type: integer
+     *       required: true
+     *       description: Id do PDI a ser retornado.
+     *     produces:
+     *       - application/json
+     *     security:
+     *       - BearerAuth: []
+     *     responses:
+     *       '200':
+     *         description: Requisição realizada com sucesso
+     *         content:
+     *           application/json:
+     *             schema:
+     *               type: object
+     *               properties:
+     *                 sucess:
+     *                   type: boolean
+     *                   example: true
+     *                 data:
+     *                   type: object
+     *                   properties:
+     *                     pointsAcademicDevelopment:
+     *                       type: number
+     *                       example: 1
+     *                     pointsEmotionalInteligence:
+     *                       type: number
+     *                       example: 6
+     *                     pointsResponsability:
+     *                       type: number
+     *                       example: 11
+     *                     considerations:
+     *                       type: string
+     *                       example: 'Aluno excelente'
+     *       '404':
+     *         description: PDI procurado não encontrado
+     *         content:
+     *           application/json:
+     *             schema:
+     *               type: object
+     *               properties:
+     *                 message:
+     *                   type: string
+     *                   example: 'PDI selecionado não encontrado'
+     *       '401':
+     *         description: Usuário não possui role correta para buscar PDI
+     *         content:
+     *           application/json:
+     *             schema:
+     *               type: object
+     *               properties:
+     *                 message:
+     *                   type: string
+     *                   example: 'Unauthorized Access'
+     *       '400':
+     *         description: Token inválido ou ausente
+     *         content:
+     *           application/json:
+     *             schema:
+     *               type: object
+     *               properties:
+     *                 message:
+     *                   type: string
+     *                   example: 'Token inválido ou ausente'
+     */
+    async getPDI(req: Request, res: Response) {
+        const pdiId = req.params.id;
+        const pdiRepository: PDIRepository = new PDIRepository();
+
+        const pdi: PDI = await pdiRepository.findPDIById(pdiId);
+
+        if (!pdi) {
+            return RouteResponse.notFound(res, 'PDI selecionado não encontrado');
+        }
+
+        const considerations: string = pdi.considerations;
+
+        let pointsEmotionalInteligence: number = 0,
+            pointsAcademicDevelopment: number = 0,
+            pointsResponsability: number = 0;
+        pdi.answers.forEach(answer => {
+            if (answer.questionType === enumQuestionType.EMOTIONAL_INTELLIGENCE) {
+                pointsEmotionalInteligence += answer.answerRelation.points;
+            } else if (answer.questionType === enumQuestionType.ACADEMIC_DEVELOPMENT) {
+                pointsAcademicDevelopment += answer.answerRelation.points;
+            } else if (answer.questionType === enumQuestionType.RESPONSABILITY) {
+                pointsResponsability += answer.answerRelation.points;
+            }
+        });
+
+        return RouteResponse.sucess(res, { pointsAcademicDevelopment, pointsEmotionalInteligence, pointsResponsability, considerations });
     }
 }

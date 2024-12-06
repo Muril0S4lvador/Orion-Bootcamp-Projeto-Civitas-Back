@@ -1,8 +1,8 @@
-import { PrimaryGeneratedColumn, Entity, Column, ManyToMany, ManyToOne, CreateDateColumn, UpdateDateColumn, JoinTable } from 'typeorm';
+import { PrimaryGeneratedColumn, Entity, Column, ManyToOne, CreateDateColumn, UpdateDateColumn, OneToMany } from 'typeorm';
 
 import { Student } from './Student';
 import { User } from './User';
-import { Answer } from './Answer';
+import { PDIAnswer } from './PDIAnswer';
 
 @Entity('pdi')
 export class PDI {
@@ -18,17 +18,8 @@ export class PDI {
     @Column({ type: 'varchar', length: 600, nullable: true })
     considerations: string;
 
-    @ManyToMany(() => Answer)
-    @JoinTable({ name: 'pdi_answer_emotional_inteligence' })
-    answersEmotionalInteligence: Answer[];
-
-    @ManyToMany(() => Answer)
-    @JoinTable({ name: 'pdi_answer_academic_development' })
-    answersAcademicDevelopment: Answer[];
-
-    @ManyToMany(() => Answer)
-    @JoinTable({ name: 'pdi_answer_responsability' })
-    answersResponsability: Answer[];
+    @OneToMany(() => PDIAnswer, pdi_answer => pdi_answer.pdi)
+    public answers: PDIAnswer[];
 
     @CreateDateColumn()
     createdAt: Date;
