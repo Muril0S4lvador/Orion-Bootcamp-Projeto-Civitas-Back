@@ -11,6 +11,7 @@ import { validationResult } from 'express-validator';
 import { authMiddleware } from './middlewares/AuthMiddleware';
 import { enumRoles } from './models/enums/EnumRoles';
 import { PDIController } from './controller/PDIController';
+import { UserController } from './controller/UserController';
 
 const router = Router();
 
@@ -21,6 +22,7 @@ router.post('/login', new AuthController().login);
 
 router.get('/me', new AuthController().returnUserInfo);
 
+// Class
 router.post(
     '/classes',
     authMiddleware([enumRoles.TEACHER]),
@@ -35,12 +37,18 @@ router.post(
     ClassController.createClass
 );
 
-// Class
 router.get('/classes-options', authMiddleware([enumRoles.TEACHER, enumRoles.ADMIN]), new ClassController().getEnumsInfos);
+
+router.get('/classes/:id/students', authMiddleware([enumRoles.TEACHER, enumRoles.ADMIN]), StudentController.getStudentsByClassId);
+
+router.get('/classes/:id/teachers', TeacherController.getClassesByTeacherId);
 
 // PDI
 router.post('/pdi', authMiddleware([enumRoles.TEACHER, enumRoles.ADMIN]), new PDIController().createPDI);
 
+router.get('/pdi/:id', authMiddleware([enumRoles.ADMIN, enumRoles.TUTOR]), new PDIController().getPDI);
+
+// Students
 router.post(
     '/students',
     authMiddleware([enumRoles.ADMIN]),
@@ -54,6 +62,8 @@ router.post(
     },
     StudentController.createStudent
 );
+
+// Teacher
 router.post(
     '/teachers',
     authMiddleware([enumRoles.ADMIN]),
@@ -68,10 +78,7 @@ router.post(
     TeacherController.createTeacher
 );
 
-router.get('/classes/:id/students', authMiddleware([enumRoles.TEACHER, enumRoles.ADMIN]), StudentController.getStudentsByClassId);
-
-router.get('/pdi/:id', authMiddleware([enumRoles.ADMIN, enumRoles.TUTOR]), new PDIController().getPDI);
-
-router.get('/classes/:id/teachers', TeacherController.getClassesByTeacherId);
+// User
+router.post('/change-password', authMiddleware([enumRoles.ADMIN, enumRoles.TEACHER, enumRoles.TUTOR]), new UserController().changePassword);
 
 export default router;
