@@ -2,6 +2,7 @@ import { Repository } from 'typeorm';
 import { MysqlDataSource } from '../config/database';
 import { User } from '../entity/User';
 import { Role } from '../entity/Role';
+import { Class } from '../entity/Class';
 
 export class UserRepository extends Repository<User> {
     constructor() {
@@ -52,5 +53,21 @@ export class UserRepository extends Repository<User> {
         const length = 12;
         const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+';
         return Array.from({ length }, () => chars.charAt(Math.floor(Math.random() * chars.length))).join('');
+    }
+    /**
+     * Busca estudantes associados ao id de uma turma
+     *
+     * @param classId - Id da turma
+     * @returns O(s) estudante(s) encontrado(s) ou `undefined` caso nenhum seja encontrado.
+     * @throws Lança um erro caso ocorra um problema na consulta ao banco de dados.
+     */
+    async findClassesByTeacherId(teacherId: number): Promise<Class[] | undefined> {
+        const classes = await MysqlDataSource.getRepository(Class)
+            .createQueryBuilder('classes')
+            .innerJoin('classes.users', 'user')
+            .where('user.id = :teacherId', { teacherId })
+            .getMany();
+
+        return classes;
     }
 }

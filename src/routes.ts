@@ -24,7 +24,7 @@ router.get('/me', new AuthController().returnUserInfo);
 router.post(
     '/classes',
     authMiddleware([enumRoles.TEACHER]),
-    validateClassData(), 
+    validateClassData(),
     (req, res, next) => {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
@@ -67,5 +67,7 @@ router.post(
 );
 
 router.get('/classes/:id/students', StudentController.getStudentsByClassId);
+
+router.get('/classes/:id/teachers', TeacherController.getClassesByTeacherId);
 
 export default router;
