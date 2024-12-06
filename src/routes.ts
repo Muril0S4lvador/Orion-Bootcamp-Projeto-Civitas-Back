@@ -25,7 +25,7 @@ router.get('/me', new AuthController().returnUserInfo);
 // Class
 router.post(
     '/classes',
-    authMiddleware([enumRoles.TEACHER]),
+    authMiddleware([enumRoles.TEACHER, enumRoles.ADMIN]),
     validateClassData(),
     (req, res, next) => {
         const errors = validationResult(req);
@@ -41,7 +41,7 @@ router.get('/classes-options', authMiddleware([enumRoles.TEACHER, enumRoles.ADMI
 
 router.get('/classes/:id/students', authMiddleware([enumRoles.TEACHER, enumRoles.ADMIN]), StudentController.getStudentsByClassId);
 
-router.get('/classes/:id/teachers', TeacherController.getClassesByTeacherId);
+router.get('/classes/:id/teachers', authMiddleware([enumRoles.ADMIN, enumRoles.TEACHER]), TeacherController.getClassesByTeacherId);
 
 // PDI
 router.post('/pdi', authMiddleware([enumRoles.TEACHER, enumRoles.ADMIN]), new PDIController().createPDI);
