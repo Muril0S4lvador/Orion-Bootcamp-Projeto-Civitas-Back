@@ -66,7 +66,8 @@ export class StudentRepository extends Repository<Student> {
      */
     async findStudentById(id: number): Promise<Student | undefined> {
         const student = await this.findOne({
-            where: { id }
+            where: { id },
+            relations: ['pdi']
         });
 
         return student;

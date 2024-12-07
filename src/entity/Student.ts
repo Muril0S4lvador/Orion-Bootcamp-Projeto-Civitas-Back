@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, BeforeInsert, JoinTable, BeforeUpdate, ManyToMany, OneToMany } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, BeforeInsert, JoinTable, BeforeUpdate, ManyToMany, OneToOne } from 'typeorm';
 
 import { Class } from './Class';
 import { PDI } from './PDI';
@@ -39,8 +39,8 @@ export class Student {
     })
     classes: Class[];
 
-    @OneToMany(() => PDI, pdi => pdi.student)
-    pdis: PDI[];
+    @OneToOne(() => PDI, pdi => pdi.student)
+    pdi: PDI;
 
     @Column({ default: () => 'NOW()' })
     createdAt: Date;

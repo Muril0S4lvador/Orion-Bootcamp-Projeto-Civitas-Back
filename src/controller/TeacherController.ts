@@ -5,6 +5,9 @@ import { UserRepository } from '../repositories/UserRepository';
 import { validationResult } from 'express-validator';
 import { Class } from '../entity/Class';
 import bcrypt from 'bcryptjs';
+import { enumRoles } from '../models/enums/EnumRoles';
+import { RoleRepository } from '../repositories/RoleRepository';
+import { Role } from '../entity/Role';
 
 export class TeacherController {
     /**
@@ -15,6 +18,8 @@ export class TeacherController {
      *     description: Endpoint para criar um novo professor com nome, e-mail, número de matrícula e turmas.
      *     tags:
      *        - Teacher
+     *     security:
+     *       - BearerAuth: []
      *     requestBody:
      *       required: true
      *       content:
@@ -60,6 +65,7 @@ export class TeacherController {
         const errors = validationResult(req);
         const classRepository = new ClassRepository();
         const userRepository = new UserRepository();
+        const roleRepository = new RoleRepository();
 
         if (!errors.isEmpty()) {
             return RouteResponse.error(res, 'Dados inválidos.');
@@ -93,13 +99,17 @@ export class TeacherController {
 
             const hashedPassword = await bcrypt.hash(rawPassword, 10);
 
+            const role: Role[] = [];
+            role.push(await roleRepository.findRoleByName(enumRoles.TEACHER));
+
             const newTeacher = userRepository.create({
                 name: name,
                 email: email,
                 password: hashedPassword,
                 isFirstPassword: true,
                 registration: registration,
-                classes: validClasses
+                classes: validClasses,
+                roles: role
             });
 
             await userRepository.save(newTeacher);
