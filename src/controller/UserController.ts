@@ -100,9 +100,11 @@ export class UserController {
             const hashedPassword = await bcrypt.hash(newPassword, 10);
 
             existingUser.password = hashedPassword;
-            const updatedUser = await userRepository.save(existingUser);
+            const updatedUser = await userRepository.update(
+                { id: existingUser.id },
+                { password: hashedPassword, isFirstPassword: false, updatedAt: new Date() }
+            );
 
-            delete updatedUser.password;
             return RouteResponse.sucess(res, updatedUser);
         } catch (error) {
             return RouteResponse.error(res, error);
