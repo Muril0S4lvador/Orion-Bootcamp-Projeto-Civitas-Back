@@ -4,6 +4,11 @@ import { StudentRepository } from '../repositories/StudentRepository';
 import { ClassRepository } from '../repositories/ClassRepository';
 import { validationResult } from 'express-validator';
 import { Student } from '../entity/Student';
+import { enumRoles } from '../models/enums/EnumRoles';
+import { RoleRepository } from '../repositories/RoleRepository';
+import { UserRepository } from '../repositories/UserRepository';
+import { Role } from '../entity/Role';
+import bcrypt from 'bcryptjs';
 
 export class StudentController {
     /**
@@ -64,6 +69,8 @@ export class StudentController {
         const errors = validationResult(req);
         const studentRepository = new StudentRepository();
         const classRepository = new ClassRepository();
+        const userRepository = new UserRepository();
+        const roleRepository = new RoleRepository();
 
         if (!errors.isEmpty()) {
             return RouteResponse.error(res, 'Dados inválidos.');
@@ -99,6 +106,22 @@ export class StudentController {
                 email: email
             });
             await studentRepository.save(newStudent);
+            const role: Role[] = [];
+            role.push(await roleRepository.findRoleByName(enumRoles.TUTOR));
+            const rawPassword = await userRepository.generateRandomPassword();
+
+            const hashedPassword = await bcrypt.hash(rawPassword, 10);
+            const newGuardian = userRepository.create({
+                name: name,
+                registration: null,
+                classes: null,
+                cpf: cpf,
+                email: email,
+                roles: role,
+                password: hashedPassword
+            });
+            await userRepository.save(newGuardian);
+
             return RouteResponse.sucessCreated(res, newStudent);
         } catch (error) {
             return RouteResponse.error(res, error);
