@@ -46,9 +46,9 @@ router.get('/classes/:id/teachers', authMiddleware([enumRoles.ADMIN, enumRoles.T
 // PDI
 router.post('/pdi', authMiddleware([enumRoles.TEACHER, enumRoles.ADMIN]), new PDIController().createPDI);
 
-router.get('/pdi/:id', authMiddleware([enumRoles.ADMIN, enumRoles.TUTOR]), new PDIController().getPDI);
+router.get('/student/:id/pdi', authMiddleware([enumRoles.ADMIN, enumRoles.TUTOR]), new PDIController().getPDI);
 
-// Students
+// Student
 router.post(
     '/students',
     authMiddleware([enumRoles.ADMIN]),

@@ -1,4 +1,4 @@
-import { PrimaryGeneratedColumn, Entity, Column, ManyToOne, CreateDateColumn, UpdateDateColumn, OneToMany } from 'typeorm';
+import { PrimaryGeneratedColumn, Entity, Column, ManyToOne, CreateDateColumn, UpdateDateColumn, OneToOne, OneToMany, JoinColumn } from 'typeorm';
 
 import { Student } from './Student';
 import { User } from './User';
@@ -9,7 +9,8 @@ export class PDI {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @ManyToOne(() => Student, student => student.pdis)
+    @OneToOne(() => Student, student => student.pdi)
+    @JoinColumn({ name: 'studentId' })
     student: Student;
 
     @ManyToOne(() => User, user => user.pdis)
