@@ -43,6 +43,7 @@ router.post('/pdi', authMiddleware([enumRoles.TEACHER]), new PDIController().cre
 
 router.post(
     '/students',
+    authMiddleware([enumRoles.ADMIN]),
     validateStudentData(),
     (req, res, next) => {
         const errors = validationResult(req);
@@ -55,6 +56,7 @@ router.post(
 );
 router.post(
     '/teachers',
+    authMiddleware([enumRoles.ADMIN]),
     validateTeacherData(),
     (req, res, next) => {
         const errors = validationResult(req);
@@ -66,10 +68,10 @@ router.post(
     TeacherController.createTeacher
 );
 
-router.get('/classes/:id/students', StudentController.getStudentsByClassId);
+router.get('/classes/:id/students', authMiddleware([enumRoles.TEACHER]), StudentController.getStudentsByClassId);
 
-router.get('/classes/:id/teachers', TeacherController.getClassesByTeacherId);
+router.get('/classes/:id/teachers', authMiddleware([enumRoles.TEACHER]), TeacherController.getClassesByTeacherId);
 
-router.get('/all-classes', ClassController.getAllClasses);
+router.get('/all-classes', authMiddleware([enumRoles.ADMIN]),, ClassController.getAllClasses);
 
 export default router;
