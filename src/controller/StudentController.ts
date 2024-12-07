@@ -118,6 +118,7 @@ export class StudentController {
                 cpf: cpf,
                 email: email,
                 roles: role,
+                isFirstPassword: true,
                 password: hashedPassword
             });
             await userRepository.save(newGuardian);
