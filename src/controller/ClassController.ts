@@ -176,4 +176,57 @@ export class ClassController {
 
         return RouteResponse.sucess(res, { teachings, shifts, schoolYears });
     }
+    /**
+     * @swagger
+     * /all-classes:
+     *   get:
+     *     summary: Retorna todas turmas cadastradas
+     *     tags:
+     *       - Class
+     *     responses:
+     *       '200':
+     *         description: Lista de turmas retornada com sucesso.
+     *         content:
+     *           application/json:
+     *             schema:
+     *               type: object
+     *               properties:
+     *                 success:
+     *                   type: boolean
+     *                   example: true
+     *                 data:
+     *                   type: array
+     *                   items:
+     *                     type: object
+     *                     properties:
+     *                       id:
+     *                         type: integer
+     *                         example: 1
+     *                         description: ID da turma.
+     *                       shift:
+     *                         type: integer
+     *                         example: 1
+     *                         description: id do turno.
+     *                       schoolYear:
+     *                         type: integer
+     *                         example: 1
+     *                         description: id do ano escolar.
+     *                       teaching:
+     *                         type: integer
+     *                         example: 1
+     *                         description: id do nível de ensino.
+     *       '400':
+     *         description: Dados inválidos.
+     *       '500':
+     *         description: Erro interno do servidor.
+     */
+    static async getAllClasses(req: Request, res: Response) {
+        const classRepository: ClassRepository = new ClassRepository();
+        try {
+            const classes = await classRepository.findAllClasses();
+            return RouteResponse.sucess(res, classes);
+        } catch (error) {
+            return RouteResponse.error(res, 'Erro ao buscar todas as turmas.');
+        }
+    }
 }

@@ -1,4 +1,4 @@
-import { MigrationInterface, QueryRunner } from "typeorm"
+import { MigrationInterface, QueryRunner } from 'typeorm';
 
 export class RoleUserSeeder1733160723904 implements MigrationInterface {
     private table = 'role_user';

@@ -78,7 +78,8 @@ router.post(
     TeacherController.createTeacher
 );
 
-// User
+router.get('/all-classes', authMiddleware([enumRoles.ADMIN]),, ClassController.getAllClasses);
+
 router.post('/change-password', authMiddleware([enumRoles.ADMIN, enumRoles.TEACHER, enumRoles.TUTOR]), new UserController().changePassword);
 
 export default router;
